@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('bio')->nullable();
-            $table->string('avatar_url')->nullable();
+            $table->string('avatar')->nullable();
             $table->string('genre')->nullable();
             $table->date('birth_date')->nullable();
             $table->timestamps(); //created_at & updated_at
