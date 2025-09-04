@@ -1,0 +1,274 @@
+.page-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #ffffff; /* fundo branco da página */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.custom-rectangle {
+    width: 1388px;
+    height: 975px;
+    background-color: #F2F2F2;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;  /* empilha título + white-rectangle */
+    justify-content: flex-start;
+    align-items: flex-start;  /* alinha todos os filhos à esquerda */
+    padding: 40px;            /* espaçamento interno */
+    box-sizing: border-box;
+}
+
+/* Título dinâmico das views - FORÇANDO ALINHAMENTO À ESQUERDA */
+.page-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000;
+    margin: 0 0 10px 120px;       /* espaçamento abaixo do título */
+    text-align: left;          /* alinha o texto à esquerda */
+    align-self: flex-start;    /* força alinhamento à esquerda dentro do flex */
+    width: auto;               /* largura natural do texto */
+    display: block;            /* garante que seja um elemento de bloco */
+}
+
+
+/* Remover position absoluta */
+.register-page {
+    display: flex;
+    flex-direction: column;     /* empilha verticalmente */
+    justify-content: flex-start; /* alinha ao topo */
+    align-items: flex-start;    /* alinha à esquerda */
+    padding: 20px;
+    background-color: transparent;
+    width: 100%;
+}
+
+
+.white-rectangle {
+    width: 1062px;   /* sua largura do formulário */
+    height: 565px;   /* altura do formulário */
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.white-rectangle-homepage {
+    width: 525px;   /* sua largura do formulário */
+    height: 670px;   /* altura do formulário */
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+
+
+
+/* Container flex interno */
+.content-row {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
+/* Coluna esquerda: círculo da imagem */
+.profile-column {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin-right:40px;
+
+      transform: translate(60px, -90px);
+}
+
+.circle {
+  width: 350px;
+  height: 350px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  border-radius: 50%;
+  position: relative; /* 🔑 agora o ícone será relativo ao círculo */
+}
+
+
+.profile-pic {
+    width: 350px;
+    height: 350px;
+    object-fit: cover;
+}
+
+.p-image {
+  position: absolute;
+  bottom: 50px;  /* distância da borda inferior */
+  right: 50px;   /* distância da borda direita */
+  color: #666666;
+  cursor: pointer;
+  font-size: 2em;
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+
+.p-image:hover {
+    color: #999;
+}
+
+.file-upload {
+    display: none;
+}
+
+/* Coluna direita: formulário */
+.create_account_screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: auto;
+    align-items: flex-start;
+    padding-right: 40px; /* espaço entre formulário e borda direita */
+}
+
+/* Campos de formulário register */
+.form-floating .form-control {
+    width: 383px;       /* largura fixa */
+    height: 45px;       /* altura fixa */
+    font-size: 14px;
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+}
+
+.form-floating label {
+    font-size: 14px;
+    top: 5px;
+    left: 10px;
+    opacity: 1;
+}
+
+/* Campos de formulário homepage */
+.form-floating-homepage1 .form-control {
+    width: 383px;
+    height: 45px;
+    font-size: 14px;
+    background-color: #000; /* fundo preto */
+    color: white;           /* texto digitado branco */
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+}
+
+.form-floating-homepage2 .form-control {
+    width: 383px;
+    height: 45px;
+    font-size: 14px;
+    background-color: #DFDFDF; /* fundo cinza claro */
+    color: rgb(0, 0, 0);           /* texto digitado branco */
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+}
+
+.form-floating-homepage1 .form-control::placeholder {
+    color: white;           /* placeholder branco */
+    opacity: 1;
+}
+
+.form-floating-homepage1 label {
+    font-size: 14px;
+    top: 5px;
+    left: 10px;
+    opacity: 1;
+
+    color: white; /* label branco */
+}
+
+.form-floating-homepage1 .form-control:focus + label {
+    color: white; /* mantém o label branco quando o input está focado */
+}
+
+/* Botão */
+.button_wide {
+    width: 138px;
+    height: 39px;
+    border-radius: 5px;
+    background-color: #000;
+    color: #fff;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+
+.button-container {
+    width: 100%;
+    text-align: right;
+    margin-top: 10px;
+}
+
+.change-password-link {
+    display: block;        /* ocupa linha inteira */
+    margin-bottom: 10px;   /* espaço entre link e botão */
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;      /* Medium */
+    color: #000;           /* preto */
+    text-decoration: none;  /* sem sublinhado */
+    cursor: pointer;
+    margin-right: 260px;
+    padding-top: 10px;
+
+}
+
+.change-password-link:hover {
+    color: #999999;        /* cinza claro ao passar o mouse */
+}
+
+
+.rectangle-header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start; /* imagem à esquerda */
+    margin-bottom: 20px; /* espaço abaixo da imagem */
+}
+
+.rectangle-logo {
+    position: relative; /* garante que podes mover */
+    top: -60px;         /* sobe a imagem */
+    left: 135px;         /* move para a direita */
+    width: 200px;       /* ajusta o tamanho se precisares */
+    height: auto;       /* mantém a proporção */
+}
+
+
+.custom-rectangle {
+    position: relative; /* importante para o botão X ficar relativo ao retângulo */
+}
+
+.close-button {
+    position: absolute;
+    top: 60px;    /* aumenta para descer */
+    right: 100px; /* aumenta para afastar da direita (mover para a esquerda) */
+    font-size: 24px;
+    color: #000;  /* preto */
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #999;  /* cinza claro ao passar o mouse */
+}
+
+
+
+

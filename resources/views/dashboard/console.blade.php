@@ -6,4 +6,4 @@
 
 @endsection
 
-{{-- dashboard formando --}}
+{{-- dashboard admin --}}

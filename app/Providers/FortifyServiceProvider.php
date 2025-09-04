@@ -13,17 +13,31 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\LoginResponse;
+use Illuminate\Support\Facades\Auth;
+
 
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
-    public function register(): void
+    public function register()
     {
-        //
+        $this->app->singleton(LoginResponse::class, function () {
+            return new class implements LoginResponse {
+                public function toResponse($request)
+                {
+                    if (Auth::user()->role_id == 1)
+                        return redirect()->intended('/console');
+                    if (Auth::user()->role_id == 2)
+                        return redirect()->intended('/hub');
+                    if (Auth::user()->role_id == 3)
+                        return redirect()->intended('/dashboard');
+                }
+            };
+        });
     }
-
     /**
      * Bootstrap any application services.
      */

@@ -1,4 +1,4 @@
-@extends("layouts.fe_master")
+@extends("layout.fe_master")
 
 @section("content")
 

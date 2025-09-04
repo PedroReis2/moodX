@@ -5,7 +5,7 @@
 @section('content')
 <div class="register-page">
 
-    <h1 class="page-title">CREATE ACCOUNT</h1> <!-- título fora do retângulo -->
+    <h1 class="page-title">YOUR PROFILE</h1> <!-- título fora do retângulo -->
 </div>
 
     <div class="white-rectangle">
@@ -46,12 +46,11 @@
                         <input type="date" class="form-control" id="birthday" name="birthday" placeholder="Birthday" required>
                         <label for="birthday">Birthday Date</label>
                     </div>
-                    <div class="form-floating mb-3">
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                        <label for="password">Password</label>
-                    </div>
                     <div class="button-container">
-                        <button type="submit" class="button button_wide">Save</button>
+    <!-- Link clicável para mudar a senha -->
+    <a href="{{ route('change-password') }}" class="change-password-link">Change password</a>
+                    <div class="button-container">
+                        <button type="submit" class="button button_wide">Save changes</button>
                     </div>
                 </form>
             </div>
