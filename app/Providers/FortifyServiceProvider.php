@@ -28,12 +28,7 @@ class FortifyServiceProvider extends ServiceProvider
             return new class implements LoginResponse {
                 public function toResponse($request)
                 {
-                    if (Auth::user()->role_id == 1)
-                        return redirect()->intended('/console');
-                    if (Auth::user()->role_id == 2)
-                        return redirect()->intended('/hub');
-                    if (Auth::user()->role_id == 3)
-                        return redirect()->intended('/dashboard');
+                    return redirect()->intended('/dashboard');
                 }
             };
         });

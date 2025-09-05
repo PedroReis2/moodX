@@ -2,7 +2,7 @@
 
 @section("content")
 
-    <h1>Bem-vindo ao Dashboard</h1>
+    <h1>Bem-vindo ao Dashboard FORMANDO</h1>
 
 @endsection
 
