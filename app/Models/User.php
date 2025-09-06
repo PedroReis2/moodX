@@ -59,4 +59,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(SharedContent::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

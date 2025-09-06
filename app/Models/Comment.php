@@ -24,4 +24,10 @@ class Comment extends Model
     {
         return $this->belongsTo(SketchbookEntry::class);
     }
+
+    // Alias para compatibilidade com whereHas('entry')
+    public function entry()
+    {
+        return $this->sketchbookEntry();
+    }
 }
