@@ -1,21 +1,32 @@
-@extends("layout.fe_master")
+@extends("layout.fe_master_simple")
 
 @section("content")
 
-    <h1>Login</h1>
+ <div class="rectangle-header-logo">
+<img src="{{ asset('images/logo.png') }}" alt="Header Logo" class="rectangle-logo">
+    </div>
+
+     <div class="rectangle-header-slogan">
+<img src="{{ asset('images/slogan.png') }}" alt="Header Slogan" class="rectangle-slogan">
+    </div>
 
     <form method="POST" action="{{route('login')}}">
         @csrf
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" class="form-control" id="email" name="email">
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" class="form-control" id="password" name="password">
-  </div>
-  <button type="submit" class="btn btn-primary">Login</button>
-  Esqueceu se da pass? Clique <a href="{{route("password.request")}}">aqui</a>
+         <div class="form-floating-login mb-1">
+                        <input type="email" class="form-control" id="email" placeholder="Email" name="email">
+                        <label for="email"></label>
+                    </div>
+
+        <div class="form-floating-login mb-1">
+                    <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+                        <label for="password"></label>
+                    </div>
+
+        <div class="button-container">
+                        <button type="submit" class="button button_wide">Login</button>
+                        <a href="{{route("password.request")}}" class="change-password-link">Forgot password?</a>
+                    </div>
+
 </form>
 
 @endsection

@@ -1,0 +1,98 @@
+.white-rectangle {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 120px;  /* aumentado para descer mais os campos */
+    height: 670px;
+    position: relative;  /* para melhor controle dos elementos filhos */
+}
+
+/* Container para agrupar os campos do formulário */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;  /* espaçamento consistente entre elementos */
+    margin-top: 40px;  /* espaço adicional do topo */
+}
+
+/* Campos de formulário login */
+.form-floating-login .form-control {
+    width: 383px;
+    height: 45px;
+    font-size: 14px;
+    background-color: #DFDFDF;
+    color: rgb(0, 0, 0);
+    border-radius: 10px;
+    padding: 0.25rem 0.5rem;
+}
+
+.form-floating-login {
+    margin-bottom: 0;
+}
+
+/* Botão */
+.button_wide {
+    width: 138px;
+    height: 39px;
+    border-radius: 5px;
+    background-color: #000;
+    color: #fff;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+
+.button-container {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;  /* espaço acima do botão */
+}
+
+.change-password-link {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.change-password-link:hover {
+    color: #999999;
+}
+
+/* Logo */
+.rectangle-header-logo {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.rectangle-logo {
+    position: relative;
+    top: -120px;
+    left: 135px;
+    width: 200px;
+    height: auto;
+}
+
+/* Slogan */
+.rectangle-header-slogan {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.rectangle-slogan {
+    position: relative;
+    top: -100px;
+    left: 90px;
+    width: 310px;
+    height: auto;
+}

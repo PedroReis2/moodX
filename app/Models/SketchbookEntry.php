@@ -28,6 +28,6 @@ class SketchbookEntry extends Model
 
     public function sharedContents()
     {
-        return $this->hasMany(SharedContent::class);
+        return $this->hasMany(SharedContent::class, 'sketchbook_entry_id');
     }
 }

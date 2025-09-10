@@ -1,52 +1,8 @@
-{{-- <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hover Effect Gallery</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
-      <!-- Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/test1.css') }}">
-
-    <!-- JS -->
-    <script src="{{ asset('assets/bootstrap.js') }}" defer></script>
-    <script src="{{ asset('js/test1.js') }}" defer></script>
-
-</head>
-
-
-
-<body class="bg-gray-900 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-7xl mx-auto">
-    <h1 class="text-4xl font-bold text-center text-white mb-2">Sketchbooks Entries</h1>
-
-<div class="gallery-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    @foreach ($sketchbookEntries as $sketchbook)
-        <a href="{{ route('sketchbookView', $sketchbook->id) }}">
-            <div class="gallery-item zoom rounded-lg overflow-hidden h-64 relative">
-                <img src="{{ $sketchbook->content_url }}" alt="Nature" class="gallery-img">
-                <div class="gallery-title">{{ $sketchbook->content_text }}</div>
-            </div>
-        </a>
-    @endforeach
-</div>
-
-  </div>
-  <script src="script.js"></script>
-</body>
-</html> --}}
-
-
 <html lang="pt-PT">
 <head>
 <meta charset="utf-8" />
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Sketchbook Gallery</title>
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700&subset=latin,cyrillic' rel='stylesheet'>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -95,32 +51,31 @@
 
         <aside class="modal-comments">
             <header>
-                <img src="{{ $entry->sketchbook->user->avatar ?? 'https://i.pravatar.cc/64' }}" alt="Avatar" />
+                <img src="{{ $entry->sketchbook->user->profile->avatar ?? 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}" alt="Avatar" />
                 <div>
                     <strong>{{ $entry->sketchbook->user->name ?? 'Desconhecido' }}</strong>
-                    <span>{{ $entry->sketchbook->location ?? 'Porto' }}</span>
+                    <span>{{ $entry->content_text ?? 'sem descrissao' }}</span>
+
                 </div>
-                <button id="btn-close-modal" type="button" class="close-modal ml-auto">Fechar</button>
+                <button type="button" class="close-modal">Fechar</button>
             </header>
+
+            <div class="user-info-below">
+                {{-- Informações adicionais do usuário podem ser colocadas aqui --}}
+            </div>
 
             <div class="comments-list">
                 @foreach ($entry->comments as $comment)
                     <article class="comment">
-                        <img src="{{ $comment->user->avatar ?? 'https://i.pravatar.cc/64' }}" alt="Avatar" />
+                        <img src="{{ $comment->user->profile->avatar ?? 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}" alt="Avatar" />
                         <div>
-                            <strong>{{ $comment->user->name ?? 'Anon' }}</strong>
+                            <strong>{{ $comment->user->name ?? '...' }}</strong>
                             <p>{{ $comment->comment }}</p>
                             <time datetime="{{ $comment->created_at }}">{{ $comment->created_at->diffForHumans() }}</time>
                         </div>
                     </article>
                 @endforeach
             </div>
-
-            {{-- <form method="POST" action="{{ route('comments.store', $entry->id) }}" class="add-comment">
-                @csrf
-                <input type="text" name="comentario" placeholder="Adiciona um comentário…" class="flex-1 px-2 py-1"/>
-                <button type="submit" class="px-2 py-1 bg-blue-600 rounded text-white">Publicar</button>
-            </form> --}}
 
             <form method="POST" action="{{ route('comments.store', $entry->id) }}" class="add-comment" data-entry-id="{{ $entry->id }}">
             @csrf

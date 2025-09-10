@@ -25,21 +25,22 @@
 
             <!-- Coluna direita: formulário -->
             <div class="create_account_screen">
-                <form class="create_account_form">
+                <form method="POST" action="{{route('store_user')}}" class="create_account_form">
+                    @csrf
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="firstname" placeholder="firstname">
+                        <input type="text" class="form-control" id="firstname" placeholder="firstname" name="first_name">
                         <label for="firstname">First Name</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="lastname" placeholder="lastname">
+                        <input type="text" class="form-control" id="lastname" placeholder="lastname" name="last_name">
                         <label for="lastname">Last Name</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="username" placeholder="username">
+                        <input type="text" class="form-control" id="username" placeholder="username" name="name">
                         <label for="username">Username</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="email" placeholder="name@example.com">
+                        <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email">
                         <label for="email">Email</label>
                     </div>
                     <div class="form-floating mb-3">
@@ -49,6 +50,11 @@
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                         <label for="password">Password</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" required>
+                        <label for="password_confirmation">Confirm Password</label>
                     </div>
                     <div class="button-container">
                         <button type="submit" class="button button_wide">Save</button>

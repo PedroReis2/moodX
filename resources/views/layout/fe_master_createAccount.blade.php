@@ -37,10 +37,10 @@
             <img src="{{ asset('images/logo.png') }}" alt="Header Logo" class="rectangle-logo">
         </div>
 
-        <!-- Botão de fechar (X) -->
+        {{-- <!-- Botão de fechar (X) -->
         <a href="{{ url('/') }}" class="close-button">
             <i class="fa-solid fa-xmark"></i>
-        </a>
+        </a> --}}
 
         @yield('content') <!-- conteúdo da view entra aqui -->
     </div>
@@ -61,12 +61,12 @@
                         <button type="submit">Logout</button>
                     </form>
                     @else
-                        <a
+                        {{-- <a
                             href="{{ route('login') }}"
                             class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal"
                         >
                             Log in
-                        </a>
+                        </a> --}}
 
                         @if (Route::has('add_user'))
                             <a

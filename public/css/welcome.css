@@ -1,0 +1,212 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #F2F2F2 !important; /* força o cinza */
+}
+
+.page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+}
+
+
+.white-rectangle {
+    background-color: #fff;
+    width: 525px;
+    min-height: 670px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+
+
+/* ===== Logo e slogan centralizados ===== */
+.rectangle-header-logo,
+.rectangle-header-slogan {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* centraliza horizontalmente */
+    margin-bottom: 20px;
+}
+
+.rectangle-logo {
+    width: 200px;
+    height: auto;
+    position: static; /* remove top/left */
+}
+
+.rectangle-slogan {
+    width: 310px;
+    height: auto;
+    position: static; /* remove top/left */
+}
+
+/* ===== Formulário ===== */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    margin-top: 20px; /* espaço entre slogan e campos */
+}
+
+/* Campos de formulário login */
+.form-floating-welcome .form-control {
+    width: 383px;
+    height: 45px;
+    font-size: 14px;
+    background-color: #000000;
+    color: #fff;
+    border-radius: 10px;
+    padding: 0.25rem 0.5rem;
+}
+
+.form-floating-welcome2 .form-control {
+    width: 383px;
+    height: 45px;
+    font-size: 14px;
+    background-color: #DFDFDF;
+    color: #000;
+    border-radius: 10px;
+    padding: 0.25rem 0.5rem;
+}
+
+.form-floating-welcome .form-control::placeholder {
+    color: #ffffff;
+    opacity: 1;
+}
+
+.form-floating-welcome {
+    margin-bottom: 0;
+}
+
+/* Botão */
+.button_wide {
+    width: 138px;
+    height: 39px;
+    border-radius: 5px;
+    background-color: #000;
+    color: #fff;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+
+.button-container {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.change-password-link {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.change-password-link:hover {
+    color: #999999;
+}
+
+/* ===== Media Queries ===== */
+
+/* Tablet */
+@media (max-width: 992px) {
+    .white-rectangle {
+        width: 420px;
+        min-height: 670px;
+        padding-top: 30px;
+    }
+
+    .form-floating-welcome .form-control,
+    .form-floating-welcome2 .form-control {
+        width: 300px;
+        height: 40px;
+        font-size: 13px;
+    }
+
+    .button_wide {
+        width: 120px;
+        height: 35px;
+    }
+
+    .rectangle-logo {
+        width: 160px;
+    }
+
+    .rectangle-slogan {
+        width: 250px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .white-rectangle {
+        width: 320px;
+        padding-top: 20px;
+    }
+
+    .form-floating-welcome .form-control,
+    .form-floating-welcome2 .form-control {
+        width: 260px;
+        height: 35px;
+        font-size: 12px;
+    }
+
+    .button_wide {
+        width: 110px;
+        height: 32px;
+    }
+
+    .rectangle-logo {
+        width: 120px;
+    }
+
+    .rectangle-slogan {
+        width: 180px;
+    }
+}
+
+/* Telemóveis muito pequenos */
+@media (max-width: 400px) {
+    .white-rectangle {
+        width: 280px;
+        padding-top: 15px;
+    }
+
+    .form-floating-welcome .form-control,
+    .form-floating-welcome2 .form-control {
+        width: 220px;
+        height: 32px;
+        font-size: 11px;
+    }
+
+    .button_wide {
+        width: 100px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .rectangle-logo {
+        width: 100px;
+    }
+
+    .rectangle-slogan {
+        width: 140px;
+    }
+}

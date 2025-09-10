@@ -6,17 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
+
+
     <!-- Google Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 
-
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/register.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/change-password.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/master-simple.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- JS -->
@@ -25,20 +26,14 @@
     <script src="{{ asset('js/register.js') }}" defer></script> {{-- JS do formulário --}}
 
 
-
-
 </head>
-<body>
+<body style="background-color: #F2F2F2; margin:0; padding:0; min-height:100vh;">
 
-<div class="page-container">
-    <div class="custom-rectangle">
-
-
-        @yield('content') <!-- conteúdo da view entra aqui -->
+    <div class="page-container">
+        <div class="white-rectangle">
+            @yield('content')
+        </div>
     </div>
-</div>
-
-
 
 </body>
 </html>

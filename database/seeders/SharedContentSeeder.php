@@ -10,28 +10,29 @@ class SharedContentSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('shared_contents')->insert([
-            [
-                'sketchbook_entry_id' => 1,
-                'user_ids' => json_encode([2, 3, 4]), // array de IDs dos usuários que podem aceder
-                'permissions' => 'view',
+        $sharedEntries = [];
+
+        // Seleciona 30 sketchbook entries aleatórios de 1 a 60
+        $entryIds = range(1, 60);
+        shuffle($entryIds);
+        $entryIds = array_slice($entryIds, 0, 30);
+
+        foreach ($entryIds as $entryId) {
+            $possibleUsers = [2, 3, 4, 5, 6, 7];
+            shuffle($possibleUsers);
+            $userIds = array_slice($possibleUsers, 0, rand(1, 4)); // 1 a 4 users aleatórios
+
+            $permissions = rand(0, 1) ? 'view' : 'edit';
+
+            $sharedEntries[] = [
+                'sketchbook_entry_id' => $entryId,
+                'user_ids' => json_encode($userIds),
+                'permissions' => $permissions,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-            ],
-            [
-                'sketchbook_entry_id' => 2,
-                'user_ids' => json_encode([2]),
-                'permissions' => 'edit',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'sketchbook_entry_id' => 3,
-                'user_ids' => json_encode([2, 3, 6]),
-                'permissions' => 'view',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-        ]);
+            ];
+        }
+
+        DB::table('shared_contents')->insert($sharedEntries);
     }
 }
