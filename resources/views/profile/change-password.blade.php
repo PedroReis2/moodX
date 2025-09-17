@@ -1,35 +1,50 @@
 @extends('layout.fe_master')
 
-@section('title', 'Registo')
+@section('title', 'Create Account')
 
 @section('content')
-<div class="register-page">
+<div class="register-page container-fluid">
+    <div class="header-container mx-auto" style="max-width: 1062px; position: relative;">
 
-    <h1 class="page-title">PASSWORD CHANGES</h1> <!-- título fora do retângulo -->
+        <!-- Logo -->
+        <div class="layout-logo">
+            <img src="{{ asset('images/logo.png') }}" class="logo-img raise-up" alt="Logo">
+        </div>
+
+        <!-- Título -->
+        <div class="title-outside">
+            <h1 class="page-title">PASSWORD CHANGES</h1>
+        </div>
+
+        <!-- Botão de fechar -->
+        <div class="close-button-container">
+            <a href="{{ url('/') }}" class="close-button">
+                <i class="fa-solid fa-xmark"></i>
+            </a>
+        </div>
+
+    <div class="white-form-rectangle">
+        <div class="create_account_screen">
+            <form class="create_account_form" method="POST" action="{{ route('password.update') }}">
+                @csrf
+                <div class="form-floating-pass">
+                    <input type="password" class="form-control" id="current-password" placeholder="Current Password" name="current_password" required>
+                    <label for="current-password"></label>
+                </div>
+                <div class="form-floating-pass">
+                    <input type="password" class="form-control" id="new-password" placeholder="New Password" name="password" required>
+                    <label for="new-password"></label>
+                </div>
+                <div class="form-floating-pass">
+                    <input type="password" class="form-control" id="confirm-password" placeholder="Confirm New Password" name="password_confirmation" required>
+                    <label for="confirm-password"></label>
+                </div>
+                <div class="button-container">
+    <button type="button" class="button button_wide" onclick="window.location='{{ url('/login') }}'">
+        Save changes
+    </button>
 </div>
-
-    <div class="white-rectangle">
-
-            <!-- formulário -->
-            <div class="create_account_screen">
-                <form class="create_account_form">
-                    <div class="form-floating-pass mb-3">
-                        <input type="text" class="form-control" id="firstname" placeholder="Current Password">
-                        <label for="firstname"></label>
-                    </div>
-                    <div class="form-floating-pass mb-3">
-                        <input type="text" class="form-control" id="lastname" placeholder="New Password">
-                        <label for="lastname"></label>
-                    </div>
-                    <div class="form-floating-pass mb-3">
-                        <input type="text" class="form-control" id="username" placeholder="Confirm New Password">
-                        <label for="username"></label>
-                    </div>
-                    <div class="button-container">
-                        <button type="submit" class="button button_wide">Save changes</button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
 </div>

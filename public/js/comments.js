@@ -7,7 +7,9 @@ document.querySelectorAll('.add-comment').forEach(form => {
 
         fetch(`/comments/${entryId}`, {
             method: "POST",
-            headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content") },
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+            },
             body: formData
         })
         .then(res => res.json())
@@ -15,14 +17,21 @@ document.querySelectorAll('.add-comment').forEach(form => {
             let commentsList = this.closest('.modal-comments').querySelector('.comments-list');
             let article = document.createElement('article');
             article.classList.add('comment');
+
+            let avatar = data.user.profile?.avatar ? '/storage/' + data.user.profile.avatar : 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg';
+            let name = data.user.name ?? '...';
+            let comment = data.comment;
+            let time = new Date(data.created_at).toLocaleString(); // ou "agora mesmo" se quiseres simplificar
+
             article.innerHTML = `
-                <img src="${data.user.profile?.avatar ?? 'https://i.pravatar.cc/64'}" alt="Avatar" />
+                <img src="${avatar}" alt="Avatar" />
                 <div>
-                    <strong>${data.user.name ?? 'Anon'}</strong>
-                    <p>${data.comment}</p>
-                    <time datetime="${data.created_at}">agora mesmo</time>
+                    <strong>${name}</strong>
+                    <p>${comment}</p>
+                    <time datetime="${data.created_at}">0s</time>
                 </div>
             `;
+
             commentsList.appendChild(article);
             this.reset();
         });

@@ -1,0 +1,130 @@
+.register-page {
+    width: 100%;
+    min-height: 100vh; 
+    background-color: #F2F2F2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0; 
+    box-sizing: border-box;
+}
+
+
+.header-container {
+    width: 100%;
+    max-width: 1062px;
+    margin: 0 auto; 
+    position: relative;
+    padding: 0;
+    margin-top: 60px; 
+}
+
+
+.layout-logo {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0;
+}
+
+
+.logo-img.raise-up {
+    margin-top: 0;
+}
+
+.logo-img {
+    width: 178px; 
+    height: auto;
+}
+
+
+.message-circle {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 180px auto 20px auto;
+}
+
+.message-circle img {
+    width: 72px;
+    height: 72px;
+    display: block;
+    margin: 0 auto;
+}
+
+
+.under-construction-content {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto 0 auto; 
+    text-align: center;
+}
+
+.under-construction-content h1 {
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.under-construction-content p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #555;
+}
+
+
+
+/* Tablets */
+@media (max-width: 1024px) {
+    .logo-img {
+        width: 150px;
+    }
+
+    .under-construction-content h1 {
+        font-size: 22px;
+    }
+
+    .under-construction-content p {
+        font-size: 15px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .logo-img {
+        width: 130px;
+    }
+
+    .under-construction-content {
+        max-width: 90%;
+        margin-top: 15px;
+    }
+
+    .under-construction-content h1 {
+        font-size: 20px;
+    }
+
+    .under-construction-content p {
+        font-size: 14px;
+    }
+}
+
+/* pequenos ecrãs */
+@media (max-width: 576px) {
+    .logo-img {
+        width: 110px;
+    }
+
+    .under-construction-content h1 {
+        font-size: 18px;
+    }
+
+    .under-construction-content p {
+        font-size: 13px;
+    }
+}

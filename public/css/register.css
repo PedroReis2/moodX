@@ -1,77 +1,107 @@
+html, body {
+    height: auto;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 .page-container {
     width: 100%;
-    min-height: 100vh;
-    background-color: #ffffff; /* fundo branco da página */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    min-height: 100%;
+    background-color: #ffffff;
+    display: block;
     padding: 20px;
     box-sizing: border-box;
 }
 
 .custom-rectangle {
-    width: 100%;            /* ocupa toda a largura disponível */
-    max-width: 1388px;      /* mas nunca passa do design original */
-    min-height: 975px;      /* mantém altura no desktop */
+    width: 100%;
+    max-width: 1388px;
+    min-height: auto;
     background-color: #F2F2F2;
     border-radius: 20px;
-
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     padding: 40px;
     box-sizing: border-box;
-    margin: 0 auto;         /* centraliza */
+    margin: 0 auto;
+    position: relative;
 }
 
+.layout-logo {
+    max-width: 1062px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+}
 
+.layout-logo img {
+    display: block;
+}
 
-
-/* Título dinâmico das views - FORÇANDO ALINHAMENTO À ESQUERDA */
+/* Título dinâmico das views */
 .page-title {
     font-family: 'Inter', sans-serif;
     font-weight: 500;
     font-size: 14px;
     color: #000;
-    margin: 0 0 10px 120px;       /* espaçamento abaixo do título */
-    text-align: left;          /* alinha o texto à esquerda */
-    align-self: flex-start;    /* força alinhamento à esquerda dentro do flex */
-    width: auto;               /* largura natural do texto */
-    display: block;            /* garante que seja um elemento de bloco */
+    margin: 0 0 10px 0;
+    text-align: left;
+    width: auto;
 }
 
+.title-wrapper .page-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000;
+    margin: 0 0 10px 0;
+    text-align: left;
+    width: auto;
+    display: block;
+}
 
-/* Remover position absoluta */
 .register-page {
     display: flex;
-    flex-direction: column;     /* empilha verticalmente */
-    justify-content: flex-start; /* alinha ao topo */
-    align-items: flex-start;    /* alinha à esquerda */
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
     padding: 20px;
     background-color: transparent;
     width: 100%;
 }
 
-
-.white-rectangle {
-    width: 100%;            /* ocupa todo o espaço */
-    max-width: 1062px;      /* limite no desktop */
-    min-height: 565px;      /* mantém altura base */
-    background-color: #ffffff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-    box-sizing: border-box;
-}
-
-.white-rectangle-homepage {
+/* Container do botão fechar */
+.close-button-container {
     width: 100%;
-    max-width: 525px;
-    min-height: 670px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.close-button {
+    font-size: 24px;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #999;
+}
+
+/* Retângulo branco principal */
+.white-rectangle {
+    width: 100%;
+    max-width: 1062px;
+    min-height: 565px;
     background-color: #ffffff;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     border-radius: 10px;
@@ -80,45 +110,54 @@
     align-items: center;
     padding: 40px;
     box-sizing: border-box;
+    position: relative;
 }
 
-
-/* Container flex interno */
+/* Layout da linha de conteúdo */
 .content-row {
     display: flex;
     width: 100%;
     height: 100%;
     align-items: center;
+    gap: 40px;
 }
 
-/* Coluna esquerda: círculo da imagem */
+/* Coluna da foto de perfil */
 .profile-column {
-    width: 100%;          /* ocupa toda a largura em mobile */
-    max-width: 300px;     /* limite no desktop */
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.profile-pic-wrapper {
     position: relative;
-    margin-right: 40px;
-    transform: none;      /* remove o translate que quebra no mobile */
+    width: 300px;
+    height: 300px;
 }
 
-
-.circle, .profile-pic {
+.circle {
     width: 100%;
-    max-width: 350px;
-    height: auto;         /* altura proporcional */
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
+.circle img.profile-pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
 
 .p-image {
-  position: absolute;
-  bottom: 50px;  /* distância da borda inferior */
-  right: 50px;   /* distância da borda direita */
-  color: #666666;
-  cursor: pointer;
-  font-size: 2em;
-  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    color: #666666;
+    cursor: pointer;
+    font-size: 2.5em;
+    transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
 }
 
 .p-image:hover {
@@ -129,50 +168,49 @@
     display: none;
 }
 
-/* Coluna direita: formulário */
-.create_account_screen {
+/* Coluna do formulário */
+.form-column {
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-left: auto;
-    align-items: flex-start;
-    padding-right: 40px; /* espaço entre formulário e borda direita */
 }
 
-/* Campos de formulário register */
+/* CAMPOS DO FORMULÁRIO - 383x45px no DESKTOP */
+.create_account_form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.form-floating {
+    width: 100%;
+    max-width: 383px;
+}
+
 .form-floating .form-control {
-    width: 100%;          /* ocupa toda a coluna */
-    max-width: 383px;     /* limite em desktop */
+    width: 100%;
     height: 45px;
     font-size: 14px;
     background-color: #D9D9D9;
+    border: 1px solid #ccc;
     border-radius: 10px;
-    padding: 0.5rem 0.75rem;
+    padding: 0.75rem 1rem;
+    box-sizing: border-box;
+    color: #000;
+}
+
+.form-floating .form-control::placeholder {
+    color: #888;
 }
 
 .form-floating label {
-    font-size: 14px;
-    top: 5px;
-    left: 10px;
-    opacity: 1;
-}
-
-.form-floating-homepage1 .form-control::placeholder {
-    color: white;           /* placeholder branco */
-    opacity: 1;
-}
-
-.form-floating-homepage1 label {
-    font-size: 14px;
-    top: 5px;
-    left: 10px;
-    opacity: 1;
-
-    color: white; /* label branco */
-}
-
-.form-floating-homepage1 .form-control:focus + label {
-    color: white; /* mantém o label branco quando o input está focado */
+    font-size: 12px;
+    color: #666;
+    padding: 0 0.25rem;
+    background-color: #D9D9D9;
+    border-radius: 3px;
 }
 
 /* Botão */
@@ -185,97 +223,150 @@
     font-size: 14px;
     border: none;
     cursor: pointer;
+    margin-top: 20px;
+}
+
+.button_wide:hover {
+    background-color: #333;
+}
+
+/* RESPONSIVIDADE */
+
+/* Tablets (768px até 1024px) */
+@media (max-width: 1024px) {
+    .white-rectangle {
+        padding: 30px;
+    }
+
+    .profile-pic-wrapper {
+        width: 250px;
+        height: 250px;
+    }
+
+
+    .content-row {
+        gap: 30px;
+    }
+}
+
+/* Mobile (até 768px) */
+@media (max-width: 768px) {
+    .custom-rectangle {
+        padding: 20px;
+        min-height: auto;
+    }
+
+    .white-rectangle {
+        padding: 20px;
+        min-height: auto;
+    }
+
+    /* Muda para layout vertical no mobile */
+    .content-row {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .profile-pic-wrapper {
+        width: 200px;
+        height: 200px;
+    }
+
+    /* Campos ocupam largura total no mobile */
+    .form-floating {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .form-floating .form-control {
+        font-size: 16px;
+    }
+
+    .create_account_form {
+        width: 100%;
+    }
+
+    /* Botão centralizado no mobile */
+    .text-end {
+        text-align: center !important;
+    }
+
+    .close-button-container {
+        margin-bottom: 15px;
+    }
+}
+
+/* Mobile pequeno (até 576px) */
+@media (max-width: 576px) {
+    .custom-rectangle {
+        padding: 15px;
+    }
+
+    .white-rectangle {
+        padding: 15px;
+    }
+
+    .profile-pic-wrapper {
+        width: 150px;
+        height: 150px;
+    }
+
+    .p-image {
+        font-size: 2em;
+        bottom: 2px;
+        right: 2px;
+    }
+
+    .form-floating {
+        margin-bottom: 15px;
+    }
+
+    .create_account_form {
+        gap: 15px;
+    }
+}
+
+/* Ajustes específicos para o Bootstrap */
+@media (min-width: 768px) {
+    .row.align-items-center {
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .col-md-5 {
+        flex: 0 0 auto;
+        width: 41.66666667%;
+    }
+
+    .col-md-7 {
+        flex: 0 0 auto;
+        width: 58.33333333%;
+    }
 }
 
 .button-container {
     width: 100%;
-    text-align: right;
+    text-align: center;
     margin-top: 10px;
+    justify-content: flex-end;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-top: 15px;
 }
 
 .change-password-link {
-    display: block;        /* ocupa linha inteira */
-    margin-bottom: 10px;   /* espaço entre link e botão */
+    display: block;
+    text-align: center;
     font-size: 14px;
     font-family: 'Inter', sans-serif;
-    font-weight: 500;      /* Medium */
-    color: #000;           /* preto */
-    text-decoration: none;  /* sem sublinhado */
-    cursor: pointer;
-    margin-right: 260px;
-    padding-top: 10px;
-
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    margin-top: 10px;
 }
 
 .change-password-link:hover {
-    color: #999999;        /* cinza claro ao passar o mouse */
+    color: #999999;
 }
-
-
-.rectangle-header {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start; /* imagem à esquerda */
-    margin-bottom: 20px; /* espaço abaixo da imagem */
-}
-
-.rectangle-logo {
-    position: relative;
-    top: -60px;       /* sobe a imagem no desktop */
-    left: 135px;      /* desloca para a direita no desktop */
-    width: 200px;
-    height: auto;
-}
-
-
-
-.custom-rectangle {
-    position: relative; /* importante para o botão X ficar relativo ao retângulo */
-}
-
-.close-button {
-    position: absolute;
-    top: 60px;    /* aumenta para descer */
-    right: 100px; /* aumenta para afastar da direita (mover para a esquerda) */
-    font-size: 24px;
-    color: #000;  /* preto */
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.close-button:hover {
-    color: #999;  /* cinza claro ao passar o mouse */
-}
-
-@media (max-width: 768px) {
-    .custom-rectangle,
-    .white-rectangle,
-    .white-rectangle-homepage {
-        padding: 20px;
-        min-height: auto; /* altura flexível em telas pequenas */
-    }
-
-    .page-title {
-        margin-left: 20px; /* menos espaço no mobile */
-    }
-
-    .close-button {
-        top: 20px;
-        right: 20px;
-    }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-    .rectangle-logo {
-        position: relative;
-        top: 40px;          /* empurra para baixo no mobile */
-        left: 0;            /* remove deslocamento horizontal */
-        margin: 0 auto 20px auto; /* centraliza horizontalmente */
-        width: 150px;       /* reduz tamanho para mobile */
-    }
-}
-
-
 
 

@@ -71,3 +71,13 @@ $(document).ready(function() {
        $(".file-upload").click();
     });
 });
+
+
+function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function(){
+        const img = document.getElementById('profilePreview');
+        img.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}

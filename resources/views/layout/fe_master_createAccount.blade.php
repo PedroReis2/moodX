@@ -34,7 +34,9 @@
 
         <!-- Imagem no topo (igual em todas as views) -->
         <div class="rectangle-header">
+            <a href="{{ url('/dashboard') }}">
             <img src="{{ asset('images/logo.png') }}" alt="Header Logo" class="rectangle-logo">
+            </a>
         </div>
 
         {{-- <!-- Botão de fechar (X) -->

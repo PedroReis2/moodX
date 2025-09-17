@@ -12,7 +12,7 @@ class Profile extends Model
     protected $fillable = [
         'user_id',
         'bio',
-        'avatar_url',
+        'avatar',
         'genre',
         'birth_date',
         'last_login',

@@ -51,7 +51,7 @@
 
         <aside class="modal-comments">
             <header>
-                <img src="{{ $entry->sketchbook->user->profile->avatar ?? 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}" alt="Avatar" />
+                <img src="{{ $entry->sketchbook->user->profile->avatar ? asset('storage/' . $entry->sketchbook->user->profile->avatar) : 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}" alt="Avatar" />
                 <div>
                     <strong>{{ $entry->sketchbook->user->name ?? 'Desconhecido' }}</strong>
                     <span>{{ $entry->content_text ?? 'sem descrissao' }}</span>
@@ -67,7 +67,7 @@
             <div class="comments-list">
                 @foreach ($entry->comments as $comment)
                     <article class="comment">
-                        <img src="{{ $comment->user->profile->avatar ?? 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}" alt="Avatar" />
+                        <img src="{{ $comment->user->profile->avatar ? asset('storage/' . $comment->user->profile->avatar) : 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}" alt="Avatar" />
                         <div>
                             <strong>{{ $comment->user->name ?? '...' }}</strong>
                             <p>{{ $comment->comment }}</p>

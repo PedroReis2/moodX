@@ -1,38 +1,65 @@
 .white-rectangle {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
-    padding-top: 120px;  /* aumentado para descer mais os campos */
+    padding-top: 120px;
     height: 670px;
-    position: relative;  /* para melhor controle dos elementos filhos */
 }
 
-/* Container para agrupar os campos do formulário */
+/* Logo e slogan */
+.rectangle-header-logo, .rectangle-header-slogan {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.rectangle-logo { width: 200px; }
+.rectangle-slogan { width: 310px; }
+.rectangle-logo, .rectangle-slogan { height: auto; }
+
+/* Formulário */
 .form-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;  /* espaçamento consistente entre elementos */
-    margin-top: 40px;  /* espaço adicional do topo */
+    margin-top: 80px;
+    width: 100%;
+    padding: 0 20px;
 }
 
-/* Campos de formulário login */
-.form-floating-login .form-control {
-    width: 383px;
-    height: 45px;
+.form-container form {
+    width: 100%;
+    max-width: 383px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container .form-floating-login.mb-1 {
+    margin: 0 !important;
+    padding-bottom: 10px !important;
+    width: 100%;
+}
+
+.form-container .form-floating-login .form-control {
+    width: 100% !important;
+    height: 45px !important;
     font-size: 14px;
     background-color: #DFDFDF;
-    color: rgb(0, 0, 0);
     border-radius: 10px;
     padding: 0.25rem 0.5rem;
+    border: 1px solid #ccc;
+    color: #000;
 }
 
-.form-floating-login {
-    margin-bottom: 0;
+.form-floating-login .form-control::placeholder {
+    text-align: center;
+    color: #888;
 }
 
-/* Botão */
+.form-container .form-floating-login label { display: none; }
+
+/* Botão e link */
 .button_wide {
     width: 138px;
     height: 39px;
@@ -42,57 +69,30 @@
     font-size: 14px;
     border: none;
     cursor: pointer;
+    margin-top: 40px;
 }
 
 .button-container {
-    width: 100%;
     text-align: center;
-    margin-top: 20px;  /* espaço acima do botão */
+    margin-top: 20px;
 }
 
 .change-password-link {
     display: block;
     text-align: center;
-    font-size: 14px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
+    font: 500 14px 'Inter', sans-serif;
     color: #000;
     text-decoration: none;
     margin-top: 10px;
 }
 
-.change-password-link:hover {
-    color: #999999;
+.change-password-link:hover { color: #999; }
+
+/* Responsivo */
+@media (max-width: 420px) {
+    .form-container { padding: 0 15px; }
 }
 
-/* Logo */
-.rectangle-header-logo {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 20px;
-}
-
-.rectangle-logo {
-    position: relative;
-    top: -120px;
-    left: 135px;
-    width: 200px;
-    height: auto;
-}
-
-/* Slogan */
-.rectangle-header-slogan {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 20px;
-}
-
-.rectangle-slogan {
-    position: relative;
-    top: -100px;
-    left: 90px;
-    width: 310px;
-    height: auto;
+@media (max-width: 320px) {
+    .form-container { padding: 0 10px; }
 }

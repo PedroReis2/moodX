@@ -15,7 +15,7 @@ class DashboardController extends Controller
             return view('dashboard.hub');
         }
         if (Auth::user()->role_id == 3){
-            return view('dashboard.dashboard');
+            return view('dashboard.gallery');
         }
     }
 
