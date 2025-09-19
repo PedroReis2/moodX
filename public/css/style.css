@@ -1,17 +1,17 @@
 /* Fundo geral da página */
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #ffffff; /* Fundo branco total */
+    background-color: #ffffff;
     margin: 0;
-    padding: 20px; /* Espaço ao redor do container cinza */
+    padding: 20px;
 }
 
 /* Conteiner geral que envolver navbar + conteúdo */
 .dashboard-wrapper {
-    background-color: #f8f8f8; /* Cinzento claro */
+    background-color: #f8f8f8;
     border-radius: 16px;
     padding: 24px 40px;
-    min-height: calc(100vh - 40px); /* Altura da tela - padding externo */
+    min-height: calc(100vh - 40px);
     box-sizing: border-box;
 }
 
@@ -52,15 +52,15 @@ body {
     background-color: #333;
 }
 
+/* Avatar redondo */
 .avatar {
     width: 24px;
     height: 24px;
+    background-color: #ccc;
     border-radius: 50%;
-    object-fit: cover;
-    display: inline-block;
 }
 
-/* === ÍCONE HAMBÚRGUER (apenas mobile) === */
+/* Icon hamburguer (apenas mobile) */
 .hamburger {
     display: none;
     font-size: 24px;
@@ -71,7 +71,7 @@ body {
     transform: translateY(-50%);
 }
 
-/* === MENU HAMBÚRGUER (dropdown em mobile) === */
+/* Menu hamburguer (dropdown em mobile) */
 .mobile-menu {
     display: none;
     flex-direction: column;
@@ -103,7 +103,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 180px); /* Espaço total - navbar e padding */
+    height: calc(100vh - 180px);
 }
 
 .empty-state {
@@ -155,10 +155,10 @@ body {
 
 .projects-title {
     font-family: 'Inter', sans-serif;
-    font-size: 16px;             /* Tamanho menor */
+    font-size: 16px;
     font-weight: 600;
-    text-transform: uppercase;   /* Todas as letras em maiúsculas */
-    letter-spacing: 1px;         /* Espaçamento entre letras */
+    text-transform: uppercase;
+    letter-spacing: 1px;
     color: #4D5959;
     margin-bottom: 24px;
 }
@@ -213,12 +213,12 @@ body {
 .project-name {
     font-weight: 600;
     font-size: 14px;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo preto semi-transparente */
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
-    width: 100%;                /* Ocupa toda a largura da imagem */
-    text-align: center;         /* Texto centrado */
-    padding: 8px 0;             /* Espaço interno (top/bottom) */
-    position: absolute;         /* Fixa no fundo da imagem */
+    width: 100%;
+    text-align: center;
+    padding: 8px 0;
+    position: absolute;
     bottom: 0;
     left: 0;
     z-index: 3;
@@ -271,5 +271,316 @@ body {
 
     .cta-empty {
         padding: 8px 16px;
+    }
+}
+
+
+
+
+/* ******* MODAL PRINCIPAL ****** */
+.modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal.hidden {
+    display: none !important;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 1000px;
+    height: 80vh;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    padding: 24px;
+    overflow: hidden; /* Impede crescimento com muitos comentários */
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+}
+
+/* layout interno */
+.modal-inner {
+    display: flex;
+    gap: 24px;
+    flex: 1;
+    min-height: 0;
+}
+
+/* lardo esquerdo - imagem */
+.modal-image-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.modal-image-section img {
+    max-width: 90%;
+    max-height: 70%;
+    border-radius: 12px;
+    object-fit: contain;
+}
+
+/* Lado direito:  detalhes + comentários */
+.modal-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Bloco com informações centralizado verticalemte */
+.modal-info {
+    flex-shrink: 0; /* Não encolhe */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 16px;
+    min-height: 120px;
+}
+
+.description-title {
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.description-text {
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.meta {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.modal-actions {
+    margin-top: 8px;
+}
+
+.share-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #ccc;
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Comentários com scroll interno*/
+.modal-comments {
+    flex: 1; /* Ocupa o espaço restante */
+    overflow-y: auto; /* Scroll só nesta área */
+    border-top: 1px solid #e5e5e5;
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 200px;
+    scrollbar-width: thin;
+    scrollbar-color: #bbb transparent;
+}
+
+/* Barra de Scroll*/
+.modal-comments::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-comments::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 6px;
+}
+
+/* Lista de comentários */
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comment {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.comment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-content {
+    background: #f1f1f1;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+.comment-username {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+/* Formulário fixo no fundo */
+.comment-form {
+    flex-shrink: 0; /* Mantém no fundo mesmo com scroll */
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.comment-input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+.comment-button {
+    align-self: flex-end;
+    background: #000;
+    color: white;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.comment-button:hover {
+    background-color: #333;
+}
+
+/* Título do projeto no modal */
+.modal-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #4D5959;
+    margin-bottom: 8px;
+}
+
+/* Título dos comentários */
+.modal-comments h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #4D5959;
+    margin-bottom: 12px;
+}
+
+/* Envolve todo o conteúdo do lado direito e centraliza */
+.modal-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+/* Mini Modal da imagem */
+.image-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000; /* Por cima do modal */
+}
+
+.image-overlay.hidden {
+    display: none !important;
+}
+
+.image-overlay-content {
+    position: relative;
+    max-width: 70%;
+    max-height: 80%;
+}
+
+.image-overlay-content img {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.close-overlay {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+    z-index: 10;
+    background: transparent;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+/*  Ajustes para mobile  */
+@media (max-width: 768px) {
+    .modal-content {
+        height: auto;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-inner {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .modal-image-section img {
+        max-width: 100%;
+        max-height: 250px;
+    }
+
+    .modal-details-wrapper {
+        justify-content: flex-start;
+    }
+
+    .modal-comments {
+        max-height: 150px;
     }
 }

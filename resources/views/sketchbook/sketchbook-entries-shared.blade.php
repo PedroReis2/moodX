@@ -1,18 +1,7 @@
-<html lang="pt-PT">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<title>Sketchbook Gallery</title>
-<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700&subset=latin,cyrillic' rel='stylesheet'>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('assets/bootstrap.css') }}">
-<link rel="stylesheet" href="{{ asset('css/sketchbook-gallery.css') }}">
-<script src="{{ asset('assets/bootstrap.js') }}" defer></script>
-<script src="{{ asset('js/sketchbook-gallery.js') }}" defer></script>
-<script src="{{ asset('js/comments.js') }}" defer></script>
-</head>
-<body class="bg-gray-900 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+{{-- galeria --}}
+
+
+
 
 <div class="max-w-7xl mx-auto">
     <h1 class="text-4xl font-bold text-center text-white mb-6">Sketchbooks Entries</h1>
@@ -33,6 +22,14 @@
     </div>
 </div>
 
+
+
+
+
+
+{{-- modal --}}
+
+{{-- info user --}}
 @foreach ($sketchbookEntries as $entry)
 <div class="modal-backdrop" id="modal-{{ $entry->id }}">
     <div class="modal-container">
@@ -49,20 +46,13 @@
             <p class="p-4">{{ $entry->content_text }}</p>
         </section>
 
-        <aside class="modal-comments">
-            <header>
-                <img src="{{ $entry->sketchbook->user->profile->avatar ? asset('storage/' . $entry->sketchbook->user->profile->avatar) : 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}" alt="Avatar" />
-                <div>
-                    <strong>{{ $entry->sketchbook->user->name ?? 'Desconhecido' }}</strong>
-                    <span>{{ $entry->content_text ?? 'sem descrissao' }}</span>
 
-                </div>
-                <button type="button" class="close-modal">Fechar</button>
-            </header>
 
-            <div class="user-info-below">
-                {{-- Informações adicionais do usuário podem ser colocadas aqui --}}
-            </div>
+
+
+{{-- comentarios --}}
+
+
 
             <div class="comments-list">
                 @foreach ($entry->comments as $comment)
@@ -76,6 +66,22 @@
                     </article>
                 @endforeach
             </div>
+
+
+
+
+
+
+
+
+            {{-- novo comentario --}}
+
+
+
+
+
+
+
 
             <form method="POST" action="{{ route('comments.store', $entry->id) }}" class="add-comment" data-entry-id="{{ $entry->id }}">
             @csrf

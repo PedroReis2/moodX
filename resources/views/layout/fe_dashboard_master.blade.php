@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'Dashboard')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Tipografia -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -12,6 +13,9 @@
     <link rel="stylesheet" href="{{ asset('assets/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('assets/bootstrap.js') }}" defer></script>
+    <script src="{{ asset('js/sketchbook-gallery.js') }}" defer></script>
+    <script src="{{ asset('js/comments.js') }}" defer></script>
 </head>
 <body style="font-family: 'Inter', sans-serif; background-color: #ffffff;">
 
