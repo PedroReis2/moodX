@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             modal.classList.remove('hidden');
 
-            // Atualiza a imagem do modal (lado esquerdo)
             const modalImage = modal.querySelector('.modal-image-section img');
             if (modalImage) modalImage.src = card.querySelector('img').src;
         });
@@ -30,14 +29,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Formulário de comentários via AJAX
-    document.querySelectorAll('.add-comment').forEach(form => {
+    document.querySelectorAll('.comment-form').forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const entryId = this.dataset.entryId;
+            const entryId = this.action.split('/').pop();
             const formData = new FormData(this);
 
-            fetch(`/comments/${entryId}`, {
+            fetch(this.action, {
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
@@ -46,13 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(res => res.json())
             .then(data => {
-                const commentsList = this.closest('.modal-comments').querySelector('.comments-list');
-
+                const commentsList = this.closest('.modal').querySelector('.comment-list');
                 const article = document.createElement('article');
                 article.classList.add('comment');
 
                 const avatar = data.user.profile?.avatar ? '/storage/' + data.user.profile.avatar : 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg';
-                const name = data.user.name ?? '...';
+                const name = data.user.name ?? 'Anon';
                 const comment = data.comment;
 
                 article.innerHTML = `
@@ -69,3 +67,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+

@@ -3,75 +3,74 @@
 @section('title', 'Dashboard — mood.x')
 
 @section('content')
-    <div class="dashboard-wrapper">
-        <div class="projects-section">
+<div class="dashboard-wrapper">
+    <div class="projects-section">
 
-            {{-- Se for partilhado mostra o nome do criador --}}
-
+        {{-- Se houver entradas no sketchbook --}}
+        @if($sketchbookEntries->isNotEmpty())
+            {{-- Nome do criador (se não for o próprio user) --}}
             <h2 class="projects-title">
                 @if(optional($sketchbookEntries->first()->sketchbook->user)->id !== auth()->id())
                     {{ $sketchbookEntries->first()->sketchbook->user->name }}
                 @endif
             </h2>
 
-            {{-- nome do sketchbook --}}
-
+            {{-- Nome do sketchbook --}}
             <h2 class="projects-title">{{ $sketchbookEntries->first()->sketchbook->title ?? '' }}</h2>
 
-
-            {{-- cards das entries do sketchbook --}}
-
+            {{-- Grelha de entradas --}}
             <div class="projects-grid">
                 @foreach ($sketchbookEntries as $entry)
-                    <div class="project-card" data-entry-id="{{ $entry->id }}">
+                    <a href="javascript:void(0)"
+                       class="project-card"
+                       onclick="openModal({{ $entry->id }})">
                         <img src="{{ $entry->content_url }}" alt="{{ $entry->content_text }}" class="project-image">
                         <div class="project-overlay">
                             <div class="project-name">{{ $entry->content_text }}</div>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
+        @else
+            {{-- Estado vazio se não houver projetos --}}
+            <div class="dash-empty-container">
+                <div class="empty-state">
+                    <img src="{{ asset('images/icons/empty_icon.png') }}" class="empty-icon" alt="">
+                    <p class="empty-title">No Projects Yet</p>
+                    <p class="empty-sub">Start creating and your projects will appear here.</p>
+                    <a href="{{ route('create.project') }}" class="cta-empty">Create Project</a>
+                </div>
+            </div>
+        @endif
 
-        </div>
     </div>
+</div>
 
-
-
-
-    {{-- abrir modal --}}
-
-    @foreach ($sketchbookEntries as $entry)
-    <!-- Modal Principal -->
+{{-- Modais para cada entry --}}
+@foreach ($sketchbookEntries as $entry)
 <div id="modal-{{ $entry->id }}" class="modal hidden">
     <div class="modal-content">
+        {{-- Botão de fechar --}}
+        <span class="modal-close" onclick="closeModal({{ $entry->id }})">&times;</span>
 
-        <!-- Botão para fechar modal -->
-        <span class="modal-close" onclick="closeModal()">&times;</span>
-
-        <!-- Conteúdo -->
         <div class="modal-inner">
-
-            <!-- Lado Esquerdo - imagem -->
+            {{-- Lado Esquerdo: Imagem --}}
             <div class="modal-image-section">
                 <img src="{{ $entry->content_url }}" alt="Imagem da publicação" />
             </div>
 
-            <!-- Lado direito: Detalhes + Comentários -->
+            {{-- Lado Direito: Detalhes e Comentários --}}
             <div class="modal-details">
-
-                <!-- Div pai para controlar o alinhamento vertical -->
                 <div class="modal-details-wrapper">
-
-                    <!-- Bloco fixo de informações -->
                     <div class="modal-info">
-                        <h3 id="modal-title" class="modal-title">Nome do Projeto</h3>
-                        <p class="description-title">Description</p>
-                        <p id="modal-description" class="description-text">
-                            Texto da descrição do projeto selecionado.
-                        </p>
+                        <h3 class="modal-title">{{ $entry->content_text }}</h3>
+                        @if($entry->description)
+                            <p class="description-title">Description</p>
+                            <p class="description-text">{{ $entry->description }}</p>
+                        @endif
                         <div class="meta">
-                            <div><strong>Added</strong> <span class="meta-light" id="modal-added">...</span></div>
-                            <div><strong>By</strong> <span id="modal-author">...</span></div>
+                            <div><strong>Added</strong> <span class="meta-light">{{ $entry->created_at->format('d M Y') }}</span></div>
+                            <div><strong>By</strong> <span>{{ optional($entry->sketchbook->user)->name ?? 'Unknown' }}</span></div>
                         </div>
                         <div class="modal-actions">
                             <button class="share-btn">
@@ -81,49 +80,67 @@
                         </div>
                     </div>
 
-                    <!-- Lista de comentários com scroll -->
+                    {{-- Comentários --}}
                     <div class="modal-comments">
                         <h4>Comments</h4>
-                        <div id="commentList" class="comment-list">
-                            <div class="comments-list">
-                @foreach ($entry->comments as $comment)
-                    <article class="comment">
-                        <img src="{{ $comment->user->profile->avatar ? asset('storage/' . $comment->user->profile->avatar) : 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}" alt="Avatar" />
-                        <div>
-                            <strong>{{ $comment->user->name ?? '...' }}</strong>
-                            <p>{{ $comment->comment }}</p>
-                            <time datetime="{{ $comment->created_at }}">{{ $comment->created_at->diffForHumans() }}</time>
-                        </div>
-                    </article>
-                @endforeach
-            </div>
+                        <div class="comment-list">
+                            @forelse ($entry->comments as $comment)
+                                <article class="comment">
+                                    <img src="{{ optional(optional($comment->user)->profile)->avatar
+                                        ? asset('storage/' . $comment->user->profile->avatar)
+                                        : 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}"
+                                         class="comment-avatar" alt="Avatar">
+                                    <div class="comment-content">
+                                        <div class="comment-username">{{ optional($comment->user)->name ?? 'Anon' }}</div>
+                                        <div class="comment-text">{{ $comment->comment }}</div>
+                                        <small>{{ $comment->created_at->diffForHumans() }}</small>
+                                    </div>
+                                </article>
+                            @empty
+                                <p>No comments yet. Be the first!</p>
+                            @endforelse
                         </div>
                     </div>
 
-
-            </div>
-
-                    <!-- Formulário de comentários no fundo -->
-            <form method="POST" action="{{ route('comments.store', $entry->id) }}" class="add-comment" data-entry-id="{{ $entry->id }}">
-            @csrf
-                <input type="text" name="comentario" placeholder="Adiciona um comentário…" class="flex-1 px-2 py-1"/>
-                <button type="submit" class="px-2 py-1 bg-blue-600 rounded text-white">Publicar</button>
-            </form>
+                    {{-- Formulário de Comentários --}}
+                    <form method="POST" action="{{ route('comments.store', $entry->id) }}" class="comment-form">
+                        @csrf
+                        <textarea name="comentario" class="comment-input" placeholder="Add a comment..."></textarea>
+                        <button type="submit" class="comment-button">Add comment</button>
+                    </form>
 
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-
-<!-- Mini-Modal de imagem (Dentro do Modal Principal) -->
-<div id="imageOverlay" class="image-overlay hidden">
-    <div class="image-overlay-content">
-        <span class="close-overlay" onclick="closeImageOverlay()">&times;</span>
-        <img id="overlay-image" src="" alt="Imagem ampliada">
-    </div>
-</div>
-
 @endforeach
+
 @endsection
+
+@push('scripts')
+<script>
+    function openModal(id) {
+        const modal = document.getElementById('modal-' + id);
+        if (modal) {
+            modal.classList.remove('hidden');
+        }
+    }
+
+    function closeModal(id) {
+        const modal = document.getElementById('modal-' + id);
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+    }
+
+    // Fecha modal ao clicar fora do conteúdo
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    });
+</script>
+@endpush
