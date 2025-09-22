@@ -12,12 +12,15 @@ class SketchbookController extends Controller
     // Mostra todas as entries de um sketchbook
     public function sketchbookEntry($sketchbookId)
     {
-        $sketchbookEntries = $this->getEntries($sketchbookId);
+        $sketchbookEntries = $this->getSharedEntries($sketchbookId);
         // dd($sketchbookEntries);
         return view('dashboard.projects', compact('sketchbookEntries'));
     }
 
-    // Mostra todas as entries de um sketchbook partilhado com o User
+
+
+
+    //Mostra todas as entries de um sketchbook partilhado com o User
     public function sketchbookEntryShared($sketchbookId)
     {
         $sketchbookEntries = $this->getSharedEntries($sketchbookId);
@@ -25,11 +28,14 @@ class SketchbookController extends Controller
         return view('dashboard.projects', compact('sketchbookEntries'));
     }
 
+
+
+
     // Galeria com todos os sketchbooks do utilizador
     public function dashboard()
     {
         $sketchbooks = $this->getUserSketchbooks();
-        $sketchbooksShared = $this->getSharedSketchbooks();
+        $sketchbooksShared = $this->getSharedSketchbooksbyUser();
 
 
         if ($sketchbooks->isNotEmpty())
@@ -38,29 +44,41 @@ class SketchbookController extends Controller
             return view('dashboard.empty');
     }
 
+
+
+
+    // Galeria com todos os sketchbooks partilhados com o formador
+    public function dashboardTeacher()
+    {
+        $sketchbooksShared = $this->getSharedSketchbooksbyUser();
+        //dd($sketchbooksShared);
+        return view('dashboard.dashboard-teacher', compact('sketchbooksShared'));
+    }
+
+
+
+
     // Galeria com todos os sketchbooks partilhados com o utilizador
     public function sketchbookGalleryShared()
     {
-        $sketchbooks = $this->getSharedSketchbooks();
+        $sketchbooks = $this->getSharedSketchbooksbyUser();
         //dd(auth()->id());
         //dd($sketchbooks);
         return view('dashboard.gallery', compact('sketchbooks'));
     }
 
+
+
+
+
+
+
+
+
+
+
     // ------------------- Métodos privados -------------------
 
-    private function getSharedSketchbooks()
-    {
-        $userId = auth()->id();
-
-        return \DB::table('sketchbooks')
-        ->join('sketchbook_entries', 'sketchbooks.id', '=', 'sketchbook_entries.sketchbook_id')
-        ->join('shared_contents', 'sketchbook_entries.id', '=', 'shared_contents.sketchbook_entry_id')
-        ->whereJsonContains('shared_contents.user_ids', $userId)
-        ->select('sketchbooks.*')
-        ->distinct()
-        ->get();
-    }
 
     private function getUserSketchbooks()
     {
@@ -85,4 +103,19 @@ private function getSharedEntries($sketchbookId)
         })
         ->get();
 }
+
+
+private function getSharedSketchbooksbyUser()
+{
+    $userId = auth()->id();
+
+    $sketchbooks = Sketchbook::whereHas('entries.sharedContents', function ($query) use ($userId) {
+        $query->whereJsonContains('user_ids', $userId);
+    })->with(['entries.sharedContents', 'user'])->get();
+
+    // Agrupa pelos DONOS dos sketchbooks, não pelos users partilhados
+    return $sketchbooks->groupBy('user.name');
+}
+
+
 }

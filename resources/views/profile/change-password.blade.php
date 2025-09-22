@@ -22,10 +22,19 @@
                 <i class="fa-solid fa-xmark"></i>
             </a>
         </div>
+        @if ($errors->any())
+    <div class="alert alert-danger mb-3">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
     <div class="white-form-rectangle">
         <div class="create_account_screen">
-            <form class="create_account_form" method="POST" action="{{ route('password.update') }}">
+            <form class="create_account_form" method="POST" action="{{ route('password.change') }}">
                 @csrf
                 <div class="form-floating-pass">
                     <input type="password" class="form-control" id="current-password" placeholder="Current Password" name="current_password" required>
@@ -40,10 +49,10 @@
                     <label for="confirm-password"></label>
                 </div>
                 <div class="button-container">
-    <button type="button" class="button button_wide" onclick="window.location='{{ url('/login') }}'">
-        Save changes
-    </button>
-</div>
+                    <button type="submit" class="button button_wide">
+                        Save changes
+                    </button>
+                </div>
             </form>
         </div>
     </div>

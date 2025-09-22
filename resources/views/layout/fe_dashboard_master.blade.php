@@ -32,15 +32,17 @@
 
     <!-- Botões (apenas desktop) -->
     <div class="navbar-actions">
-        <a href="#" class="btn btn-black">My Creative Studios ▾</a>
-        <a href="#" class="btn btn-black">+ new project</a>
+        <a href="{{ route('dashboard') }}" class="btn btn-black">My Creative Studios ▾</a>
+        <a href="{{ route('studio') }}" class="btn btn-black">+ new project</a>
         <form action="{{ route('logout') }}" method="POST" style="display:inline;">
             @csrf
             <button type="submit" class="btn btn-black">Logout</button>
         </form>
-<img src="{{ auth()->user()->profile?->avatar ? asset('storage/' . auth()->user()->profile->avatar) : 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}"
-     alt="Avatar"
-     class="avatar">
+<a href="{{ route('profile') }}">
+    <img src="{{ auth()->user()->profile?->avatar ? asset('storage/' . auth()->user()->profile->avatar) : 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}"
+         alt="Avatar"
+         class="avatar">
+</a>
     </div>
 
     <!-- Ícone hamburguer (mobile only) -->

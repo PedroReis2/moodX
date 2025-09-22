@@ -2,35 +2,52 @@
 
 @section('title', 'Dashboard — mood.x')
 
+{{-- @php
+    dd($sketchbookEntries->map(function($entry) {
+        return [
+            'entry_id' => $entry->id,
+            'sketchbook_id' => $entry->sketchbook->id ?? 'null',
+            'user_id' => $entry->sketchbook->user->id ?? 'null',
+            'user_name' => $entry->sketchbook->user->name ?? 'null'
+        ];
+    }));
+@endphp --}}
+
 @section('content')
 <div class="dashboard-wrapper">
     <div class="projects-section">
 
         {{-- Se houver entradas no sketchbook --}}
         @if($sketchbookEntries->isNotEmpty())
-            {{-- Nome do criador (se não for o próprio user) --}}
-            <h2 class="projects-title">
-                @if(optional($sketchbookEntries->first()->sketchbook->user)->id !== auth()->id())
-                    {{ $sketchbookEntries->first()->sketchbook->user->name }}
-                @endif
-            </h2>
+            @php
+                $groupedEntries = $sketchbookEntries->groupBy('sketchbook.user.id');
+            @endphp
 
-            {{-- Nome do sketchbook --}}
-            <h2 class="projects-title">{{ $sketchbookEntries->first()->sketchbook->title ?? '' }}</h2>
+            @foreach($groupedEntries as $userId => $userEntries)
+                {{-- Nome do criador (se não for o próprio user) --}}
+                <h2 class="projects-title">
+                    @if(optional($userEntries->first()->sketchbook->user)->id !== auth()->id())
+                        {{ $userEntries->first()->sketchbook->user->name }}
+                    @endif
+                </h2>
 
-            {{-- Grelha de entradas --}}
-            <div class="projects-grid">
-                @foreach ($sketchbookEntries as $entry)
-                    <a href="javascript:void(0)"
-                       class="project-card"
-                       onclick="openModal({{ $entry->id }})">
-                        <img src="{{ $entry->content_url }}" alt="{{ $entry->content_text }}" class="project-image">
-                        <div class="project-overlay">
-                            <div class="project-name">{{ $entry->content_text }}</div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
+                {{-- Nome do sketchbook --}}
+                <h2 class="projects-title">{{ $userEntries->first()->sketchbook->title ?? '' }}</h2>
+
+                {{-- Grelha de entradas --}}
+                <div class="projects-grid">
+                    @foreach ($userEntries as $entry)
+                        <a href="javascript:void(0)"
+                           class="project-card"
+                           onclick="openModal({{ $entry->id }})">
+                            <img src="{{ $entry->content_url }}" alt="{{ $entry->content_text }}" class="project-image">
+                            <div class="project-overlay">
+                                <div class="project-name">{{ $entry->content_text }}</div>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            @endforeach
         @else
             {{-- Estado vazio se não houver projetos --}}
             <div class="dash-empty-container">
