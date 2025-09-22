@@ -1,6 +1,5 @@
 
 
-
 function openAddUserModal() {
     const modal = document.getElementById("addUserModal");
     modal.classList.add("show");

@@ -3,105 +3,134 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-<div class="container-fluid mt-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
+    <h2 class="dashboard-title">Hello, Admin.</h2>
+    <p class="dashboard-subtitle">
+        Time to take control of your accounts!
+    </p>
 
-            <!-- Título -->
-            <div class="dashboard-text text-start mb-4">
-                <h1>Hello, Admin.</h1>
-                <p>Time to take control of your accounts!</p>
-            </div>
+    <!-- Linha topo: botão e search -->
+    <div class="admin-actions-row">
+        <button id="openModalBtn" class="btn btn-black">
+            <span style="margin-right: 6px;">➕</span> Add user
+        </button>
 
-            <!-- Header com botão + campo de pesquisa -->
-            <div class="row align-items-center mb-3">
-                <div class="col-md-6 mb-2 mb-md-0">
-                    <button class="btn btn-dark" onclick="openAddUserModal()">➕ Add user</button>
+        <input type="text" class="admin-search" placeholder="Search">
+    </div>
+
+    <!-- Tabela de utilizadores -->
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Phone</th>
+                    <th class="status-col">Status</th>
+                    <th>Archived</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>User Name</td>
+                    <td>emailuser@mail.pt</td>
+                    <td>Student</td>
+                    <td>912345678</td>
+                    <td class="status-col">
+                        <input type="checkbox" class="status-checkbox" checked>
+                    </td>
+                    <td>No</td>
+                    <td class="dropdown-cell">
+                        <div class="dropdown">
+                            <button class="dropdown-trigger">⋮</button>
+                            <div class="dropdown-menu-custom">
+                                <a class="dropdown-item" href="#"><span>✏️</span> Edit</a>
+                                <a class="dropdown-item" href="#"><span>🔑</span> Reset Password</a>
+                                <a class="dropdown-item text-danger" href="#"><span>🗑️</span> Delete User</a>
+                                <a class="dropdown-item change-status" href="#" onclick="openStatusModal('User Name', this)">
+                                    <span>🔄</span> Change Status
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Inactive User</td>
+                    <td>inactive@mail.pt</td>
+                    <td>Teacher</td>
+                    <td>987654321</td>
+                    <td class="status-col">
+                        <input type="checkbox" class="status-checkbox">
+                    </td>
+                    <td>No</td>
+                    <td class="dropdown-cell">
+                        <div class="dropdown">
+                            <button class="dropdown-trigger">⋮</button>
+                            <div class="dropdown-menu-custom">
+                                <a class="dropdown-item" href="#"><span>✏️</span> Edit</a>
+                                <a class="dropdown-item" href="#"><span>🔑</span> Reset Password</a>
+                                <a class="dropdown-item text-danger" href="#"><span>🗑️</span> Delete User</a>
+                                <a class="dropdown-item change-status" href="#" onclick="openStatusModal('Inactive User', this)">
+                                    <span>🔄</span> Change Status
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- MODAL DE ADIÇÃO DE UTILIZADOR -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModalBtn" class="modal-close">&times;</span>
+            <h3>Add New User</h3>
+
+            <div class="modal-form">
+                <div class="form-group">
+                    <label>Name *</label>
+                    <input type="text" class="form-control" placeholder="Enter full name">
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <input type="text" class="form-control" placeholder="Search" id="searchInput">
+
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" class="form-control" placeholder="user@example.com">
                 </div>
-            </div>
 
-            <!-- Tabela -->
-            <div class="table-responsive" style="min-height:300px;padding-bottom:150px;">
-                <table class="table table-bordered table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Name</th><th>Email</th><th>Role</th><th>Phone</th>
-                            <th>Status</th><th>Archived</th><th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTableBody">
-                        <tr>
-                            <td>User Name</td><td>emailuser@mail.pt</td><td>Student</td><td>912345678</td>
-                            <td><img src="{{ asset('images/iconActive.png') }}" alt="Active" class="status-icon"></td>
-                            <td>No</td>
-                            <td class="dropdown-cell">
-                                <div class="dropdown">
-                                    <button class="btn btn-link p-0 no-caret dropdown-trigger"
-                                            data-bs-toggle="dropdown" aria-expanded="false">⋮</button>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                                        <li><a class="dropdown-item" href="#" onclick="editUser(this)">✏️ Edit</a></li>
-                                        <li><a class="dropdown-item" href="#">🔑 Reset Password</a></li>
-                                        <li><a class="dropdown-item text-danger" href="#" onclick="deleteUser(this)">🗑️ Delete User</a></li>
-                                        <li><a class="dropdown-item" href="#" onclick="toggleStatus(this)">🔄 Change Status</a></li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                <div class="form-group">
+                    <label>Role *</label>
+                    <select class="form-control">
+                        <option value="">Select role...</option>
+                        <option value="admin">Admin</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
+                    </select>
+                </div>
 
+                <div class="form-group">
+                    <label>Phone *</label>
+                    <input type="text" class="form-control" placeholder="Enter phone number">
+                    <small>Only numbers allowed, exactly 9 digits.</small>
+                </div>
+
+                <button class="btn btn-black" style="margin-top: 10px;">Add User</button>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Modal Add/Edit User -->
-<div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="btn-close" onclick="closeModal()" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="addUserForm">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Name *</label>
-              <input type="text" class="form-control" id="userName" required placeholder="Enter full name">
+    <!-- MODAL DE CONFIRMAÇÃO DE STATUS -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeStatusModal">&times;</span>
+            <h3>Change User Status</h3>
+            <p id="statusModalMessage"></p>
+            <div class="modal-actions">
+                <button id="cancelStatusChange">Cancel</button>
+                <button id="confirmStatusChange">Confirm</button>
             </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Email *</label>
-              <input type="email" class="form-control" id="userEmail" required placeholder="user@example.com">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Role *</label>
-              <select class="form-select" id="userRole" required>
-                <option value="">Select role...</option>
-                <option value="Admin">Admin</option>
-                <option value="Teacher">Teacher</option>
-                <option value="Student">Student</option>
-              </select>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Phone *</label>
-              <input type="tel" class="form-control" id="userPhone" placeholder="Enter phone number" required maxlength="9">
-              <small class="form-text text-muted">Only numbers allowed, exactly 9 digits.</small>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-dark" id="addUserBtn" onclick="addUser()">Add User</button>
-        <button type="button" class="btn btn-dark" id="editUserBtn" onclick="saveUserChanges()" style="display:none;">Save Changes</button>
-      </div>
+        </div>
     </div>
-  </div>
-</div>
-
-
 @endsection

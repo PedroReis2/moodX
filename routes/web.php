@@ -41,7 +41,7 @@ Route::get('/change-password', function () {
 
 // Dashboard do formando sem projetos
 Route::get('/dashboard-empty', function () {
-    return view('dashboard.dash-formandos-empty');
+    return view('dashboard.empty');
 })->name('dashboard.empty');
 
 // Página de criação de novo projeto
@@ -54,7 +54,7 @@ Route::get('/profile', function () {
 })->name('profile');
 
 Route::get('/under-construction', function () {
-    return view('under-construction');
+    return view('fallback.under-construction');
 })->name('under-construction');
 
 Route::get('/forgot-password', function () {
@@ -66,3 +66,10 @@ Route::get('/forgot-password', function () {
 Route::get('/studio', function () {
     return view('dashboard.creative-studio');
 })->name('studio')->middleware(['auth', 'role:3']);
+
+
+// Admin
+
+Route::get('/dashboard-admin', function () {
+    return view('dashboard.dashboard-admin');
+})->name('dashboard.admin')->middleware('auth');

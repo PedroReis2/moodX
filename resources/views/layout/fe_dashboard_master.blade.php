@@ -12,6 +12,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    
     <script src="{{ asset('js/script.js') }}"></script>
     <script src="{{ asset('assets/bootstrap.js') }}" defer></script>
     <script src="{{ asset('js/sketchbook-gallery.js') }}" defer></script>
