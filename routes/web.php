@@ -40,9 +40,9 @@ Route::get('/change-password', function () {
 
 
 // Dashboard do formando sem projetos
-Route::get('/dashboard-empty', function () {
-    return view('dashboard.empty');
-})->name('dashboard.empty');
+// Route::get('/dashboard-empty', function () {
+//     return view('dashboard.empty');
+// })->name('dashboard.empty');
 
 // Página de criação de novo projeto
 Route::get('/create-project', function () {
@@ -73,3 +73,10 @@ Route::get('/studio', function () {
 Route::get('/dashboard-admin', function () {
     return view('dashboard.dashboard-admin');
 })->name('dashboard.admin')->middleware('auth');
+
+
+//IA
+Route::post('/generate-image', [ImageGenerationController::class, 'generate'])->name('generate.image');
+
+//underconstruction
+Route::view('/under-construction', 'fallback.under-construction');

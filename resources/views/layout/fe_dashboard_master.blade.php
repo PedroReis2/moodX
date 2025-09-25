@@ -12,46 +12,50 @@
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    
-    <script src="{{ asset('js/script.js') }}"></script>
+
+
+    <!-- JS -->
     <script src="{{ asset('assets/bootstrap.js') }}" defer></script>
+    <script src="{{ asset('js/script.js') }}"></script>
     <script src="{{ asset('js/sketchbook-gallery.js') }}" defer></script>
     <script src="{{ asset('js/comments.js') }}" defer></script>
+    <script src="{{ asset('js/studio.js') }}" defer></script>
+
 </head>
-<body style="font-family: 'Inter', sans-serif; background-color: #ffffff;">
+<body>
 
     <!-- WRAPPER cinza-claro arredondado -->
     <div class="dashboard-wrapper">
 
-        <!-- NAVBAR universal -->
-<header class="dash-navbar">
-    <div class="navbar-brand">
-        <a href="{{ url('/dashboard') }}">
-            <img src="{{ asset('images/moodx.png') }}" alt="mood.x logo" style="height: 24px;">
-        </a>
-    </div>
+    <!-- NAVBAR universal -->
+    <header class="dash-navbar">
+        <div class="navbar-brand">
+            <a href="{{ url('/dashboard') }}">
+                <img src="{{ asset('images/moodx.png') }}" alt="mood.x logo" style="height: 24px;">
+            </a>
+        </div>
 
-    <!-- Botões (apenas desktop) -->
-    <div class="navbar-actions">
-        <a href="{{ route('dashboard') }}" class="btn btn-black">My Creative Studios ▾</a>
-        <a href="{{ route('studio') }}" class="btn btn-black">+ new project</a>
-        <form action="{{ route('logout') }}" method="POST" style="display:inline;">
-            @csrf
-            <button type="submit" class="btn btn-black">Logout</button>
-        </form>
-<a href="{{ route('profile') }}">
-    <img src="{{ auth()->user()->profile?->avatar ? asset('storage/' . auth()->user()->profile->avatar) : 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}"
-         alt="Avatar"
-         class="avatar">
-</a>
-    </div>
+        <!-- Botões (apenas desktop) -->
+        <div class="navbar-actions">
+            <a href="{{ route('dashboard') }}" class="btn btn-black">My Creative Studios ▾</a>
+            <a href="{{ route('studio') }}" class="btn btn-black">+ new project</a>
+            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                @csrf
+                <button type="submit" class="btn btn-black">Logout</button>
+            </form>
+            <a href="{{ route('profile') }}">
+            <img src="{{ auth()->user()->profile?->avatar ? asset('storage/' . auth()->user()->profile->avatar) : 'https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg' }}"
+            alt="Avatar"
+            class="avatar">
+            </a>
+        </div>
 
-    <!-- Ícone hamburguer (mobile only) -->
-    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-</header>
+        <!-- Ícone hamburguer (mobile only) -->
+        <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+    </header>
 
-<!-- Menu mobile -->
-<div id="mobile-menu" class="mobile-menu">
+    <!-- Menu mobile -->
+    <div id="mobile-menu" class="mobile-menu">
     <a href="#">My Profile</a>
     <a href="#">+ New Project</a>
     <a href="#">My Creative Studio</a>
@@ -59,10 +63,10 @@
         @csrf
         <button type="submit" class="btn-mobile">Logout</button>
     </form>
-</div>
+    </div>
 
-<!-- MENU DROPDOWN PARA MOBILE -->
-<div id="mobileMenu" class="mobile-menu hidden">
+    <!-- MENU DROPDOWN PARA MOBILE -->
+    <div id="mobileMenu" class="mobile-menu hidden">
     <a href="#">My Profile</a>
     <a href="#">New Project</a>
     <a href="#">My Creative Studio</a>
@@ -70,16 +74,15 @@
         @csrf
         <button type="submit" class="btn-mobile">Logout</button>
     </form>
-</div>
+    </div>
 
 
-
-        {{-- CONTEÚDO ESPECÍFICO DE CADA PÁGINA --}}
-        <div class="dashboard-content">
-            @yield('content')
-        </div>
+    {{-- CONTEÚDO ESPECÍFICO DE CADA PÁGINA --}}
+    <div class="dashboard-content">
+        @yield('content')
+    </div>
 
     </div>
-@stack('scripts')
+    @stack('scripts')
 </body>
 </html>
