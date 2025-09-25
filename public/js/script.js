@@ -82,6 +82,42 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    /* Modal: Actualizar Utilizador */
+    const updateUserModal = document.getElementById("updateUserModal");
+    const closeModalBtnUpdate = document.getElementById("closeModalBtnUpdate");
+
+    if (updateUserModal && closeModalBtnUpdate) {
+        // Fecha modal (X)
+        closeModalBtnUpdate.addEventListener("click", () => updateUserModal.style.display = "none");
+        // Fecha ao clicar fora do conteúdo
+        window.addEventListener("click", function (e) {
+            if (e.target === updateUserModal) updateUserModal.style.display = "none";
+        });
+    }
+
+    // Edit user functionality
+    document.querySelectorAll('.edit-user-btn').forEach(function(btn) {
+        btn.addEventListener("click", function(e) {
+            e.preventDefault();
+
+            const userId = this.dataset.userId;
+            const username = this.dataset.username;
+            const firstname = this.dataset.firstname;
+            const lastname = this.dataset.lastname;
+            const email = this.dataset.email;
+            const role = this.dataset.role;
+
+            document.getElementById('update_user_id').value = userId;
+            document.getElementById('update_username').value = username;
+            document.getElementById('update_first_name').value = firstname;
+            document.getElementById('update_last_name').value = lastname;
+            document.getElementById('update_email').value = email;
+            document.getElementById('update_role').value = role;
+
+            updateUserModal.style.display = "flex";
+        });
+    });
+
     /* Checkbox de status (tooltip) */
     document.querySelectorAll(".status-checkbox").forEach(checkbox => {
         checkbox.title = checkbox.checked ? "Active" : "Inactive";
@@ -108,6 +144,24 @@ document.addEventListener("DOMContentLoaded", function () {
         statusModal.style.display = "flex";
     };
 
+    // Status change functionality with data attributes
+    document.querySelectorAll('.change-status-btn').forEach(function(btn) {
+        btn.addEventListener("click", function(e) {
+            e.preventDefault();
+
+            const userId = this.dataset.userId;
+            const username = this.dataset.username;
+            const currentStatus = this.dataset.currentStatus;
+            const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+
+            statusMessage.textContent = `Do you want to change status for "${username}" to ${newStatus}?`;
+            statusModal.style.display = "flex";
+
+            // Store the user ID for later use
+            statusModal.dataset.userId = userId;
+        });
+    });
+
     if (statusModal) {
         // Fechar (X) e Cancel
         closeStatusModal?.addEventListener("click", () => statusModal.style.display = "none");
@@ -115,9 +169,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Confirmar mudança
         confirmStatusChange?.addEventListener("click", () => {
-            if (selectedCheckbox) {
-                selectedCheckbox.checked = !selectedCheckbox.checked;
-                selectedCheckbox.title = selectedCheckbox.checked ? "Active" : "Inactive";
+            const userId = statusModal.dataset.userId;
+            if (userId) {
+                // Submit form or make AJAX request to change status
+                window.location.href = `/admin/users/${userId}/toggle-status`;
             }
             statusModal.style.display = "none";
         });
@@ -128,71 +183,64 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* Adicionar Novo Utilizador na Tabela */
-    const addUserButton = document.querySelector("#addUserModal button.btn-black");
-    const tableBody     = document.querySelector(".table tbody");
+    /* Modal: Confirmar Eliminacao de user */
+    const deleteModal = document.getElementById("deleteModal");
+    const closeDeleteModal = document.getElementById("closeDeleteModal");
+    const cancelDelete = document.getElementById("cancelDelete");
+    const confirmDelete = document.getElementById("confirmDelete");
+    const deleteModalMessage = document.getElementById("deleteModalMessage");
 
-    if (addUserButton && tableBody) {
-        addUserButton.addEventListener("click", function () {
-            // Lê valores do formulário
-            const inputs = document.querySelectorAll("#addUserModal input, #addUserModal select");
-            const name  = inputs[0].value;
-            const email = inputs[1].value;
-            const role  = inputs[2].value;
-            const phone = inputs[3].value;
+    // Delete user functionality
+    document.querySelectorAll('.delete-user-btn').forEach(function(btn) {
+        btn.addEventListener("click", function(e) {
+            e.preventDefault();
 
-            // Validação simples
-            if (!name || !email || !role || !phone) {
-                alert("Please fill all fields!");
-                return;
+            const userId = this.dataset.userId;
+            const username = this.dataset.username;
+
+            deleteModalMessage.textContent = `Are you sure you want to delete ${username}? This action cannot be undone.`;
+            deleteModal.style.display = "flex";
+
+            // Store the user ID for later use
+            deleteModal.dataset.userId = userId;
+        });
+    });
+
+    if (deleteModal) {
+        // Fechar (X) e Cancel
+        closeDeleteModal?.addEventListener("click", () => deleteModal.style.display = "none");
+        cancelDelete?.addEventListener("click", () => deleteModal.style.display = "none");
+
+        // Confirmar delete
+        confirmDelete?.addEventListener("click", () => {
+            const userId = deleteModal.dataset.userId;
+            if (userId) {
+                // Submit form or make AJAX request to delete user
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/admin/users/${userId}`;
+
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = '_token';
+                csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                const methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.value = 'DELETE';
+
+                form.appendChild(csrfToken);
+                form.appendChild(methodInput);
+                document.body.appendChild(form);
+                form.submit();
             }
+            deleteModal.style.display = "none";
+        });
 
-            // Nova linha
-            const newRow = document.createElement("tr");
-            newRow.innerHTML = `
-                <td>${name}</td>
-                <td>${email}</td>
-                <td>${role}</td>
-                <td>${phone}</td>
-                <td class="status-col">
-                    <input type="checkbox" class="status-checkbox" checked>
-                </td>
-                <td>No</td>
-                <td class="dropdown-cell">
-                    <div class="dropdown">
-                        <button class="dropdown-trigger">⋮</button>
-                        <div class="dropdown-menu-custom">
-                            <a class="dropdown-item" href="#"><span>✏️</span> Edit</a>
-                            <a class="dropdown-item" href="#"><span>🔑</span> Reset Password</a>
-                            <a class="dropdown-item text-danger" href="#"><span>🗑️</span> Delete User</a>
-                            <a class="dropdown-item change-status" href="#" onclick="openStatusModal('${name}', this)">
-                                <span>🔄</span> Change Status
-                            </a>
-                        </div>
-                    </div>
-                </td>
-            `;
-            tableBody.appendChild(newRow);
-
-            // Reaplica eventos da nova linha
-            newRow.querySelector(".dropdown-trigger").addEventListener("click", function (e) {
-                e.stopPropagation();
-                toggleDropdown(this);
-            });
-
-            const newCheckbox = newRow.querySelector(".status-checkbox");
-            newCheckbox.title = "Active";
-            newCheckbox.addEventListener("change", function () {
-                this.title = this.checked ? "Active" : "Inactive";
-            });
-
-            // Fecha modal
-            addUserModal.style.display = "none";
-
-            // Reaplica filtro de pesquisa (se houver texto no search)
-            if (searchInput && searchInput.value.trim() !== "") {
-                filterRows();
-            }
+        // Fecha ao clicar fora do conteúdo
+        window.addEventListener("click", function (e) {
+            if (e.target === deleteModal) deleteModal.style.display = "none";
         });
     }
 

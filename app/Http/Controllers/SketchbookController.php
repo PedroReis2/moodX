@@ -12,8 +12,8 @@ class SketchbookController extends Controller
     // Mostra todas as entries de um sketchbook
     public function sketchbookEntry($sketchbookId)
     {
-        $sketchbookEntries = $this->getSharedEntries($sketchbookId);
-        // dd($sketchbookEntries);
+        $sketchbookEntries = $this->getEntries($sketchbookId);
+        //dd($sketchbookEntries);
         return view('dashboard.projects', compact('sketchbookEntries'));
     }
 
@@ -86,14 +86,14 @@ class SketchbookController extends Controller
     }
 
     private function getEntries($sketchbookId)
-{
+    {
     return SketchbookEntry::with(['comments.user', 'sketchbook.user'])
                           ->where('sketchbook_id', $sketchbookId)
                           ->get();
-}
+    }
 
-private function getSharedEntries($sketchbookId)
-{
+    private function getSharedEntries($sketchbookId)
+    {
     $userId = auth()->id();
 
     return SketchbookEntry::with(['comments.user', 'sketchbook.user'])
@@ -102,20 +102,20 @@ private function getSharedEntries($sketchbookId)
             $query->whereJsonContains('user_ids', $userId);
         })
         ->get();
-}
+    }
 
 
-private function getSharedSketchbooksbyUser()
-{
-    $userId = auth()->id();
+    private function getSharedSketchbooksbyUser()
+    {
+        $userId = auth()->id();
 
-    $sketchbooks = Sketchbook::whereHas('entries.sharedContents', function ($query) use ($userId) {
-        $query->whereJsonContains('user_ids', $userId);
-    })->with(['entries.sharedContents', 'user'])->get();
+        $sketchbooks = Sketchbook::whereHas('entries.sharedContents', function ($query) use ($userId) {
+           $query->whereJsonContains('user_ids', $userId);
+        })->with(['entries.sharedContents', 'user'])->get();
 
-    // Agrupa pelos DONOS dos sketchbooks, não pelos users partilhados
-    return $sketchbooks->groupBy('user.name');
-}
+        // Agrupa pelos DONOS dos sketchbooks, não pelos users partilhados
+        return $sketchbooks->groupBy('user.name');
+    }
 
 
 }

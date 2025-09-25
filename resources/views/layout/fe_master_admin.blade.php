@@ -26,7 +26,7 @@
         <!-- Navbar do Admin -->
         <header class="dash-navbar">
             <div class="navbar-brand">
-                <a href="{{ url('/dashboard-admin') }}">
+                <a href="{{ url('/dashboard') }}">
                     <img src="{{ asset('images/moodx.png') }}" alt="mood.x logo" style="height: 24px;">
                 </a>
             </div>

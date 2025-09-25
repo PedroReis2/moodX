@@ -257,3 +257,72 @@ function saveImageToStudio() {
     document.querySelector('.creative-studio-wrapper').appendChild(block);
 }
 
+
+/* Ações dos botões do Modal */
+
+/*Ação para criar novo Sketchbook */
+function createNewSketchbook() {
+    const imgSrc = document.getElementById('generatedImagePreview').src;
+    alert("Novo Sketchbook criado com esta imagem: " + imgSrc);
+    closeImageModal();
+}
+
+/* Ação para adicionar imagem a um Sketchbook já existente */
+function openSketchbookList() {
+    const imgSrc = document.getElementById('generatedImagePreview').src;
+    alert("Seleciona um Sketchbook existente para adicionar a imagem: " + imgSrc);
+    closeImageModal();
+}
+
+
+/*Para adicionar ao sketchbook*/
+function createNewSketchbook() {
+    const imgSrc = document.getElementById('generatedImagePreview').src;
+    document.getElementById('previewNewSketchbookImage').src = imgSrc;
+    openModal('modalCreateSketchbook');
+}
+
+function openSketchbookList() {
+    const imgSrc = document.getElementById('generatedImagePreview').src;
+    document.getElementById('previewExistingSketchbookImage').src = imgSrc;
+
+    // TODO: carregar sketchbooks do utilizador via AJAX (Laravel route)
+    const select = document.getElementById('sketchbookSelect');
+    select.innerHTML = `
+        <option value="">Select...</option>
+        <option value="1">Sketchbook 1</option>
+        <option value="2">Sketchbook 2</option>
+    `;
+
+    openModal('modalAddToSketchbook');
+}
+
+function openModal(id) {
+    document.getElementById(id).classList.remove('hidden');
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.add('hidden');
+}
+
+function saveNewSketchbook() {
+    const title = document.getElementById('newSketchbookName').value;
+    const desc = document.getElementById('newSketchbookDesc').value;
+    const imgDesc = document.getElementById('newImageDesc').value;
+
+    console.log("Saving new sketchbook:", { title, desc, imgDesc });
+
+    // Aqui podes fazer fetch POST para Laravel
+    closeModal('modalCreateSketchbook');
+}
+
+function saveToExistingSketchbook() {
+    const selected = document.getElementById('sketchbookSelect').value;
+    const imgDesc = document.getElementById('existingImageDesc').value;
+
+    console.log("Adding to sketchbook:", { selected, imgDesc });
+
+    // Aqui podes fazer fetch POST para Laravel
+    closeModal('modalAddToSketchbook');
+}
+

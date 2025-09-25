@@ -143,14 +143,84 @@
                 <img id="generatedImagePreview" src="" alt="Generated Image">
             </div>
 
-            <!-- Lado direito: título, descrição e botão -->
+            <!-- Lado direito: título, descrição e botões -->
             <div class="modal-details">
                 <h3 class="modal-title">Generated Image</h3>
                 <p class="description-text">You can save this image to your Studio project.</p>
-                <button class="chat-generate-btn" onclick="saveImageToStudio()">Save to Studio</button>
+
+                <!-- Botões lado a lado -->
+                <div class="save-buttons">
+                    <button class="chat-generate-btn" onclick="createNewSketchbook()">
+                        Create New Sketchbook
+                    </button>
+                    <button class="chat-generate-btn secondary" onclick="openSketchbookList()">
+                        Add to Existing Sketchbook
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- MODAL: CREATE NEW SKETCHBOOK -->
+<div id="modalCreateSketchbook" class="modal hidden">
+    <div class="modal-content small">
+        <span class="modal-close" onclick="closeModal('modalCreateSketchbook')">&times;</span>
+
+        <h2 class="modal-form-title">Create New Sketchbook</h2>
+
+        <div class="modal-form-body">
+            <!-- Nome do Sketchbook -->
+            <label for="newSketchbookName">Sketchbook Title</label>
+            <input type="text" id="newSketchbookName" placeholder="Enter sketchbook title">
+
+            <!-- Descrição do Sketchbook -->
+            <label for="newSketchbookDesc">Sketchbook Description</label>
+            <textarea id="newSketchbookDesc" placeholder="Describe this sketchbook"></textarea>
+
+            <!-- Pré-visualização da imagem -->
+            <div class="modal-image-preview">
+                <img id="previewNewSketchbookImage" src="" alt="Generated Image">
+            </div>
+
+            <!-- Descrição da imagem -->
+            <label for="newImageDesc">Image Description</label>
+            <textarea id="newImageDesc" placeholder="Describe this image"></textarea>
+
+            <!-- Botão Guardar -->
+            <button class="chat-generate-btn" onclick="saveNewSketchbook()">Save Sketchbook</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: ADD TO EXISTING SKETCHBOOK -->
+<div id="modalAddToSketchbook" class="modal hidden">
+    <div class="modal-content small">
+        <span class="modal-close" onclick="closeModal('modalAddToSketchbook')">&times;</span>
+
+        <h2 class="modal-form-title">Add to Existing Sketchbook</h2>
+
+        <div class="modal-form-body">
+            <!-- Pré-visualização da imagem -->
+            <div class="modal-image-preview">
+                <img id="previewExistingSketchbookImage" src="" alt="Generated Image">
+            </div>
+
+            <!-- Descrição da imagem -->
+            <label for="existingImageDesc">Image Description</label>
+            <textarea id="existingImageDesc" placeholder="Describe this image"></textarea>
+
+            <!-- Lista de Sketchbooks -->
+            <label for="sketchbookSelect">Select a Sketchbook</label>
+            <select id="sketchbookSelect">
+                <!-- Vai ser preenchido dinamicamente com dados do utilizador -->
+            </select>
+
+            <!-- Botão Guardar -->
+            <button class="chat-generate-btn" onclick="saveToExistingSketchbook()">Add to Sketchbook</button>
+        </div>
+    </div>
+</div>
+
 
 @endsection

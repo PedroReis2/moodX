@@ -18,7 +18,7 @@
 
         <!-- Botão de fechar -->
         <div class="close-button-container">
-            <a href="{{ url('/') }}" class="close-button">
+            <a href="{{ route('dashboard') }}" class="close-button">
                 <i class="fa-solid fa-xmark"></i>
             </a>
         </div>

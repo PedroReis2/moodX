@@ -6,6 +6,10 @@ use App\Http\Controllers\UtilController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SketchbookController;
+use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\MessageController;
+
+
 
 Route::get('/', [UtilController::class, "welcome"])->name('welcome');
 
@@ -15,10 +19,8 @@ Route::get('/dashboard', [DashboardController::class, "dashboard"])->name('dashb
 
 
 // sketchbooks
-Route::get('/sketchbook/{id}', [SketchbookController::class, "sketchbookEntry"])->name('sketchbookEntry');//->middleware('auth');
-Route::get('/sketchbook-shared/{id}', [SketchbookController::class, "sketchbookEntryShared"])->name('sketchbookEntryShared');//->middleware('auth');
-Route::get('/sketchbook-gallery', [SketchbookController::class, "sketchbookGallery"])->name('sketchbookGallery');//->middleware('auth');
-Route::get('/sketchbook-gallery-shared', [SketchbookController::class, "sketchbookGalleryShared"])->name('sketchbookGalleryShared');//->middleware('auth');
+Route::get('/sketchbook/{id}', [SketchbookController::class, "sketchbookEntry"])->name('sketchbookEntry')->middleware('auth');
+Route::get('/sketchbook-shared/{id}', [SketchbookController::class, "sketchbookEntryShared"])->name('sketchbookEntryShared')->middleware('auth');
 
 
 // comments
@@ -26,11 +28,17 @@ Route::post('/comments/{entry}', [CommentController::class, 'store'])->name('com
 
 
 // user
-Route::post('/store_user', [UserController::class, "storeuser"])->name('store_user');
+Route::post('/store_user', [UserController::class, "storeUser"])->name('store_user');
 
-Route::post('/profile/update', [UserController::class, 'updateProfile'])
-    ->name('profile.update')
-    ->middleware('auth');
+Route::post('/store_user_by_admin', [UserController::class, "storeUserByAdmin"])->name('store_user_by_admin');
+
+Route::put('/update_user_by_admin', [UserController::class, "updateUserByAdmin"])->name('update_user_by_admin');
+
+Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+Route::get('/admin/users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle.status');
+
+Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
 
 Route::post('/change-password', [UserController::class, 'changePassword'])->name('password.change');
 
@@ -38,11 +46,6 @@ Route::get('/change-password', function () {
     return view('profile.change-password');
 })->name('change-password');
 
-
-// Dashboard do formando sem projetos
-// Route::get('/dashboard-empty', function () {
-//     return view('dashboard.empty');
-// })->name('dashboard.empty');
 
 // Página de criação de novo projeto
 Route::get('/create-project', function () {
@@ -80,3 +83,20 @@ Route::post('/generate-image', [ImageGenerationController::class, 'generate'])->
 
 //underconstruction
 Route::view('/under-construction', 'fallback.under-construction');
+
+
+
+
+
+
+
+// Teste IA
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/conversations', [ConversationController::class, 'index'])->name('conversations.index');
+    Route::get('/conversations/create', [ConversationController::class, 'create'])->name('conversations.create');
+    Route::post('/conversations', [ConversationController::class, 'store'])->name('conversations.store');
+    Route::get('/conversations/{conversation}', [ConversationController::class, 'show'])->name('conversations.show');
+
+    Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('messages.store');
+});

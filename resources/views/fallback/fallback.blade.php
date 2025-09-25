@@ -28,7 +28,7 @@
             </p>
 
             <!-- Botão GO BACK -->
-            <a href="{{ route('welcome') }}" class="btn-go-back">GO BACK</a>
+            <a href="{{ route('dashboard') }}" class="btn-go-back">GO BACK</a>
         </div>
 
     </div>

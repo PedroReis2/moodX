@@ -52,7 +52,7 @@
             {{-- Estado vazio se não houver projetos --}}
             <div class="dash-empty-container">
                 <div class="empty-state">
-                    <img src="{{ asset('images/icons/empty_icon.png') }}" class="empty-icon" alt="">
+                    <img src="{{ asset('images/icons/noProjects.png') }}" class="empty-icon" alt="">
                     <p class="empty-title">No Projects Yet</p>
                     <p class="empty-sub">Start creating and your projects will appear here.</p>
                     <a href="{{ route('create.project') }}" class="cta-empty">Create Project</a>

@@ -2,6 +2,10 @@
 
 @section('title', 'Dashboard — mood.x')
 
+{{-- @php
+    dd($sketchbooks);
+@endphp --}}
+
 @section('content')
     <div class="dashboard-wrapper">
         <div class="projects-section">
@@ -36,7 +40,7 @@
             <h3 class="projects-title-teacher" style="margin-bottom: 1rem;">{{ $userName }}</h3>
             <div class="projects-grid">
                 @foreach ($userSketchbooks as $sketchbook)
-                    <a href="{{ route('sketchbookEntry', $sketchbook->id) }}" class="project-card">
+                    <a href="{{ route('sketchbookEntryShared', $sketchbook->id) }}" class="project-card">
                         <img src="{{ $sketchbook->image }}" alt="{{ $sketchbook->title }}" class="project-image">
                         <div class="project-overlay">
                             <div class="project-name">{{ $sketchbook->title }}</div>
