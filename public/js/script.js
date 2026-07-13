@@ -118,33 +118,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    /* Checkbox de status (tooltip) */
-    document.querySelectorAll(".status-checkbox").forEach(checkbox => {
-        checkbox.title = checkbox.checked ? "Active" : "Inactive";
-        checkbox.addEventListener("change", function () {
-            this.title = this.checked ? "Active" : "Inactive";
-        });
-    });
-
     /* Modal: Confirmar mudança de status */
-    let selectedCheckbox = null;
-    const statusModal         = document.getElementById("statusModal");
-    const statusMessage       = document.getElementById("statusModalMessage");
-    const closeStatusModal    = document.getElementById("closeStatusModal");
-    const cancelStatusChange  = document.getElementById("cancelStatusChange");
+    const statusModal = document.getElementById("statusModal");
+    const statusMessage = document.getElementById("statusModalMessage");
+    const closeStatusModal = document.getElementById("closeStatusModal");
+    const cancelStatusChange = document.getElementById("cancelStatusChange");
     const confirmStatusChange = document.getElementById("confirmStatusChange");
 
-    // Função global chamada pelo link "Change Status"
-    window.openStatusModal = function (userName, element) {
-        selectedCheckbox = element.closest("tr").querySelector(".status-checkbox");
-        if (!selectedCheckbox) return;
-
-        const isActive = selectedCheckbox.checked;
-        statusMessage.textContent = `Do you want to change status for "${userName}" to ${isActive ? "Inactive" : "Active"}?`;
-        statusModal.style.display = "flex";
-    };
-
-    // Status change functionality with data attributes
+    // Status change functionality
     document.querySelectorAll('.change-status-btn').forEach(function(btn) {
         btn.addEventListener("click", function(e) {
             e.preventDefault();
@@ -154,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const currentStatus = this.dataset.currentStatus;
             const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
 
-            statusMessage.textContent = `Do you want to change status for "${username}" to ${newStatus}?`;
+            statusMessage.textContent = `Do you want to change status for "${username}" to ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}?`;
             statusModal.style.display = "flex";
 
             // Store the user ID for later use
@@ -162,16 +143,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    if (statusModal) {
+    if (statusModal && closeStatusModal && cancelStatusChange && confirmStatusChange) {
         // Fechar (X) e Cancel
-        closeStatusModal?.addEventListener("click", () => statusModal.style.display = "none");
-        cancelStatusChange?.addEventListener("click", () => statusModal.style.display = "none");
+        closeStatusModal.addEventListener("click", () => statusModal.style.display = "none");
+        cancelStatusChange.addEventListener("click", () => statusModal.style.display = "none");
 
         // Confirmar mudança
-        confirmStatusChange?.addEventListener("click", () => {
+        confirmStatusChange.addEventListener("click", () => {
             const userId = statusModal.dataset.userId;
             if (userId) {
-                // Submit form or make AJAX request to change status
+                // Redirecionar para a rota GET
                 window.location.href = `/admin/users/${userId}/toggle-status`;
             }
             statusModal.style.display = "none";
@@ -206,13 +187,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    if (deleteModal) {
+    if (deleteModal && closeDeleteModal && cancelDelete && confirmDelete) {
         // Fechar (X) e Cancel
-        closeDeleteModal?.addEventListener("click", () => deleteModal.style.display = "none");
-        cancelDelete?.addEventListener("click", () => deleteModal.style.display = "none");
+        closeDeleteModal.addEventListener("click", () => deleteModal.style.display = "none");
+        cancelDelete.addEventListener("click", () => deleteModal.style.display = "none");
 
         // Confirmar delete
-        confirmDelete?.addEventListener("click", () => {
+        confirmDelete.addEventListener("click", () => {
             const userId = deleteModal.dataset.userId;
             if (userId) {
                 // Submit form or make AJAX request to delete user
@@ -263,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const tr = document.createElement("tr");
             tr.id = NO_RESULTS_ROW_ID;
             const td = document.createElement("td");
-            td.colSpan = 7;
+            td.colSpan = 6; // Ajustado para 6 colunas
             td.style.textAlign = "center";
             td.style.color = "#666";
             td.style.padding = "16px";
@@ -289,10 +270,10 @@ document.addEventListener("DOMContentLoaded", function () {
         Array.from(tbody.querySelectorAll("tr")).forEach(tr => {
             const cells = tr.querySelectorAll("td");
             const hay = [
-                cells[0]?.textContent,
-                cells[1]?.textContent,
-                cells[2]?.textContent,
-                cells[3]?.textContent
+                cells[0]?.textContent, // Username
+                cells[1]?.textContent, // Name
+                cells[2]?.textContent, // Email
+                cells[3]?.textContent  // Role
             ].map(norm).join(" ");
 
             const show = q === "" || hay.includes(q);

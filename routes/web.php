@@ -42,9 +42,21 @@ Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('
 
 Route::post('/change-password', [UserController::class, 'changePassword'])->name('password.change');
 
+Route::get('/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('password.reset');
+
 Route::get('/change-password', function () {
     return view('profile.change-password');
 })->name('change-password');
+
+
+
+Route::post('/forgot-password', function (\Illuminate\Http\Request $request) {
+
+    // Redireciona para a página de login com mensagem
+    return redirect()->route('login')->with('message', 'Recover instructions sent to your email');
+})->name('forgot-password.submit');
+
+
 
 
 // Página de criação de novo projeto

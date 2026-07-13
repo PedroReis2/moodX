@@ -1,4 +1,4 @@
-@extends('layout.fe_dashboard_master')
+@extends('layout.fe_dashboard_master_2')
 
 @section('title', 'My Creative Studio — mood.x')
 

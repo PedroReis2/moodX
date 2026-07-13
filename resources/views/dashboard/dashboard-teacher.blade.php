@@ -1,13 +1,14 @@
-@extends('layout.fe_dashboard_master')
+@extends('layout.fe_dashboard_master_3')
 
 @section('title', 'Dashboard — mood.x')
 
 @section('content')
 <div class="dashboard-wrapper">
     <div class="projects-section">
-        <div class="mb-6">
+<!-- Barra de pesquisa alinhada à direita -->
+        <div class="search-bar-wrapper">
             <input id="searchInput" type="text" placeholder="Search by username"
-                   class="border border-gray-300 rounded px-3 py-2 w-64">
+                   class="search-bar-input">
         </div>
 
         @foreach ($sketchbooksShared as $userName => $userSketchbooks)

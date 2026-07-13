@@ -1289,3 +1289,43 @@ body {
         padding: 20px;
     }
 }
+
+
+/* Estilos Dashboard Teacher */
+/* Barra de pesquisa alinhada à direita */
+.search-bar-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.search-bar-input {
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 14px;
+    width: 250px;
+    max-width: 100%;
+    transition: all 0.2s ease;
+}
+
+.search-bar-input:focus {
+    outline: none;
+    border-color: #000;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
+
+.projects-title-teacher {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #4D5959;
+    margin-bottom: 24px;
+}
+
+/* Espaçamento entre grupos de utilizadores */
+.user-section {
+    margin-bottom: 40px;
+}

@@ -18,7 +18,7 @@
     <script src="{{ asset('assets/bootstrap.js') }}" defer></script>
     <script src="{{ asset('js/script.js') }}"></script>
     <script src="{{ asset('js/comments.js') }}" defer></script>
-    {{-- <script src="{{ asset('js/studio.js') }}" defer></script> --}}
+    <script src="{{ asset('js/studio.js') }}" defer></script>
 
 </head>
 <body>

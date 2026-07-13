@@ -188,4 +188,14 @@ public function toggleStatus($id)
         ->with('message', 'User status updated successfully');
 }
 
+public function resetPassword($id)
+{
+    $user = User::findOrFail($id);
+
+    $user->password = Hash::make("User123");;
+    $user->save();
+
+    return redirect()->back()->with('message', 'Password reseted successfully.');
+}
+
 }

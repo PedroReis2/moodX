@@ -26,10 +26,11 @@
     <div class="dashboard-wrapper">
         <div class="projects-section">
             <h2 class="projects-title">Shared Projects</h2>
-            <div class="mb-6">
-                <input id="searchInput" type="text" placeholder="Search by username"
-                       class="border border-gray-300 rounded px-3 py-2 w-64">
-            </div>
+<!-- Barra de pesquisa alinhada à direita -->
+        <div class="search-bar-wrapper">
+            <input id="searchInput" type="text" placeholder="Search by username"
+                   class="search-bar-input">
+        </div>
 
 @foreach ($sketchbooksShared as $userName => $userSketchbooks)
     @if($userName !== auth()->user()->name)

@@ -83,7 +83,7 @@
                                href="#">
                                <span>✏️</span> Edit
                             </a>
-                            <a class="dropdown-item" href="{{ route('password.change', $user->id) }}">
+                            <a class="dropdown-item" href="{{ route('password.reset', $user->id) }}">
                                 <span>🔑</span> Reset Password
                             </a>
                             <a class="dropdown-item text-danger delete-user-btn"
@@ -215,6 +215,19 @@
     </div>
 </div>
 
+<!-- MODAL DE CONFIRMAÇÃO DE RESET PASSWORD -->
+<div id="resetModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" id="closeResetModal">&times;</span>
+        <h3>User Reset Password</h3>
+        <p id="resetModalMessage"></p>
+        <div class="modal-actions">
+            <button type="button" id="cancelResetPassword" class="btn btn-secondary">Cancel</button>
+            <button type="button" id="confirmResetPassword" class="btn btn-primary">Confirm</button>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL DE CONFIRMAÇÃO DE STATUS -->
 <div id="statusModal" class="modal">
     <div class="modal-content">
@@ -228,7 +241,7 @@
     </div>
 </div>
 
-<!-- MODAL DE CONFIRMAÇÃO DE Eliminacao de user -->
+<!-- MODAL DE CONFIRMAÇÃO DE ELIMINACAO DO USER -->
 <div id="deleteModal" class="modal">
     <div class="modal-content">
         <span class="modal-close" id="closeDeleteModal">&times;</span>

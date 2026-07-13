@@ -36,8 +36,6 @@
 
         <!-- Botões (apenas desktop) -->
         <div class="navbar-actions">
-            <a href="{{ route('dashboard') }}" class="btn btn-black">My Creative Studios ▾</a>
-            <a href="{{ route('studio') }}" class="btn btn-black">+ new project</a>
             <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                 @csrf
                 <button type="submit" class="btn btn-black">Logout</button>
