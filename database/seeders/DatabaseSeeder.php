@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
                         SketchbookEntrySeeder::class,
                         CommentSeeder::class,
                         SharedContentSeeder::class,
-                        AiRequestSeeder::class,
                     ]);
     }
 }

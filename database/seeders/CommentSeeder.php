@@ -12,7 +12,7 @@ class CommentSeeder extends Seeder
     {
         $comments = [];
         $users = range(1, 7);
-        $entries = range(1, 180);
+        $entries = range(1, 240);
         $sampleComments = [
     'Adorei o padrão e a textura.',
     'Talvez experimentar outras cores.',
@@ -57,7 +57,7 @@ class CommentSeeder extends Seeder
     ];
 
         foreach ($entries as $entry) {
-            $numComments = rand(2, 5); // 2 a 5 comentários por entry
+            $numComments = rand(1, 5); // 1 a 5 comentários por entry
             for ($i = 0; $i < $numComments; $i++) {
                 $comments[] = [
                     'user_id' => $users[array_rand($users)],

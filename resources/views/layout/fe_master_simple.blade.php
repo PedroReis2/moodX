@@ -27,7 +27,7 @@
 
 
 </head>
-<body style="background-color: #F2F2F2; margin:0; padding:0; min-height:100vh;">
+<body>
 
     <div class="page-container">
         <div class="white-rectangle">

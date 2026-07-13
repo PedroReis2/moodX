@@ -61,4 +61,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class);
     }
+
+    public function conversations()
+{
+    return $this->hasMany(\App\Models\Conversation::class);
+}
 }
