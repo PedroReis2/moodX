@@ -11,18 +11,17 @@
 </div>
 
 <div class="form-container">
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+<form method="POST" action="{{ route('forgot-password.submit') }}">
+    @csrf
+    <div class="form-floating-login mb-1">
+        <input type="email" class="form-control" id="email" placeholder="Email" name="email">
+        <label for="email"></label>
+    </div>
 
-        <div class="form-floating-login mb-1">
-            <input type="email" class="form-control" id="email" placeholder="Email" name="email">
-            <label for="email"></label>
-        </div>
-
-        <div class="button-container">
-            <button type="submit" class="button button_wide">Recover password</button>
-        </div>
-    </form>
+    <div class="button-container">
+        <button type="submit" class="button button_wide">Recover password</button>
+    </div>
+</form>
 </div>
 
 @endsection

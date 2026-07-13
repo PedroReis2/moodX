@@ -18,7 +18,7 @@
 
         <!-- Botão de fechar -->
         <div class="close-button-container">
-            <a href="{{ url('/') }}" class="close-button">
+            <a href="{{ url('dashboard') }}" class="close-button">
                 <i class="fa-solid fa-xmark"></i>
             </a>
         </div>
@@ -83,9 +83,9 @@
                         </div>
 
                         <div class="form-floating">
-                            <input type="date" class="form-control" id="birthday" name="birthday"
-                                   placeholder="Birthday" value="{{ old('birthday') }}" required>
-                            @error('birthday')
+                            <input type="date" class="form-control" id="birthday" name="birth_date"
+                                   placeholder="Birthday" value="{{ old('birth_date') }}" required>
+                            @error('birth_date')
                                 <div class="text-danger small">{{ $message }}</div>
                             @enderror
                         </div>

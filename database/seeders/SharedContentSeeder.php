@@ -12,8 +12,8 @@ class SharedContentSeeder extends Seeder
     {
         $sharedEntries = [];
 
-        // Seleciona 30 sketchbook entries aleatórios de 1 a 60
-        $entryIds = range(1, 60);
+        // Seleciona 30 sketchbook entries aleatórios de 1 a 240
+        $entryIds = range(1, 240);
         shuffle($entryIds);
         $entryIds = array_slice($entryIds, 0, 30);
 
