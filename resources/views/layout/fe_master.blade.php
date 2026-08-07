@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Document</title>
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
@@ -19,7 +20,10 @@
 
     <script src="{{ asset('assets/bootstrap.js') }}" defer></script>
     <script src="{{ asset('js/script.js') }}" defer></script>
-    <script src="{{ asset('js/register.js') }}" defer></script>
+
+    {{-- Preamble do React (necessário para react-refresh em dev) --}}
+    @viteReactRefresh
+    @vite(['resources/js/app.js'])
 </head>
 <body>
 
