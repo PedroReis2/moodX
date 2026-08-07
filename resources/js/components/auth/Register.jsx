@@ -11,7 +11,6 @@ export default function Register() {
         last_name: '',
         username: '',
         email: '',
-        birth_date: '',
         password: '',
         password_confirmation: '',
     });
@@ -45,7 +44,6 @@ export default function Register() {
         data.append('last_name', form.last_name);
         data.append('username', form.username);
         data.append('email', form.email);
-        data.append('birth_date', form.birth_date);
         data.append('password', form.password);
         data.append('password_confirmation', form.password_confirmation);
         if (profileImage) {
@@ -152,7 +150,7 @@ export default function Register() {
                                         <input
                                             type="text"
                                             className="form-control"
-                                            id="firstname"
+                                            id="first_name"
                                             name="first_name"
                                             placeholder="First Name"
                                             value={form.first_name}
@@ -165,7 +163,7 @@ export default function Register() {
                                         <input
                                             type="text"
                                             className="form-control"
-                                            id="lastname"
+                                            id="last_name"
                                             name="last_name"
                                             placeholder="Last Name"
                                             value={form.last_name}
@@ -195,19 +193,6 @@ export default function Register() {
                                             name="email"
                                             placeholder="Email"
                                             value={form.email}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="form-floating">
-                                        <input
-                                            type="date"
-                                            className="form-control"
-                                            id="birthday"
-                                            name="birth_date"
-                                            placeholder="Birthday"
-                                            value={form.birth_date}
                                             onChange={handleChange}
                                             required
                                         />
