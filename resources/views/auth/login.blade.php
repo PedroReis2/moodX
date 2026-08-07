@@ -2,58 +2,7 @@
 
 @section("content")
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-@if(session('message'))
-    <div class="alert alert-success">
-        {{ session('message') }}
-    </div>
-@endif
-
-<div class="rectangle-header-logo" style="position: relative;">
-    <img src="{{ asset('images/logo.png') }}" alt="Header Logo" class="rectangle-logo">
-    <a href="{{ url('/') }}" class="close-button" style="position: absolute; top: -25px; right: 0; font-size: 24px; color: black;">
-        <i class="fa-solid fa-xmark"></i>
-    </a>
-</div>
-
-<div class="rectangle-header-slogan">
-    <img src="{{ asset('images/slogan.png') }}" alt="Header Slogan" class="rectangle-slogan">
-</div>
-
-<div class="form-container">
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <div class="form-floating-login mb-1">
-            <input type="email" class="form-control" id="email" placeholder="Email" name="email">
-            <label for="email"></label>
-        </div>
-
-        <div class="form-floating-login mb-1">
-            <input type="password" class="form-control" id="password_login" placeholder="Password" name="password">
-            <label for="password"></label>
-        </div>
-
-        <div class="button-container">
-            <button type="submit" class="button button_wide">Login</button>
-        </div>
-
-        <div class="forgot-password-container">
-            <a href="{{ url('/forgot-password') }}" class="change-password-link">
-                Forgot password?
-            </a>
-        </div>
-
-    </form>
-</div>
+{{-- Página de Login em React --}}
+<div id="login-root"></div>
 
 @endsection

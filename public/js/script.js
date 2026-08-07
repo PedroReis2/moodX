@@ -291,3 +291,18 @@ document.addEventListener("DOMContentLoaded", function () {
         searchInput.addEventListener("input", filterRows);
     }
 });
+
+// Preview de imagem de perfil (usado em páginas Blade, ex.: profile)
+function previewImage(event) {
+    const input = event.target;
+    if (!input || !input.files || !input.files[0]) return;
+
+    const reader = new FileReader();
+    reader.onload = function () {
+        const img = document.getElementById('profilePreview');
+        if (img) {
+            img.src = reader.result;
+        }
+    };
+    reader.readAsDataURL(input.files[0]);
+}

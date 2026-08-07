@@ -21,7 +21,6 @@
     <!-- JS -->
     <script src="{{ asset('assets/bootstrap.js') }}" defer></script>
     <script src="{{ asset('js/script.js') }}" defer></script>
-    <script src="{{ asset('js/register.js') }}" defer></script> {{-- JS do formulário --}}
 
 
 

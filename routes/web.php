@@ -112,3 +112,5 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('messages.store');
 });
+
+
