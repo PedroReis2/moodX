@@ -20,7 +20,7 @@ class UserController extends Controller
             'username' => 'required|string|max:50|unique:users,name',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'birth_date' => 'required|date',
+            'birth_date' => 'nullable|date',
             'profile_image' => 'image'
         ]);
 
