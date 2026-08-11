@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import axios from 'axios';
+import Navbar from './Navbar';
 
 const MIN_FILES = 20;
 const MAX_FILES = 30;
@@ -44,6 +45,8 @@ export default function CreativeDna() {
         try {
             await axios.post('/creative-dna/upload', data);
             showToast('Upload successful. Your Creative DNA is ready.', 'success');
+            // O Creative DNA é usado apenas uma vez — segue para o Moodboard
+            setTimeout(() => (window.location.href = '/moodboard'), 900);
         } catch (err) {
             showToast(err.response?.data?.message || 'Upload failed. Please try again.');
         } finally {
@@ -63,12 +66,7 @@ export default function CreativeDna() {
         <div className="cdna">
             {toast && <div className={`cdna-toast cdna-toast--${toast.type}`}>{toast.message}</div>}
 
-            <header className="cdna__header">
-                <span className="cdna__eyebrow">mood.x</span>
-                <button type="button" className="cdna__logout" onClick={handleLogout}>
-                    Logout
-                </button>
-            </header>
+            <Navbar actions={[{ label: 'Logout', onClick: handleLogout, variant: 'ghost' }]} />
 
             <main className="cdna__main">
                 <h1 className="cdna__title">Creative DNA</h1>

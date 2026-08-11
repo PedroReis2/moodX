@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import CreativeDna from './components/CreativeDna';
+import Moodboard from './components/Moodboard';
 
 // Página de Login (React)
 const loginRoot = document.getElementById('login-root');
@@ -34,6 +35,16 @@ if (creativeDnaRoot) {
     createRoot(creativeDnaRoot).render(
         <React.StrictMode>
             <CreativeDna />
+        </React.StrictMode>
+    );
+}
+
+// Página Moodboard (React)
+const moodboardRoot = document.getElementById('moodboard-root');
+if (moodboardRoot) {
+    createRoot(moodboardRoot).render(
+        <React.StrictMode>
+            <Moodboard userName={moodboardRoot.dataset.userName || ''} />
         </React.StrictMode>
     );
 }

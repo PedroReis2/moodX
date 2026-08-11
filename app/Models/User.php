@@ -42,6 +42,11 @@ class User extends Authenticatable
         return $this->hasMany(Sketchbook::class);
     }
 
+    public function moodboards()
+    {
+        return $this->hasMany(Moodboard::class);
+    }
+
     public function aiRequests()
     {
         return $this->hasMany(AiRequest::class);

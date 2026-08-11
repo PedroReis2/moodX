@@ -14,7 +14,8 @@ export default function Login() {
 
         try {
             await axios.post('/login', { email, password });
-            window.location.href = '/creative-dna';
+            // A raiz decide o destino: Moodboard (se já usou Creative DNA) ou Creative DNA
+            window.location.href = '/';
         } catch (err) {
             setLoading(false);
             const data = err.response?.data;

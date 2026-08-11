@@ -8,18 +8,26 @@ use App\Http\Controllers\SketchbookController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\CreativeDnaController;
+use App\Http\Controllers\MoodboardController;
 
 
 
-// Raiz — página de boas-vindas removida (só front-end React)
+// Raiz — redireciona conforme o estado do utilizador
 Route::get('/', function () {
-    return redirect(auth()->check() ? '/creative-dna' : '/login');
+    if (!auth()->check()) {
+        return redirect('/login');
+    }
+    $hasDna = \App\Models\CreativeDna::where('user_id', auth()->id())->exists();
+    return redirect($hasDna ? '/moodboard' : '/creative-dna');
 })->name('welcome');
 
 Route::fallback([UtilController::class, "fallback"]);
 
-// Creative DNA — página principal após o login (React)
+// Creative DNA — página única por utilizador (redireciona para o Moodboard se já usado)
 Route::get('/creative-dna', function () {
+    if (\App\Models\CreativeDna::where('user_id', auth()->id())->exists()) {
+        return redirect()->route('moodboard.index');
+    }
     return view('creative-dna');
 })->name('creative-dna')->middleware('auth');
 
@@ -28,6 +36,16 @@ Route::post('/creative-dna/upload', [CreativeDnaController::class, 'upload'])
 
 // Dashboards desativados — redirecionam para o Creative DNA
 Route::redirect('/dashboard', '/creative-dna')->name('dashboard');
+
+// Moodboard — projetos do utilizador (CRUD protegido)
+Route::middleware('auth')->group(function () {
+    Route::get('/moodboard', [MoodboardController::class, 'index'])->name('moodboard.index');
+    Route::get('/moodboard/data', [MoodboardController::class, 'data'])->name('moodboard.data');
+    Route::post('/moodboard', [MoodboardController::class, 'store'])->name('moodboard.store');
+    Route::put('/moodboard/{moodboard}', [MoodboardController::class, 'update'])->name('moodboard.update');
+    Route::delete('/moodboard', [MoodboardController::class, 'destroyAll'])->name('moodboard.deleteAll');
+    Route::delete('/moodboard/{moodboard}', [MoodboardController::class, 'destroy'])->name('moodboard.destroy');
+});
 
 
 // sketchbooks
