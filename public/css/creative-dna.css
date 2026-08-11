@@ -1,0 +1,260 @@
+/* ============================================================
+   CREATIVE DNA — minimalista, Helvetica, preto/branco
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #000;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+}
+
+#creative-dna-root {
+    min-height: 100vh;
+}
+
+.cdna {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #000;
+    padding: 40px 48px;
+}
+
+/* ----- Header ----- */
+.cdna__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cdna__eyebrow {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -1px;
+    color: #fff;
+}
+
+.cdna__logout {
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #8a8a8a;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.cdna__logout:hover {
+    color: #fff;
+}
+
+/* ----- Conteúdo central ----- */
+.cdna__main {
+    flex: 1;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.cdna__title {
+    font-weight: 600;
+    font-size: clamp(40px, 6vw, 72px);
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 16px;
+    color: #fff;
+}
+
+.cdna__subtitle {
+    font-weight: 300;
+    font-size: 16px;
+    color: #bdbdbd;
+    margin-bottom: 48px;
+}
+
+/* ----- Dropzone ----- */
+.cdna__dropzone {
+    width: 100%;
+    border: 1.5px dashed #3a3a3a;
+    border-radius: 16px;
+    padding: 64px 24px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.cdna__dropzone:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.cdna__dropzone-icon {
+    display: block;
+    font-size: 40px;
+    font-weight: 300;
+    color: #8a8a8a;
+    margin-bottom: 16px;
+    line-height: 1;
+}
+
+.cdna__dropzone-text {
+    font-size: 18px;
+    font-weight: 300;
+    margin-bottom: 8px;
+}
+
+.cdna__dropzone-hint {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6f6f6f;
+}
+
+/* ----- Meta / contagem ----- */
+.cdna__meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+    min-height: 20px;
+}
+
+.cdna__count {
+    font-size: 14px;
+    font-weight: 300;
+    color: #8a8a8a;
+}
+
+.cdna__count--ok {
+    color: #fff;
+}
+
+.cdna__warn {
+    font-size: 13px;
+    color: #e3b341;
+}
+
+/* ----- Ações ----- */
+.cdna__actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.cdna__upload,
+.cdna__moodboard {
+    height: 52px;
+    padding: 0 40px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.cdna__upload {
+    background: #fff;
+    color: #000;
+    border: none;
+}
+
+.cdna__upload:hover:not(:disabled) {
+    background: #d9d9d9;
+}
+
+.cdna__upload:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.cdna__moodboard {
+    background: transparent;
+    color: #fff;
+    border: 1px solid #3a3a3a;
+}
+
+.cdna__moodboard:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.cdna__moodboard:not(:disabled) {
+    border-color: #fff;
+}
+
+.cdna__moodboard:not(:disabled):hover {
+    background: #fff;
+    color: #000;
+}
+
+/* ----- Toast ----- */
+.cdna-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    color: #111;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    z-index: 100;
+    animation: cdna-fade 0.25s ease;
+}
+
+.cdna-toast--error {
+    color: #c0392b;
+}
+
+@keyframes cdna-fade {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 12px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* ----- Responsivo ----- */
+@media (max-width: 640px) {
+    .cdna {
+        padding: 24px 20px;
+    }
+
+    .cdna__actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cdna__upload,
+    .cdna__moodboard {
+        width: 100%;
+    }
+}

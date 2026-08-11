@@ -98,7 +98,7 @@ export default function Register() {
 
                 {/* Botão de fechar */}
                 <div className="close-button-container">
-                    <a href="/dashboard" className="close-button">
+                    <a href="/creative-dna" className="close-button">
                         <i className="fa-solid fa-xmark"></i>
                     </a>
                 </div>

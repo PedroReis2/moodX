@@ -4,18 +4,30 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UtilController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SketchbookController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\CreativeDnaController;
 
 
 
-Route::get('/', [UtilController::class, "welcome"])->name('welcome');
+// Raiz — página de boas-vindas removida (só front-end React)
+Route::get('/', function () {
+    return redirect(auth()->check() ? '/creative-dna' : '/login');
+})->name('welcome');
 
 Route::fallback([UtilController::class, "fallback"]);
 
-Route::get('/dashboard', [DashboardController::class, "dashboard"])->name('dashboard')->middleware('auth');
+// Creative DNA — página principal após o login (React)
+Route::get('/creative-dna', function () {
+    return view('creative-dna');
+})->name('creative-dna')->middleware('auth');
+
+Route::post('/creative-dna/upload', [CreativeDnaController::class, 'upload'])
+    ->name('creative-dna.upload')->middleware('auth');
+
+// Dashboards desativados — redirecionam para o Creative DNA
+Route::redirect('/dashboard', '/creative-dna')->name('dashboard');
 
 
 // sketchbooks
@@ -83,11 +95,8 @@ Route::get('/studio', function () {
 })->name('studio')->middleware(['auth', 'role:3']);
 
 
-// Admin
-
-Route::get('/dashboard-admin', function () {
-    return view('dashboard.dashboard-admin');
-})->name('dashboard.admin')->middleware('auth');
+// Admin (desativado — redireciona para o Creative DNA)
+Route::redirect('/dashboard-admin', '/creative-dna')->name('dashboard.admin');
 
 
 //IA
