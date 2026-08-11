@@ -128,12 +128,13 @@ body {
     border: 1px solid #d6d9de;
     border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .mb__card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
 }
 
 .mb__card-cover {

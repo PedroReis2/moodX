@@ -3,10 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UtilController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\SketchbookController;
-use App\Http\Controllers\ConversationController;
-use App\Http\Controllers\MessageController;
 use App\Http\Controllers\CreativeDnaController;
 use App\Http\Controllers\MoodboardController;
 
@@ -48,15 +44,6 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// sketchbooks
-Route::get('/sketchbook/{id}', [SketchbookController::class, "sketchbookEntry"])->name('sketchbookEntry')->middleware('auth');
-Route::get('/sketchbook-shared/{id}', [SketchbookController::class, "sketchbookEntryShared"])->name('sketchbookEntryShared')->middleware('auth');
-
-
-// comments
-Route::post('/comments/{entry}', [CommentController::class, 'store'])->name('comments.store');
-
-
 // user
 Route::post('/store_user', [UserController::class, "storeUser"])->name('store_user');
 
@@ -88,12 +75,6 @@ Route::post('/forgot-password', function (\Illuminate\Http\Request $request) {
 
 
 
-
-// Página de criação de novo projeto
-Route::get('/create-project', function () {
-    return "<h2>Formulário de criação de projeto</h2>";
-})->name('create.project');
-
 Route::get('/profile', function () {
     return view('profile.profile');
 })->name('profile');
@@ -107,37 +88,9 @@ Route::get('/forgot-password', function () {
 })->name('forgot-password');
 
 
-// Rota para o My Creative Studio (formando)
-Route::get('/studio', function () {
-    return view('dashboard.creative-studio');
-})->name('studio')->middleware(['auth', 'role:3']);
-
-
 // Admin (desativado — redireciona para o Creative DNA)
 Route::redirect('/dashboard-admin', '/creative-dna')->name('dashboard.admin');
 
-
-//IA
-Route::post('/generate-image', [ImageGenerationController::class, 'generate'])->name('generate.image');
-
-//underconstruction
+// Em construção
 Route::view('/under-construction', 'fallback.under-construction');
-
-
-
-
-
-
-
-// Teste IA
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/conversations', [ConversationController::class, 'index'])->name('conversations.index');
-    Route::get('/conversations/create', [ConversationController::class, 'create'])->name('conversations.create');
-    Route::post('/conversations', [ConversationController::class, 'store'])->name('conversations.store');
-    Route::get('/conversations/{conversation}', [ConversationController::class, 'show'])->name('conversations.show');
-
-    Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('messages.store');
-});
-
 

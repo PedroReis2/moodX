@@ -37,38 +37,13 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
-    public function sketchbooks()
-    {
-        return $this->hasMany(Sketchbook::class);
-    }
-
     public function moodboards()
     {
         return $this->hasMany(Moodboard::class);
-    }
-
-    public function aiRequests()
-    {
-        return $this->hasMany(AiRequest::class);
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
-
-    public function sharedContents()
-    {
-        return $this->hasMany(SharedContent::class);
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-    public function conversations()
-{
-    return $this->hasMany(\App\Models\Conversation::class);
-}
 }

@@ -28,7 +28,8 @@ class FortifyServiceProvider extends ServiceProvider
             return new class implements LoginResponse {
                 public function toResponse($request)
                 {
-                    return redirect()->intended('/dashboard');
+                    // A raiz decide o destino: Moodboard ou Creative DNA
+                    return redirect()->intended('/');
                 }
             };
         });

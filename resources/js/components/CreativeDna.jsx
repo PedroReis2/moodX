@@ -45,6 +45,7 @@ export default function CreativeDna() {
         try {
             await axios.post('/creative-dna/upload', data);
             showToast('Upload successful. Your Creative DNA is ready.', 'success');
+
             // O Creative DNA é usado apenas uma vez — segue para o Moodboard
             setTimeout(() => (window.location.href = '/moodboard'), 900);
         } catch (err) {
