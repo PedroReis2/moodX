@@ -98,13 +98,19 @@ export default function CreativeDna() {
                     cannot be edited, and it will be used to generate a result with AI.
                 </p>
 
+                {/* Arrasta sobre a área → onDragEnter → destaca (dragover)
+                     Sai da área sem soltar → onDragLeave → desfaz o destaque
+                     Solta na área → onDrop → processa as imagens */}
+
                 <div
+                    // arrastar e soltar ficheiros -- dropzone
                     className={`cdna__dropzone ${dragging ? 'cdna__dropzone--dragover' : ''}`}
                     onClick={() => inputRef.current?.click()}
                     onDragEnter={(e) => {
                         e.preventDefault();
                         setDragging(true);
                     }}
+                    //dragging: "acende" a borda e muda o fundo 
                     onDragOver={(e) => e.preventDefault()}
                     onDragLeave={(e) => {
                         e.preventDefault();

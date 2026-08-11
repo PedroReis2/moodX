@@ -29,7 +29,7 @@ html:has(.login-split) body {
 /* ----- Painel esquerdo (preto) — 33% ----- */
 .login-split__brand {
     flex: 0 0 33%;
-    background: #000000;
+    background: linear-gradient(165deg, #000000 0%, #141414 55%, #23272b 100%);
     color: #ffffff;
     display: flex;
     flex-direction: column;
@@ -88,8 +88,8 @@ html:has(.login-split) body {
 .login-split__headline {
     font-family: 'Inter', sans-serif;
     font-weight: 600;
-    font-size: clamp(32px, 4vw, 52px);
-    line-height: 1.1;
+    font-size: clamp(24px, 3vw, 40px);
+    line-height: 1.15;
     letter-spacing: -1px;
     color: #ffffff;
     margin: 0;
@@ -114,7 +114,7 @@ html:has(.login-split) body {
 /* ----- Painel direito (branco) ----- */
 .login-split__panel {
     flex: 1;
-    background: #ffffff;
+    background: linear-gradient(135deg, #f6f6f6 0%, #e9eaec 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -123,30 +123,41 @@ html:has(.login-split) body {
 
 .login-split__form-wrap {
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    padding: 40px 36px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
 }
 
 .login-split__title {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 600;
-    font-size: 26px;
+    font-size: 28px;
     letter-spacing: -0.5px;
     color: #111111;
     margin: 0 0 6px;
+    background: linear-gradient(180deg, #1c1c1c 30%, #6f757e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .login-split__subtitle {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 300;
-    font-size: 12px;
+    font-size: 13px;
     letter-spacing: 0.2px;
-    color: #9a9a9a;
+    color: #6f757e;
     margin: 0 0 32px;
 }
 
 /* Alertas */
 .login-split__alert {
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 13px;
     padding: 12px 14px;
     margin-bottom: 20px;
@@ -154,20 +165,43 @@ html:has(.login-split) body {
 }
 
 .login-split__alert--error {
-    background: #f5f5f5;
+    background: #fff4f2;
     color: #c0392b;
-    border: 1px solid #ececec;
+    border: 1px solid #f3d9d5;
 }
 
 .login-split__alert--success {
-    background: #f5f5f5;
+    background: #f2faf4;
     color: #1e7e34;
-    border: 1px solid #ececec;
+    border: 1px solid #d8ecdd;
 }
 
 .login-split__alert ul {
     margin: 0;
-    padding-left: 16px;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.login-split__alert li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.login-split__alert-icon {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #c0392b;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: center;
 }
 
 /* Campos */
@@ -190,15 +224,19 @@ html:has(.login-split) body {
     width: 100%;
     height: 50px;
     border: 1px solid #e5e5e5;
-    border-radius: 8px;
+    border-radius: 10px;
     background: #fafafa;
     padding: 0 16px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 15px;
     color: #111111;
     outline: none;
     transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
     box-sizing: border-box;
+}
+
+.login-split__input:hover {
+    border-color: #cfcfcf;
 }
 
 .login-split__input::placeholder {
@@ -213,28 +251,32 @@ html:has(.login-split) body {
 
 /* Linha: botão + link */
 .login-split__actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 24px;
+    margin-top: 4px;
 }
 
 .login-split__submit {
+    width: 100%;
     height: 50px;
     padding: 0 36px;
     border: none;
-    border-radius: 8px;
-    background: #000000;
+    border-radius: 10px;
+    background: #1c1c1c;
     color: #ffffff;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.login-split__submit:hover {
-    background: #2b2b2b;
+.login-split__submit:hover:not(:disabled) {
+    background: #000000;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
 }
 
 .login-split__submit:active {
@@ -287,6 +329,98 @@ html:has(.login-split) body {
 .login-split__register-link:hover {
     color: #6f6f6f;
     border-color: #6f6f6f;
+}
+
+/* ----- Novos estilos: kicker, toggle, remember, spinner ----- */
+.login-split__kicker {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #8a8f98;
+    margin: 0 0 10px;
+}
+
+.login-split__input-wrap {
+    position: relative;
+}
+
+.login-split__input--password {
+    padding-right: 48px;
+}
+
+.login-split__toggle {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: #9a9a9a;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+.login-split__toggle:hover {
+    color: #111111;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.login-split__remember {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 4px 0 20px;
+}
+
+.login-split__check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: #6f757e;
+    cursor: pointer;
+}
+
+.login-split__check input {
+    width: 15px;
+    height: 15px;
+    accent-color: #1c1c1c;
+    cursor: pointer;
+}
+
+.login-split__spinner {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    animation: login-spin 0.7s linear infinite;
+}
+
+@keyframes login-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Fonte do projeto: Helvetica para todos os elementos do login */
+.login-split__eyebrow,
+.login-split__headline,
+.login-split__headline-accent,
+.login-split__label,
+.login-split__forgot,
+.login-split__register-text,
+.login-split__register-link {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 /* Responsivo */
