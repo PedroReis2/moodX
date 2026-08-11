@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AiRequest extends Model
+class CreativeDna extends Model
 {
-    use HasFactory;
+    protected $table = 'creative_dna_files';
 
     protected $fillable = [
         'user_id',
-        'input_text',
-        'input_url',
-        'ai_output',
+        'original_name',
+        'path',
     ];
 
     public function user()

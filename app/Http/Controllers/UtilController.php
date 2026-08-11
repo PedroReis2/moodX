@@ -10,10 +10,6 @@ class UtilController extends Controller
 //___________________________________________________________ PAGES _____________________________________________________________\\
 
 
-    public function welcome() {
-        return view('welcome');
-    }
-
     public function fallback(){
         return view("fallback.fallback");
     }
