@@ -180,13 +180,12 @@ export default function Moodboard({ userName = '' }) {
         }
     };
 
-    const firstName = (userName || '').trim().split(' ')[0] || '';
-
     return (
         <div className="mb">
             {toast && <div className={`mb-toast mb-toast--${toast.type}`}>{toast.message}</div>}
 
             <Navbar
+                userName={userName}
                 actions={[
                     { label: 'New Project', onClick: openCreate, variant: 'solid' },
                     { label: 'Logout', onClick: logout, variant: 'ghost' },
@@ -194,15 +193,16 @@ export default function Moodboard({ userName = '' }) {
             />
 
             <main className="mb__main">
-                <h1 className="mb__welcome">
-                    Welcome{firstName ? `, ${firstName}` : ''}
-                </h1>
-                <p className="mb__subtitle">
-                    Create your fashion projects with your references.
-                </p>
+                <header className="mb__header">
+                    <p className="mb__kicker">MOOD.X — Creative Studio</p>
+                    <h1 className="mb__title">Moodboard</h1>
+                    <p className="mb__subtitle">
+                        Create your fashion projects with your references.
+                    </p>
+                </header>
 
                 {loading ? (
-                    <p className="mb__subtitle">Loading...</p>
+                    <p className="mb__loading">Loading...</p>
                 ) : projects.length === 0 ? (
                     <div className="mb__empty">
                         <span className="mb__empty-icon">+</span>

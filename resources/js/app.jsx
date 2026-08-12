@@ -34,7 +34,7 @@ const creativeDnaRoot = document.getElementById('creative-dna-root');
 if (creativeDnaRoot) {
     createRoot(creativeDnaRoot).render(
         <React.StrictMode>
-            <CreativeDna />
+            <CreativeDna userName={creativeDnaRoot.dataset.userName || ''} />
         </React.StrictMode>
     );
 }

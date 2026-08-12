@@ -264,41 +264,6 @@ body {
     color: #a8791a;
 }
 
-/* ----- Barra de progresso ----- */
-.cdna__progress {
-    width: 100%;
-    max-width: 480px;
-    margin: 14px auto 0;
-}
-
-.cdna__progress-track {
-    position: relative;
-    height: 4px;
-    border-radius: 999px;
-    background: rgba(28, 28, 28, 0.08);
-}
-
-.cdna__progress-fill {
-    height: 100%;
-    border-radius: 999px;
-    background: #8a8f98;
-    transition: width 0.3s ease, background 0.3s ease;
-}
-
-.cdna__progress-fill--ok {
-    background: #1c1c1c;
-}
-
-.cdna__progress-marker {
-    position: absolute;
-    top: -3px;
-    left: 66.66%;
-    width: 2px;
-    height: 10px;
-    border-radius: 2px;
-    background: rgba(28, 28, 28, 0.35);
-}
-
 /* ----- Ações ----- */
 .cdna__actions {
     display: flex;

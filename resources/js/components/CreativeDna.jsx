@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 const MIN_FILES = 20;
 const MAX_FILES = 30;
 
-export default function CreativeDna() {
+export default function CreativeDna({ userName = '' }) {
     const [files, setFiles] = useState([]); // [{ file, url }]
     const [uploading, setUploading] = useState(false);
     const [dragging, setDragging] = useState(false);
@@ -79,13 +79,11 @@ export default function CreativeDna() {
         }
     };
 
-    const progress = Math.min((files.length / MAX_FILES) * 100, 100);
-
     return (
         <div className="cdna">
             {toast && <div className={`cdna-toast cdna-toast--${toast.type}`}>{toast.message}</div>}
 
-            <Navbar actions={[{ label: 'Logout', onClick: handleLogout, variant: 'ghost' }]} />
+            <Navbar userName={userName} actions={[{ label: 'Logout', onClick: handleLogout, variant: 'ghost' }]} />
 
             <main className="cdna__main">
                 <p className="cdna__kicker">MOOD.X — Creative Studio</p>
@@ -167,16 +165,6 @@ export default function CreativeDna() {
                     {files.length > 0 && files.length < MIN_FILES && (
                         <span className="cdna__warn">At least {MIN_FILES} images required.</span>
                     )}
-                </div>
-
-                <div className="cdna__progress">
-                    <div className="cdna__progress-track">
-                        <span className="cdna__progress-marker" />
-                        <div
-                            className={`cdna__progress-fill ${files.length >= MIN_FILES ? 'cdna__progress-fill--ok' : ''}`}
-                            style={{ width: `${progress}%` }}
-                        />
-                    </div>
                 </div>
 
                 <div className="cdna__actions">

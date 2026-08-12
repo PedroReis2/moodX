@@ -27,33 +27,6 @@ body {
     background: #ececec;
 }
 
-/* ----- Navbar ----- */
-.mb__nav {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 48px;
-    background: rgba(236, 236, 236, 0.92);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid #d6d9de;
-}
-
-.mb__brand {
-    font-size: 22px;
-    font-weight: 300;
-    letter-spacing: -1px;
-    color: #1c1c1c;
-}
-
-.mb__nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
 /* ----- Botões ----- */
 .mb__btn {
     font-family: inherit;
@@ -101,19 +74,45 @@ body {
     padding: 64px 48px 80px;
 }
 
-.mb__welcome {
-    font-size: clamp(32px, 5vw, 56px);
+.mb__header {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.mb__kicker {
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: -2px;
-    line-height: 1.05;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #8a8f98;
     margin-bottom: 12px;
 }
 
+.mb__title {
+    font-weight: 600;
+    font-size: clamp(34px, 5vw, 56px);
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 16px;
+    color: #1c1c1c;
+    background: linear-gradient(180deg, #1c1c1c 20%, #8a8f98 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .mb__subtitle {
-    font-size: 15px;
+    font-weight: 500;
+    font-size: 17px;
+    color: #1c1c1c;
+}
+
+.mb__loading {
+    font-size: 14px;
     font-weight: 300;
     color: #6f757e;
-    margin-bottom: 48px;
+    text-align: center;
+    padding: 40px 0;
 }
 
 /* ----- Grid de projetos (3 colunas) ----- */
@@ -525,10 +524,6 @@ body {
 }
 
 @media (max-width: 640px) {
-    .mb__nav {
-        padding: 16px 20px;
-    }
-
     .mb__main {
         padding: 40px 20px 60px;
     }
