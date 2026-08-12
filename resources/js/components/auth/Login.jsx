@@ -30,7 +30,7 @@ export default function Login() {
 
         try {
             await axios.post('/login', { email, password, remember });
-            // A raiz decide o destino: Moodboard (se já usou Creative DNA) ou Creative DNA
+            // A raiz decide o destino: Projects (se já usou Creative DNA) ou Creative DNA
             window.location.href = '/';
         } catch (err) {
             setLoading(false);
@@ -43,26 +43,26 @@ export default function Login() {
     return (
         <div className="login-split">
             <aside className="login-split__brand">
-                <div className="login-split__logo-text">mood.x</div>
-                <div className="login-split__brand-copy">
+                <div className="login-split__logo">mood.x</div>
+                <div className="login-split__copy">
                     <p className="login-split__eyebrow">Creative Studio</p>
                     <h1 className="login-split__headline">
                         Where ideas
                         <br />
-                        become <span className="login-split__headline-accent">design.</span>
+                        become <span className="login-split__accent">design.</span>
                     </h1>
                 </div>
-                <p className="login-split__brand-foot">Your creative DNA, moodboards &amp; AI.</p>
+                <p className="login-split__foot">Your creative DNA, projects &amp; AI.</p>
             </aside>
 
             <main className="login-split__panel">
-                <div className="login-split__form-wrap">
+                <div className="login-split__form">
                     <p className="login-split__kicker">MOOD.X — Creative Studio</p>
                     <h2 className="login-split__title">Welcome</h2>
                     <p className="login-split__subtitle">Sign in to your account.</p>
 
                     {errors.length > 0 && (
-                        <div className="login-split__alert login-split__alert--error" role="alert">
+                        <div className="login-split__alert login-split__alert-error" role="alert">
                             <ul>
                                 {errors.map((error, i) => (
                                     <li key={i}>
@@ -95,7 +95,7 @@ export default function Login() {
                             <div className="login-split__input-wrap">
                                 <input
                                     type={showPassword ? 'text' : 'password'}
-                                    className="login-split__input login-split__input--password"
+                                    className="login-split__input login-split__input-password"
                                     id="password"
                                     placeholder="Enter your password"
                                     name="password"

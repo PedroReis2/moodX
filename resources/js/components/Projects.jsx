@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 const MIN_IMAGES = 4;
 const MAX_IMAGES = 5;
 
-export default function Moodboard({ userName = '' }) {
+export default function Projects({ userName = '' }) {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -29,10 +29,10 @@ export default function Moodboard({ userName = '' }) {
 
     const loadData = async () => {
         try {
-            const { data } = await axios.get('/moodboard/data');
+            const { data } = await axios.get('/projects/data');
             setProjects(data.projects);
         } catch (err) {
-            showToast(err.response?.data?.message || 'Unable to load the moodboard.');
+            showToast(err.response?.data?.message || 'Unable to load your projects.');
         } finally {
             setLoading(false);
         }
@@ -122,11 +122,11 @@ export default function Moodboard({ userName = '' }) {
 
         try {
             if (editing) {
-                const { data: res } = await axios.put(`/moodboard/${editing.id}`, data);
+                const { data: res } = await axios.put(`/projects/${editing.id}`, data);
                 setProjects((prev) => prev.map((p) => (p.id === editing.id ? res.project : p)));
                 showToast('Project updated.', 'success');
             } else {
-                const { data: res } = await axios.post('/moodboard', data);
+                const { data: res } = await axios.post('/projects', data);
                 setProjects((prev) => [res.project, ...prev]);
                 showToast('Project created.', 'success');
             }
@@ -146,7 +146,7 @@ export default function Moodboard({ userName = '' }) {
     const remove = async (project) => {
         if (!window.confirm(`Delete the project "${project.title}"?`)) return;
         try {
-            await axios.delete(`/moodboard/${project.id}`);
+            await axios.delete(`/projects/${project.id}`);
             setProjects((prev) => prev.filter((p) => p.id !== project.id));
             showToast('Project deleted.', 'success');
         } catch (err) {
@@ -161,7 +161,7 @@ export default function Moodboard({ userName = '' }) {
     const deleteAll = async () => {
         setDeletingAll(true);
         try {
-            await axios.delete('/moodboard');
+            await axios.delete('/projects');
             setProjects([]);
             setDeleteAllOpen(false);
             showToast('All projects deleted.', 'success');
@@ -195,7 +195,7 @@ export default function Moodboard({ userName = '' }) {
             <main className="mb__main">
                 <header className="mb__header">
                     <p className="mb__kicker">MOOD.X — Creative Studio</p>
-                    <h1 className="mb__title">Moodboard</h1>
+                    <h1 className="mb__title">Projects</h1>
                     <p className="mb__subtitle">
                         Create your fashion projects with your references.
                     </p>

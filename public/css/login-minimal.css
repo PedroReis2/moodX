@@ -1,5 +1,5 @@
 /* ============================================================
-   LOGIN SPLIT — layout novo: split-screen (preto | branco)
+   LOGIN SPLIT — split-screen (preto | branco)
    ============================================================ */
 
 /* Neutraliza os wrappers do layout quando o login-split está presente */
@@ -19,7 +19,7 @@ html:has(.login-split) body {
     background: #000 !important;
 }
 
-/* Contenedor principal split-screen */
+/* Container principal */
 .login-split {
     display: flex;
     min-height: 100vh;
@@ -52,14 +52,6 @@ html:has(.login-split) body {
 }
 
 .login-split__logo {
-    width: 140px;
-    height: auto;
-    filter: brightness(0) invert(1); /* logo a branco */
-    position: relative;
-    z-index: 1;
-}
-
-.login-split__logo-text {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 300;
     font-size: 34px;
@@ -69,7 +61,7 @@ html:has(.login-split) body {
     z-index: 1;
 }
 
-.login-split__brand-copy {
+.login-split__copy {
     position: relative;
     z-index: 1;
     margin: auto 0 auto auto; /* centraliza verticalmente e alinha à direita */
@@ -77,7 +69,6 @@ html:has(.login-split) body {
 }
 
 .login-split__eyebrow {
-    font-family: 'Inter', sans-serif;
     font-size: 12px;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -86,7 +77,6 @@ html:has(.login-split) body {
 }
 
 .login-split__headline {
-    font-family: 'Inter', sans-serif;
     font-weight: 600;
     font-size: clamp(24px, 3vw, 40px);
     line-height: 1.15;
@@ -95,19 +85,18 @@ html:has(.login-split) body {
     margin: 0;
 }
 
-.login-split__headline-accent {
+.login-split__accent {
     color: #bdbdbd;
     font-weight: 400;
 }
 
-.login-split__brand-foot {
+.login-split__foot {
     position: relative;
     z-index: 1;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 15px;
     font-weight: 500;
     letter-spacing: 0.5px;
-    text-transform: none;
     color: #8f8f8f;
 }
 
@@ -121,7 +110,7 @@ html:has(.login-split) body {
     padding: 48px 32px;
 }
 
-.login-split__form-wrap {
+.login-split__form {
     width: 100%;
     max-width: 420px;
     background: rgba(255, 255, 255, 0.7);
@@ -161,19 +150,12 @@ html:has(.login-split) body {
     font-size: 13px;
     padding: 12px 14px;
     margin-bottom: 20px;
-    list-style: none;
 }
 
-.login-split__alert--error {
+.login-split__alert-error {
     background: #fff4f2;
     color: #c0392b;
     border: 1px solid #f3d9d5;
-}
-
-.login-split__alert--success {
-    background: #f2faf4;
-    color: #1e7e34;
-    border: 1px solid #d8ecdd;
 }
 
 .login-split__alert ul {
@@ -211,7 +193,6 @@ html:has(.login-split) body {
 
 .login-split__label {
     display: block;
-    font-family: 'Inter', sans-serif;
     font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.5px;
@@ -289,7 +270,6 @@ html:has(.login-split) body {
 }
 
 .login-split__forgot {
-    font-family: 'Inter', sans-serif;
     font-size: 13px;
     color: #9a9a9a;
     text-decoration: none;
@@ -309,14 +289,12 @@ html:has(.login-split) body {
 }
 
 .login-split__register-text {
-    font-family: 'Inter', sans-serif;
     font-size: 13px;
     color: #9a9a9a;
     margin: 0 0 8px;
 }
 
 .login-split__register-link {
-    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: #111111;
@@ -331,7 +309,7 @@ html:has(.login-split) body {
     border-color: #6f6f6f;
 }
 
-/* ----- Novos estilos: kicker, toggle, remember, spinner ----- */
+/* ----- kicker, toggle, remember, spinner ----- */
 .login-split__kicker {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 11px;
@@ -346,7 +324,7 @@ html:has(.login-split) body {
     position: relative;
 }
 
-.login-split__input--password {
+.login-split__input-password {
     padding-right: 48px;
 }
 
@@ -412,17 +390,6 @@ html:has(.login-split) body {
     }
 }
 
-/* Fonte do projeto: Helvetica para todos os elementos do login */
-.login-split__eyebrow,
-.login-split__headline,
-.login-split__headline-accent,
-.login-split__label,
-.login-split__forgot,
-.login-split__register-text,
-.login-split__register-link {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
 /* Responsivo */
 @media (max-width: 860px) {
     .login-split {
@@ -434,11 +401,11 @@ html:has(.login-split) body {
         min-height: 240px;
     }
 
-    .login-split__brand-copy {
+    .login-split__copy {
         margin-top: 24px;
     }
 
-    .login-split__brand-foot {
+    .login-split__foot {
         display: none;
     }
 }

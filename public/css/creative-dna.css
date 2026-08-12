@@ -31,37 +31,6 @@ body {
     background: #ececec;
 }
 
-/* ----- Header ----- */
-.cdna__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.cdna__eyebrow {
-    font-size: 22px;
-    font-weight: 300;
-    letter-spacing: -1px;
-    color: #fff;
-}
-
-.cdna__logout {
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #8a8a8a;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: color 0.2s ease;
-}
-
-.cdna__logout:hover {
-    color: #fff;
-}
-
 /* ----- Conteúdo central ----- */
 .cdna__main {
     flex: 1;
@@ -88,8 +57,8 @@ body {
     font-weight: 600;
     font-size: clamp(34px, 5vw, 56px);
     letter-spacing: -2px;
-    line-height: 1;
-    margin-bottom: 16px;
+    line-height: 1.15;
+    margin-bottom: 28px;
     color: #1c1c1c;
     background: linear-gradient(180deg, #1c1c1c 20%, #8a8f98 100%);
     -webkit-background-clip: text;
@@ -273,7 +242,7 @@ body {
 }
 
 .cdna__upload,
-.cdna__moodboard {
+.cdna__projects {
     height: 52px;
     padding: 0 40px;
     border-radius: 10px;
@@ -303,22 +272,22 @@ body {
     cursor: not-allowed;
 }
 
-.cdna__moodboard {
+.cdna__projects {
     background: transparent;
     color: #1c1c1c;
     border: 1px solid #c6c9cf;
 }
 
-.cdna__moodboard:disabled {
+.cdna__projects:disabled {
     opacity: 0.35;
     cursor: not-allowed;
 }
 
-.cdna__moodboard:not(:disabled) {
+.cdna__projects:not(:disabled) {
     border-color: #1c1c1c;
 }
 
-.cdna__moodboard:not(:disabled):hover {
+.cdna__projects:not(:disabled):hover {
     background: #1c1c1c;
     color: #fff;
     transform: translateY(-1px);
@@ -369,7 +338,7 @@ body {
     }
 
     .cdna__upload,
-    .cdna__moodboard {
+    .cdna__projects {
         width: 100%;
     }
 }

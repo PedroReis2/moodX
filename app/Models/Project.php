@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Moodboard extends Model
+class Project extends Model
 {
+    protected $table = 'projects';
+
     protected $fillable = [
         'user_id',
         'title',
