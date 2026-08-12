@@ -62,8 +62,8 @@ export default function CreativeDna({ userName = '' }) {
             await axios.post('/creative-dna/upload', data);
             showToast('Upload successful. Your Creative DNA is ready.', 'success');
 
-            // O Creative DNA é usado apenas uma vez — segue para o Moodboard
-            setTimeout(() => (window.location.href = '/moodboard'), 900);
+            // O Creative DNA é usado apenas uma vez — segue para Projects
+            setTimeout(() => (window.location.href = '/projects'), 900);
         } catch (err) {
             showToast(err.response?.data?.message || 'Upload failed. Please try again.');
         } finally {
@@ -134,7 +134,7 @@ export default function CreativeDna({ userName = '' }) {
                 </div>
 
                 <p className="cdna__steps">
-                    After your images are loaded, click “Upload images” and then “My Moodboard”.
+                    After your images are loaded, click “Upload images” and then “My Projects”.
                 </p>
 
                 {files.length > 0 && (
@@ -179,11 +179,11 @@ export default function CreativeDna({ userName = '' }) {
 
                     <button
                         type="button"
-                        className="cdna__moodboard"
+                        className="cdna__projects"
                         disabled={files.length < MIN_FILES}
-                        onClick={() => (window.location.href = '/moodboard')}
+                        onClick={() => (window.location.href = '/projects')}
                     >
-                        My Moodboard
+                        My Projects
                     </button>
                 </div>
             </main>

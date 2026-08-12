@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UtilController;
 use App\Http\Controllers\CreativeDnaController;
-use App\Http\Controllers\MoodboardController;
+use App\Http\Controllers\ProjectController;
 
 
 
@@ -14,15 +14,15 @@ Route::get('/', function () {
         return redirect('/login');
     }
     $hasDna = \App\Models\CreativeDna::where('user_id', auth()->id())->exists();
-    return redirect($hasDna ? '/moodboard' : '/creative-dna');
+    return redirect($hasDna ? '/projects' : '/creative-dna');
 })->name('welcome');
 
 Route::fallback([UtilController::class, "fallback"]);
 
-// Creative DNA — página única por utilizador (redireciona para o Moodboard se já usado)
+// Creative DNA — página única por utilizador (redireciona para Projects se já usado)
 Route::get('/creative-dna', function () {
     if (\App\Models\CreativeDna::where('user_id', auth()->id())->exists()) {
-        return redirect()->route('moodboard.index');
+        return redirect()->route('projects.index');
     }
     return view('creative-dna');
 })->name('creative-dna')->middleware('auth');
@@ -33,14 +33,14 @@ Route::post('/creative-dna/upload', [CreativeDnaController::class, 'upload'])
 // Dashboards desativados — redirecionam para o Creative DNA
 Route::redirect('/dashboard', '/creative-dna')->name('dashboard');
 
-// Moodboard — projetos do utilizador (CRUD protegido)
+// Projects — projetos do utilizador (CRUD protegido)
 Route::middleware('auth')->group(function () {
-    Route::get('/moodboard', [MoodboardController::class, 'index'])->name('moodboard.index');
-    Route::get('/moodboard/data', [MoodboardController::class, 'data'])->name('moodboard.data');
-    Route::post('/moodboard', [MoodboardController::class, 'store'])->name('moodboard.store');
-    Route::put('/moodboard/{moodboard}', [MoodboardController::class, 'update'])->name('moodboard.update');
-    Route::delete('/moodboard', [MoodboardController::class, 'destroyAll'])->name('moodboard.deleteAll');
-    Route::delete('/moodboard/{moodboard}', [MoodboardController::class, 'destroy'])->name('moodboard.destroy');
+    Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::get('/projects/data', [ProjectController::class, 'data'])->name('projects.data');
+    Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+    Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+    Route::delete('/projects', [ProjectController::class, 'destroyAll'])->name('projects.deleteAll');
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 });
 
 

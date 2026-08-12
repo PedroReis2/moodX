@@ -37,9 +37,9 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
-    public function moodboards()
+    public function projects()
     {
-        return $this->hasMany(Moodboard::class);
+        return $this->hasMany(Project::class);
     }
 
     public function user()

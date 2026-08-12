@@ -1,7 +1,7 @@
 import React from 'react';
 
 /**
- * Navbar partilhada pelas páginas da app (Creative DNA, Moodboard, ...).
+ * Navbar partilhada pelas páginas da app (Creative DNA, Projects, ...).
  * Preta, com texto branco e botões com efeito de hover.
  * As ações são passadas por props: [{ label, variant: 'solid'|'ghost', onClick, disabled }]
  */
