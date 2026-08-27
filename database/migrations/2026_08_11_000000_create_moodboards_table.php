@@ -8,18 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('moodboards', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('title');
+        Schema::table('moodboards', function (Blueprint $table) {
             // Até 5 caminhos de imagens do Creative DNA do utilizador
-            $table->json('images');
-            $table->timestamps();
+            $table->json('images')->nullable();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('moodboards');
+        Schema::table('moodboards', function (Blueprint $table) {
+            $table->dropColumn('images');
+        });
     }
 };
