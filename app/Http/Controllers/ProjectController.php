@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\CreativeDna;
-use App\Models\Moodboard;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class MoodboardController extends Controller
+class ProjectController extends Controller
 {
     public const MIN_IMAGES = 4;
     public const MAX_IMAGES = 5;
 
     /**
-     * Página do Moodboard (React).
+     * Página de Projects (React).
      * Só é acessível depois de o utilizador ter carregado as imagens do Creative DNA.
      */
     public function index()
@@ -22,7 +22,7 @@ class MoodboardController extends Controller
             return redirect()->route('creative-dna');
         }
 
-        return view('moodboard');
+        return view('projects');
     }
 
     /**
@@ -32,10 +32,10 @@ class MoodboardController extends Controller
     {
         $user = $request->user();
 
-        $projects = Moodboard::where('user_id', $user->id)
+        $projects = Project::where('user_id', $user->id)
             ->orderByDesc('id')
             ->get()
-            ->map(fn (Moodboard $moodboard) => $this->serialize($moodboard));
+            ->map(fn (Project $project) => $this->serialize($project));
 
         return response()->json([
             'user' => ['name' => $user->name],
@@ -50,7 +50,7 @@ class MoodboardController extends Controller
     {
         $data = $this->validateProject($request);
 
-        $moodboard = Moodboard::create([
+        $project = Project::create([
             'user_id' => $request->user()->id,
             'title' => $data['title'],
             'images' => $data['paths'],
@@ -58,48 +58,48 @@ class MoodboardController extends Controller
 
         return response()->json([
             'message' => 'Project created.',
-            'project' => $this->serialize($moodboard),
+            'project' => $this->serialize($project),
         ], 201);
     }
 
     /**
      * Atualizar um projeto existente (CRUD - Update).
      */
-    public function update(Request $request, Moodboard $moodboard)
+    public function update(Request $request, Project $project)
     {
-        $this->authorizeOwner($request, $moodboard);
-        $data = $this->validateProject($request, $moodboard);
+        $this->authorizeOwner($request, $project);
+        $data = $this->validateProject($request, $project);
 
         // Apagar imagens antigas que deixaram de ser usadas
-        $removed = array_diff($moodboard->images ?? [], $data['paths']);
+        $removed = array_diff($project->images ?? [], $data['paths']);
         foreach ($removed as $path) {
             Storage::disk('public')->delete($path);
         }
 
-        $moodboard->update([
+        $project->update([
             'title' => $data['title'],
             'images' => $data['paths'],
         ]);
 
         return response()->json([
             'message' => 'Project updated.',
-            'project' => $this->serialize($moodboard->fresh()),
+            'project' => $this->serialize($project->fresh()),
         ]);
     }
 
     /**
      * Apagar um projeto (CRUD - Delete).
      */
-    public function destroy(Request $request, Moodboard $moodboard)
+    public function destroy(Request $request, Project $project)
     {
-        $this->authorizeOwner($request, $moodboard);
+        $this->authorizeOwner($request, $project);
 
         // Apagar as imagens do projeto
-        foreach ($moodboard->images ?? [] as $path) {
+        foreach ($project->images ?? [] as $path) {
             Storage::disk('public')->delete($path);
         }
 
-        $moodboard->delete();
+        $project->delete();
 
         return response()->json(['message' => 'Project deleted.']);
     }
@@ -110,7 +110,7 @@ class MoodboardController extends Controller
     public function destroyAll(Request $request)
     {
         $user = $request->user();
-        $projects = Moodboard::where('user_id', $user->id)->get();
+        $projects = Project::where('user_id', $user->id)->get();
 
         foreach ($projects as $project) {
             foreach ($project->images ?? [] as $path) {
@@ -118,12 +118,12 @@ class MoodboardController extends Controller
             }
         }
 
-        Moodboard::where('user_id', $user->id)->delete();
+        Project::where('user_id', $user->id)->delete();
 
         return response()->json(['message' => 'All projects deleted.']);
     }
 
-    private function validateProject(Request $request, ?Moodboard $moodboard = null): array
+    private function validateProject(Request $request, ?Project $project = null): array
     {
         $request->validate([
             'title' => ['required', 'string', 'max:100'],
@@ -138,10 +138,10 @@ class MoodboardController extends Controller
         $existing = is_array($existing) ? array_values(array_filter($existing)) : [];
 
         // Em criação não pode haver imagens "existentes"
-        if ($moodboard === null) {
+        if ($project === null) {
             abort_unless(count($existing) === 0, 422, 'You cannot reference existing images in a new project.');
         } else {
-            $allowed = $moodboard->images ?? [];
+            $allowed = $project->images ?? [];
             foreach ($existing as $path) {
                 abort_unless(in_array($path, $allowed, true), 422, 'Invalid existing image.');
             }
@@ -156,7 +156,7 @@ class MoodboardController extends Controller
 
         $paths = $existing;
         foreach ($newFiles as $file) {
-            $paths[] = $file->store('moodboards/' . $request->user()->id, 'public');
+            $paths[] = $file->store('projects/' . $request->user()->id, 'public');
         }
 
         return [
@@ -165,22 +165,22 @@ class MoodboardController extends Controller
         ];
     }
 
-    private function authorizeOwner(Request $request, Moodboard $moodboard): void
+    private function authorizeOwner(Request $request, Project $project): void
     {
-        abort_unless($moodboard->user_id === $request->user()->id, 403);
+        abort_unless($project->user_id === $request->user()->id, 403);
     }
 
-    private function serialize(Moodboard $moodboard): array
+    private function serialize(Project $project): array
     {
-        $paths = $moodboard->images ?? [];
+        $paths = $project->images ?? [];
 
         return [
-            'id' => $moodboard->id,
-            'title' => $moodboard->title,
+            'id' => $project->id,
+            'title' => $project->title,
             'images' => $paths,
             'imageUrls' => array_map(fn ($p) => asset('storage/' . $p), $paths),
             'coverUrl' => count($paths) ? asset('storage/' . $paths[0]) : null,
-            'createdAt' => optional($moodboard->created_at)->toDateString(),
+            'createdAt' => optional($project->created_at)->toDateString(),
         ];
     }
 }
