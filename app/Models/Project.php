@@ -16,7 +16,7 @@ class Project extends Model
         'palette',
     ];
 
-// Converte os campos JSON da BD em arrays PHP para facilitar o uso no controller e no frontend.
+    // Converte os campos JSON da BD em arrays PHP para facilitar o uso no controller e no frontend.
     protected $casts = [
         'images' => 'array',
         'image_colors' => 'array',
