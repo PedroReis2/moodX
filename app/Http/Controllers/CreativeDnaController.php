@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CreativeDna;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Services\ColorPaletteService;
 
 class CreativeDnaController extends Controller
 {
@@ -13,7 +14,7 @@ class CreativeDnaController extends Controller
      * Exige no mínimo 20 ficheiros de imagem.
      * Em re-upload, substitui as imagens anteriores do utilizador.
      */
-    public function upload(Request $request)
+    public function upload(Request $request, ColorPaletteService $palettes)
     {
         $request->validate([
             'files' => ['required', 'array', 'min:20', 'max:30'],
@@ -38,6 +39,9 @@ class CreativeDnaController extends Controller
                 'user_id' => $user->id,
                 'original_name' => $file->getClientOriginalName(),
                 'path' => $path,
+                // Extrair e guardar as cores principais desta imagem do Creative DNA.
+                'colors' => $palettes->extractFromPublicPath($path),
+
             ]);
 
             $saved++;

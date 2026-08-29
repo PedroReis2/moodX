@@ -13,6 +13,6 @@
     @vite(['resources/js/app.js'])
 </head>
 <body>
-    <div id="creative-dna-root"></div>
+    <div id="creative-dna-root" data-user-name="{{ auth()->user()->name }}"></div>
 </body>
 </html>
