@@ -163,6 +163,21 @@ body {
     font-weight: 300;
     color: #8a8f98;
 }
+/* Paleta gerada automaticamente a partir do Creative DNA e das imagens do projeto. */
+.mb__palette {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+/* Cada swatch representa uma cor final calculada pelo algoritmo 30/70. */
+.mb__palette-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(28, 28, 28, 0.18);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
 
 .mb__card-actions {
     display: flex;

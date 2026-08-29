@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
-import Navbar from './Navbar';
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import Navbar from "./Navbar";
 
 const MIN_IMAGES = 4;
 const MAX_IMAGES = 5;
 
-export default function Projects({ userName = '' }) {
+export default function Projects({ userName = "" }) {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState(null); // project being edited or null (new)
-    const [title, setTitle] = useState('');
+    const [title, setTitle] = useState("");
     // project images: [{ key, type: 'new'|'existing', file?, path?, url? }]
     const [images, setImages] = useState([]);
 
@@ -22,17 +22,19 @@ export default function Projects({ userName = '' }) {
     const [toast, setToast] = useState(null);
     const fileInputRef = useRef(null);
 
-    const showToast = (message, type = 'error') => {
+    const showToast = (message, type = "error") => {
         setToast({ message, type });
         setTimeout(() => setToast(null), 4000);
     };
 
     const loadData = async () => {
         try {
-            const { data } = await axios.get('/projects/data');
+            const { data } = await axios.get("/projects/data");
             setProjects(data.projects);
         } catch (err) {
-            showToast(err.response?.data?.message || 'Unable to load your projects.');
+            showToast(
+                err.response?.data?.message || "Unable to load your projects.",
+            );
         } finally {
             setLoading(false);
         }
@@ -44,7 +46,7 @@ export default function Projects({ userName = '' }) {
 
     const openCreate = () => {
         setEditing(null);
-        setTitle('');
+        setTitle("");
         setImages([]);
         setModalOpen(true);
     };
@@ -55,10 +57,10 @@ export default function Projects({ userName = '' }) {
         setImages(
             project.imageUrls.map((url, i) => ({
                 key: `${project.id}-${i}`,
-                type: 'existing',
+                type: "existing",
                 path: project.images[i],
                 url,
-            }))
+            })),
         );
         setModalOpen(true);
     };
@@ -69,20 +71,24 @@ export default function Projects({ userName = '' }) {
     };
 
     const handleFiles = (fileList) => {
-        const files = Array.from(fileList || []).filter((f) => f.type.startsWith('image/'));
+        const files = Array.from(fileList || []).filter((f) =>
+            f.type.startsWith("image/"),
+        );
         if (files.length === 0) return;
 
         setImages((prev) => {
             const room = MAX_IMAGES - prev.length;
             if (files.length > room) {
-                showToast(`A project can contain a maximum of ${MAX_IMAGES} images.`);
+                showToast(
+                    `A project can contain a maximum of ${MAX_IMAGES} images.`,
+                );
             }
             const kept = files.slice(0, Math.max(room, 0));
             return [
                 ...prev,
                 ...kept.map((file) => ({
                     key: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2)}`,
-                    type: 'new',
+                    type: "new",
                     file,
                     url: URL.createObjectURL(file),
                 })),
@@ -93,7 +99,7 @@ export default function Projects({ userName = '' }) {
     const removeImage = (key) => {
         setImages((prev) => {
             const item = prev.find((i) => i.key === key);
-            if (item && item.type === 'new' && item.url) {
+            if (item && item.type === "new" && item.url) {
                 URL.revokeObjectURL(item.url);
             }
             return prev.filter((i) => i.key !== key);
@@ -102,33 +108,40 @@ export default function Projects({ userName = '' }) {
 
     const save = async () => {
         if (!title.trim()) {
-            showToast('Give your project a title.');
+            showToast("Give your project a title.");
             return;
         }
         if (images.length < MIN_IMAGES || images.length > MAX_IMAGES) {
-            showToast(`A project must contain between ${MIN_IMAGES} and ${MAX_IMAGES} images.`);
+            showToast(
+                `A project must contain between ${MIN_IMAGES} and ${MAX_IMAGES} images.`,
+            );
             return;
         }
 
         setSaving(true);
         const data = new FormData();
-        data.append('title', title.trim());
+        data.append("title", title.trim());
         images
-            .filter((i) => i.type === 'existing')
-            .forEach((i) => data.append('existing[]', i.path));
+            .filter((i) => i.type === "existing")
+            .forEach((i) => data.append("existing[]", i.path));
         images
-            .filter((i) => i.type === 'new')
-            .forEach((i) => data.append('files[]', i.file));
+            .filter((i) => i.type === "new")
+            .forEach((i) => data.append("files[]", i.file));
 
         try {
             if (editing) {
-                const { data: res } = await axios.put(`/projects/${editing.id}`, data);
-                setProjects((prev) => prev.map((p) => (p.id === editing.id ? res.project : p)));
-                showToast('Project updated.', 'success');
+                const { data: res } = await axios.put(
+                    `/projects/${editing.id}`,
+                    data,
+                );
+                setProjects((prev) =>
+                    prev.map((p) => (p.id === editing.id ? res.project : p)),
+                );
+                showToast("Project updated.", "success");
             } else {
-                const { data: res } = await axios.post('/projects', data);
+                const { data: res } = await axios.post("/projects", data);
                 setProjects((prev) => [res.project, ...prev]);
-                showToast('Project created.', 'success');
+                showToast("Project created.", "success");
             }
             setModalOpen(false);
         } catch (err) {
@@ -137,7 +150,12 @@ export default function Projects({ userName = '' }) {
                 return;
             }
             const msgs = Object.values(err.response?.data?.errors ?? {}).flat();
-            showToast(msgs.length ? msgs[0] : (err.response?.data?.message || 'Unable to save the project.'));
+            showToast(
+                msgs.length
+                    ? msgs[0]
+                    : err.response?.data?.message ||
+                          "Unable to save the project.",
+            );
         } finally {
             setSaving(false);
         }
@@ -148,25 +166,30 @@ export default function Projects({ userName = '' }) {
         try {
             await axios.delete(`/projects/${project.id}`);
             setProjects((prev) => prev.filter((p) => p.id !== project.id));
-            showToast('Project deleted.', 'success');
+            showToast("Project deleted.", "success");
         } catch (err) {
             if (err.response?.status === 403) {
                 showToast("You don't have permission to delete this project.");
                 return;
             }
-            showToast(err.response?.data?.message || 'Unable to delete the project.');
+            showToast(
+                err.response?.data?.message || "Unable to delete the project.",
+            );
         }
     };
 
     const deleteAll = async () => {
         setDeletingAll(true);
         try {
-            await axios.delete('/projects');
+            await axios.delete("/projects");
             setProjects([]);
             setDeleteAllOpen(false);
-            showToast('All projects deleted.', 'success');
+            showToast("All projects deleted.", "success");
         } catch (err) {
-            showToast(err.response?.data?.message || 'Unable to delete your projects.');
+            showToast(
+                err.response?.data?.message ||
+                    "Unable to delete your projects.",
+            );
         } finally {
             setDeletingAll(false);
         }
@@ -174,21 +197,29 @@ export default function Projects({ userName = '' }) {
 
     const logout = async () => {
         try {
-            await axios.post('/logout');
+            await axios.post("/logout");
         } finally {
-            window.location.href = '/login';
+            window.location.href = "/login";
         }
     };
 
     return (
         <div className="mb">
-            {toast && <div className={`mb-toast mb-toast--${toast.type}`}>{toast.message}</div>}
+            {toast && (
+                <div className={`mb-toast mb-toast--${toast.type}`}>
+                    {toast.message}
+                </div>
+            )}
 
             <Navbar
                 userName={userName}
                 actions={[
-                    { label: 'New Project', onClick: openCreate, variant: 'solid' },
-                    { label: 'Logout', onClick: logout, variant: 'ghost' },
+                    {
+                        label: "New Project",
+                        onClick: openCreate,
+                        variant: "solid",
+                    },
+                    { label: "Logout", onClick: logout, variant: "ghost" },
                 ]}
             />
 
@@ -206,8 +237,14 @@ export default function Projects({ userName = '' }) {
                 ) : projects.length === 0 ? (
                     <div className="mb__empty">
                         <span className="mb__empty-icon">+</span>
-                        <p className="mb__empty-text">You don't have any projects yet.</p>
-                        <button type="button" className="mb__btn mb__btn--solid" onClick={openCreate}>
+                        <p className="mb__empty-text">
+                            You don't have any projects yet.
+                        </p>
+                        <button
+                            type="button"
+                            className="mb__btn mb__btn--solid"
+                            onClick={openCreate}
+                        >
                             Create your first project
                         </button>
                     </div>
@@ -225,11 +262,31 @@ export default function Projects({ userName = '' }) {
                                     <div className="mb__card-cover" />
                                 )}
                                 <div className="mb__card-body">
-                                    <h2 className="mb__card-title">{project.title}</h2>
+                                    <h2 className="mb__card-title">
+                                        {project.title}
+                                    </h2>
                                     <span className="mb__card-count">
-                                        {project.images.length}{' '}
-                                        {project.images.length === 1 ? 'image' : 'images'}
+                                        {project.images.length}{" "}
+                                        {project.images.length === 1
+                                            ? "image"
+                                            : "images"}
                                     </span>
+                                    {/* Mostrar os quadradinhos com as cores geradas para este projeto. */}
+                                    {project.palette?.length > 0 && (
+                                        <div className="mb__palette">
+                                            {project.palette.map((color) => (
+                                                <span
+                                                    key={`${project.id}-${color.hex}`}
+                                                    className="mb__palette-swatch"
+                                                    style={{
+                                                        backgroundColor:
+                                                            color.hex,
+                                                    }}
+                                                    title={`${color.hex} - score ${Math.round(color.score)}`}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
                                     <div className="mb__card-actions">
                                         <button
                                             type="button"
@@ -260,7 +317,9 @@ export default function Projects({ userName = '' }) {
                             disabled={projects.length < 2 || deletingAll}
                             onClick={() => setDeleteAllOpen(true)}
                         >
-                            {deletingAll ? 'Deleting...' : 'Delete all projects'}
+                            {deletingAll
+                                ? "Deleting..."
+                                : "Delete all projects"}
                         </button>
                     </div>
                 )}
@@ -268,10 +327,13 @@ export default function Projects({ userName = '' }) {
 
             {modalOpen && (
                 <div className="mb-modal" onClick={closeModal}>
-                    <div className="mb-modal__panel" onClick={(e) => e.stopPropagation()}>
+                    <div
+                        className="mb-modal__panel"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <div className="mb-modal__head">
                             <h2 className="mb-modal__title">
-                                {editing ? 'Edit project' : 'New project'}
+                                {editing ? "Edit project" : "New project"}
                             </h2>
                             <button
                                 type="button"
@@ -283,7 +345,10 @@ export default function Projects({ userName = '' }) {
                             </button>
                         </div>
 
-                        <label className="mb-field__label" htmlFor="project-title">
+                        <label
+                            className="mb-field__label"
+                            htmlFor="project-title"
+                        >
                             Project title
                         </label>
                         <input
@@ -298,10 +363,11 @@ export default function Projects({ userName = '' }) {
 
                         <div className="mb-picker__meta">
                             <span className="mb-picker__label">
-                                Upload {MIN_IMAGES} to {MAX_IMAGES} images for the project
+                                Upload {MIN_IMAGES} to {MAX_IMAGES} images for
+                                the project
                             </span>
                             <span
-                                className={`mb-picker__count ${images.length >= MIN_IMAGES ? 'mb-picker__count--ok' : ''}`}
+                                className={`mb-picker__count ${images.length >= MIN_IMAGES ? "mb-picker__count--ok" : ""}`}
                             >
                                 {images.length} / {MAX_IMAGES}
                             </span>
@@ -315,7 +381,7 @@ export default function Projects({ userName = '' }) {
                             hidden
                             onChange={(e) => {
                                 handleFiles(e.target.files);
-                                e.target.value = '';
+                                e.target.value = "";
                             }}
                         />
 
@@ -329,15 +395,24 @@ export default function Projects({ userName = '' }) {
                             }}
                         >
                             <span className="mb-upload__icon">+</span>
-                            <p className="mb-upload__text">Click or drag your images here</p>
-                            <p className="mb-upload__hint">JPG, PNG — between {MIN_IMAGES} and {MAX_IMAGES} files</p>
+                            <p className="mb-upload__text">
+                                Click or drag your images here
+                            </p>
+                            <p className="mb-upload__hint">
+                                JPG, PNG — between {MIN_IMAGES} and {MAX_IMAGES}{" "}
+                                files
+                            </p>
                         </div>
 
                         {images.length > 0 && (
                             <div className="mb-previews">
                                 {images.map((img) => (
                                     <div key={img.key} className="mb-preview">
-                                        <img className="mb-preview__img" src={img.url} alt="" />
+                                        <img
+                                            className="mb-preview__img"
+                                            src={img.url}
+                                            alt=""
+                                        />
                                         <button
                                             type="button"
                                             className="mb-preview__remove"
@@ -367,10 +442,10 @@ export default function Projects({ userName = '' }) {
                                 disabled={saving}
                             >
                                 {saving
-                                    ? 'Saving...'
+                                    ? "Saving..."
                                     : editing
-                                      ? 'Save changes'
-                                      : 'Create project'}
+                                      ? "Save changes"
+                                      : "Create project"}
                             </button>
                         </div>
                     </div>
@@ -384,9 +459,16 @@ export default function Projects({ userName = '' }) {
                         if (!deletingAll) setDeleteAllOpen(false);
                     }}
                 >
-                    <div className="mb-confirm__panel" onClick={(e) => e.stopPropagation()}>
-                        <h3 className="mb-confirm__title">Delete all projects</h3>
-                        <p className="mb-confirm__text">Are you sure you want to delete your projects?</p>
+                    <div
+                        className="mb-confirm__panel"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h3 className="mb-confirm__title">
+                            Delete all projects
+                        </h3>
+                        <p className="mb-confirm__text">
+                            Are you sure you want to delete your projects?
+                        </p>
                         <div className="mb-confirm__actions">
                             <button
                                 type="button"
@@ -402,7 +484,7 @@ export default function Projects({ userName = '' }) {
                                 disabled={deletingAll}
                                 onClick={deleteAll}
                             >
-                                {deletingAll ? 'Deleting...' : 'YES'}
+                                {deletingAll ? "Deleting..." : "YES"}
                             </button>
                         </div>
                     </div>
