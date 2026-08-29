@@ -12,10 +12,15 @@ class Project extends Model
         'user_id',
         'title',
         'images',
+        'image_colors',
+        'palette',
     ];
 
+// Converte os campos JSON da BD em arrays PHP para facilitar o uso no controller e no frontend.
     protected $casts = [
         'images' => 'array',
+        'image_colors' => 'array',
+        'palette' => 'array',
     ];
 
     public function user()
