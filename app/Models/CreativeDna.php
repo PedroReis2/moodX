@@ -12,6 +12,12 @@ class CreativeDna extends Model
         'user_id',
         'original_name',
         'path',
+        'colors',
+    ];
+
+    // Converte automaticamente o JSON de cores guardado na BD para array PHP.
+    protected $casts = [
+        'colors' => 'array',
     ];
 
     public function user()

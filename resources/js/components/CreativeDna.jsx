@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 const MIN_FILES = 20;
 const MAX_FILES = 30;
 
-export default function CreativeDna() {
+export default function CreativeDna({ userName = '' }) {
     const [files, setFiles] = useState([]); // [{ file, url }]
     const [uploading, setUploading] = useState(false);
     const [dragging, setDragging] = useState(false);
@@ -62,8 +62,8 @@ export default function CreativeDna() {
             await axios.post('/creative-dna/upload', data);
             showToast('Upload successful. Your Creative DNA is ready.', 'success');
 
-            // O Creative DNA é usado apenas uma vez — segue para o Moodboard
-            setTimeout(() => (window.location.href = '/moodboard'), 900);
+            // O Creative DNA é usado apenas uma vez — segue para Projects
+            setTimeout(() => (window.location.href = '/projects'), 900);
         } catch (err) {
             showToast(err.response?.data?.message || 'Upload failed. Please try again.');
         } finally {
@@ -79,13 +79,11 @@ export default function CreativeDna() {
         }
     };
 
-    const progress = Math.min((files.length / MAX_FILES) * 100, 100);
-
     return (
         <div className="cdna">
             {toast && <div className={`cdna-toast cdna-toast--${toast.type}`}>{toast.message}</div>}
 
-            <Navbar actions={[{ label: 'Logout', onClick: handleLogout, variant: 'ghost' }]} />
+            <Navbar userName={userName} actions={[{ label: 'Logout', onClick: handleLogout, variant: 'ghost' }]} />
 
             <main className="cdna__main">
                 <p className="cdna__kicker">MOOD.X — Creative Studio</p>
@@ -98,13 +96,19 @@ export default function CreativeDna() {
                     cannot be edited, and it will be used to generate a result with AI.
                 </p>
 
+                {/* Arrasta sobre a área → onDragEnter → destaca (dragover)
+                     Sai da área sem soltar → onDragLeave → desfaz o destaque
+                     Solta na área → onDrop → processa as imagens */}
+
                 <div
+                    // arrastar e soltar ficheiros -- dropzone
                     className={`cdna__dropzone ${dragging ? 'cdna__dropzone--dragover' : ''}`}
                     onClick={() => inputRef.current?.click()}
                     onDragEnter={(e) => {
                         e.preventDefault();
                         setDragging(true);
                     }}
+                    //dragging: "acende" a borda e muda o fundo 
                     onDragOver={(e) => e.preventDefault()}
                     onDragLeave={(e) => {
                         e.preventDefault();
@@ -130,7 +134,7 @@ export default function CreativeDna() {
                 </div>
 
                 <p className="cdna__steps">
-                    After your images are loaded, click “Upload images” and then “My Moodboard”.
+                    After your images are loaded, click “Upload images” and then “My Projects”.
                 </p>
 
                 {files.length > 0 && (
@@ -163,16 +167,6 @@ export default function CreativeDna() {
                     )}
                 </div>
 
-                <div className="cdna__progress">
-                    <div className="cdna__progress-track">
-                        <span className="cdna__progress-marker" />
-                        <div
-                            className={`cdna__progress-fill ${files.length >= MIN_FILES ? 'cdna__progress-fill--ok' : ''}`}
-                            style={{ width: `${progress}%` }}
-                        />
-                    </div>
-                </div>
-
                 <div className="cdna__actions">
                     <button
                         type="button"
@@ -185,11 +179,11 @@ export default function CreativeDna() {
 
                     <button
                         type="button"
-                        className="cdna__moodboard"
+                        className="cdna__projects"
                         disabled={files.length < MIN_FILES}
-                        onClick={() => (window.location.href = '/moodboard')}
+                        onClick={() => (window.location.href = '/projects')}
                     >
-                        My Moodboard
+                        My Projects
                     </button>
                 </div>
             </main>
