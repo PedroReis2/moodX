@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use ColorThief\ColorThief;
+use ColorThief\ImageRegion;
 use Illuminate\Support\Facades\Storage;
 
 class ColorPaletteService
@@ -19,9 +20,22 @@ class ColorPaletteService
             alphaThreshold: 125,
             minSaturation: 0.03,
         );
+        [$width, $height] = getimagesize($fullPath);
 
-        // Extrair as cores dominantes da imagem.
-        $palette = $thief->getPalette($fullPath, $limit);
+        // Definiu-se que só queremos analisar o centro da imagem.
+        // Isto ajuda a ignorar fundos, margens e zonas menos importantes da imagem, para dar mais peso às cores do centro.
+        $centerRatio = 0.60;
+
+        $regionWidth = (int) round($width * $centerRatio);
+        $regionHeight = (int) round($height * $centerRatio);
+
+        $x = (int) round(($width - $regionWidth) / 2);
+        $y = (int) round(($height - $regionHeight) / 2);
+
+        $region = new ImageRegion($x, $y, $regionWidth, $regionHeight);
+
+        // Extrair as cores dominantes do centro da imagem.
+        $palette = $thief->getPalette($fullPath, $limit, $region);
 
         $colors = [];
 
@@ -52,7 +66,7 @@ class ColorPaletteService
             $this->addWeightedColor($weighted, $color, 0.70, 'project');
         }
 
-        usort($weighted, fn ($a, $b) => $b['score'] <=> $a['score']);
+        usort($weighted, fn($a, $b) => $b['score'] <=> $a['score']);
 
         return array_slice(array_values($weighted), 0, $limit);
     }
@@ -82,7 +96,7 @@ class ColorPaletteService
     {
         // Aproximar cores parecidas para que tons quase iguais contem como a mesma cor.
         return implode('-', array_map(
-            fn ($value) => (string) (round($value / 24) * 24),
+            fn($value) => (string) (round($value / 24) * 24),
             $rgb
         ));
     }
