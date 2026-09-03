@@ -1,0 +1,71 @@
+/* ============================================================
+   REGISTER SPLIT — página de registo React (usa o visual do Login)
+   Montado no layout fe_master_simple; reutiliza as classes
+   .login-split__* do login-minimal.css com ajustes próprios.
+   Tudo fica limitado ao elemento-raiz .register-split para não
+   afetar a página de Login.
+   ============================================================ */
+
+/* Painel direito: fundo em degrade mais suave */
+.register-split .login-split__panel {
+    background: linear-gradient(135deg, #f6f6f6 0%, #e9edf2 55%, #dde2ea 100%);
+}
+
+/* Cartão: maior, com degrade/sombra moderna */
+.register-split .login-split__form {
+    max-width: 660px;
+    padding: 34px 40px 30px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.78) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow:
+        0 28px 64px -16px rgba(15, 23, 42, 0.22),
+        0 8px 24px -10px rgba(15, 23, 42, 0.10);
+}
+
+/* Cabeçalho do cartão mais compacto */
+.register-split .login-split__title {
+    margin-bottom: 4px;
+}
+
+.register-split .login-split__subtitle {
+    margin-bottom: 24px;
+}
+
+/* Campos mais compactos */
+.register-split .login-split__field {
+    margin-bottom: 15px;
+}
+
+.register-split .login-split__input {
+    height: 46px;
+}
+
+.register-split .login-split__submit {
+    height: 46px;
+}
+
+/* Grelha de duas colunas (primeiro/último nome e palavras-passe) */
+.register-split__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 14px;
+}
+
+/* Rodapé do cartão ligeiramente mais curto */
+.register-split .login-split__register {
+    margin-top: 28px;
+    padding-top: 20px;
+}
+
+/* Responsivo: empilha campos */
+@media (max-width: 640px) {
+    .register-split .login-split__form {
+        padding: 28px 22px 24px;
+        border-radius: 18px;
+    }
+
+    .register-split__grid {
+        grid-template-columns: 1fr;
+    }
+}
