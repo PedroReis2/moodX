@@ -20,10 +20,11 @@ class ColorPaletteService
             alphaThreshold: 125,
             minSaturation: 0.03,
         );
+
         [$width, $height] = getimagesize($fullPath);
 
         // Definiu-se que só queremos analisar o centro da imagem.
-        // Isto ajuda a ignorar fundos, margens e zonas menos importantes da imagem, para dar mais peso às cores do centro.
+        // Isto ajuda a ignorar fundos, margens e zonas menos importantes da imagem que podem distorcer a paleta final.
         $centerRatio = 0.60;
 
         $regionWidth = (int) round($width * $centerRatio);
@@ -33,8 +34,7 @@ class ColorPaletteService
         $y = (int) round(($height - $regionHeight) / 2);
 
         $region = new ImageRegion($x, $y, $regionWidth, $regionHeight);
-
-        // Extrair as cores dominantes do centro da imagem.
+        // Extrair as cores dominantes da imagem.
         $palette = $thief->getPalette($fullPath, $limit, $region);
 
         $colors = [];
