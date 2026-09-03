@@ -1,21 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
 
 export default function CreativeDnaView({ userName = "" }) {
     const [images, setImages] = useState([]);
+    const [palette, setPalette] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         axios
             .get("/creative-dna/data")
-            .then(({ data }) => setImages(data.images))
+            .then(({ data }) => {
+                setImages(data.images);
+                setPalette(data.palette);
+            })
             .finally(() => setLoading(false));
     }, []);
 
+    const rows = useMemo(() => {
+        const n = images.length;
+        if (n === 0) return [];
+
+        const cols = Math.max(1, Math.round(Math.sqrt(n * 1.6)));
+        const result = [];
+        for (let i = 0; i < n; i += cols) {
+            result.push(images.slice(i, i + cols));
+        }
+        return result;
+    }, [images]);
+
     return (
         <div className="mb">
-            <Navbar userName={userName} page="creative-dna-view" />
+            <Navbar userName={userName} page="creative-dna" />
 
             <main className="mb__main">
                 <header className="mb__header">
@@ -29,31 +45,55 @@ export default function CreativeDnaView({ userName = "" }) {
                 {loading ? (
                     <p className="mb__loading">Loading...</p>
                 ) : (
-                    <div className="mb__grid">
-                        {images.map((img) => (
-                            <article key={img.id} className="mb__card">
-                                <img
-                                    className="mb__card-cover"
-                                    src={img.url}
-                                    alt="Creative DNA reference"
-                                />
-                                {img.colors?.length > 0 && (
-                                    <div className="mb__palette">
-                                        {img.colors.map((color) => (
-                                            <span
-                                                key={`${img.id}-${color.hex}`}
-                                                className="mb__palette-swatch"
-                                                style={{
-                                                    backgroundColor: color.hex,
-                                                }}
-                                                title={color.hex}
+                    <>
+                        {palette.length > 0 && (
+                            <div className="mb__palette mb__palette--dna">
+                                {palette.map((color) => (
+                                    <span
+                                        key={color.hex}
+                                        className="mb__palette-swatch"
+                                        style={{
+                                            backgroundColor: color.hex,
+                                        }}
+                                        title={`${
+                                            color.hex
+                                        } - score ${Math.round(color.score)}`}
+                                    />
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="mb__collage">
+                            {rows.map((row, rowIndex) => (
+                                <div key={rowIndex} className="mb__collage-row">
+                                    {row.map((img) => (
+                                        <div
+                                            key={img.id}
+                                            className="mb__collage-item"
+                                        >
+                                            <img
+                                                src={img.url}
+                                                alt="Creative DNA reference"
                                             />
-                                        ))}
-                                    </div>
-                                )}
-                            </article>
-                        ))}
-                    </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mb__footer">
+                            <button
+                                type="button"
+                                className="mb__btn mb__btn--ghost"
+                                onClick={() =>
+                                    (window.location.href =
+                                        "/creative-dna/edit")
+                                }
+                            >
+                                Update Creative DNA
+                            </button>
+                        </div>
+                    </>
                 )}
             </main>
         </div>
