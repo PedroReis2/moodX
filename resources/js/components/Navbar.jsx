@@ -22,7 +22,7 @@ export default function Navbar({ userName = "", page = "", actions = [] }) {
         {
             key: "creative-dna",
             label: "Creative DNA",
-            href: "/creative-dna/view",
+            href: "/creative-dna-view",
         },
         { key: "projects", label: "My Projects", href: "/projects" },
     ].filter((link) => link.key !== page);

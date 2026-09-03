@@ -190,8 +190,9 @@ class ProjectController extends Controller
     {
         return array_map(fn($path) => [
             'path' => $path,
-            // Guardar as cores por imagem para conseguir consultar ou recalcular depois.
-            'colors' => $palettes->extractFromPublicPath($path),
+            // Guardar as cores por imagem para conseguir consultar ou recalcular depois,
+            // usando crop de 60% central para reduzir o peso do fundo neutro.
+            'colors' => $palettes->extractFromPublicPath($path, 6, 0.6),
         ], $paths);
     }
 
