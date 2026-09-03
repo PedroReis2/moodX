@@ -30,6 +30,13 @@ Route::get('/creative-dna', function () {
 Route::post('/creative-dna/upload', [CreativeDnaController::class, 'upload'])
     ->name('creative-dna.upload')->middleware('auth');
 
+// Galeria do Creative DNA — visualização (só leitura) das imagens carregadas
+Route::get('/creative-dna/gallery', [CreativeDnaController::class, 'gallery'])
+    ->name('creative-dna.gallery')->middleware('auth');
+
+Route::get('/creative-dna/images', [CreativeDnaController::class, 'images'])
+    ->name('creative-dna.images')->middleware('auth');
+
 // Dashboards desativados — redirecionam para o Creative DNA
 Route::redirect('/dashboard', '/creative-dna')->name('dashboard');
 

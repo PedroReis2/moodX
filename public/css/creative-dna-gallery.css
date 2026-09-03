@@ -1,0 +1,96 @@
+/* ============================================================
+   CREATIVE DNA — GALERIA (só visualização)
+   Reutiliza creative-dna.css para base/fontes/cabeçalho (.cdna__*).
+   Grelha: 3 imagens por fila, maiores, com sombra, só leitura.
+   ============================================================ */
+
+#cdna-gallery-root {
+    min-height: 100vh;
+}
+
+.cdg {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #ececec;
+}
+
+.cdg__main {
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+}
+
+.cdg__header {
+    text-align: center;
+    margin-bottom: 44px;
+}
+
+/* Nota sob o título (cdna__title tem margin-bottom próprio) */
+.cdg__note {
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #6f757e;
+    max-width: 520px;
+    margin: -6px auto 0;
+}
+
+.cdg__count {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #8a8f98;
+    margin-bottom: 28px;
+}
+
+/* ----- Grelha: 3 imagens por fila ----- */
+.cdg__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+}
+
+.cdg__item {
+    margin: 0;
+    aspect-ratio: 1 / 1;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow:
+        0 16px 38px -14px rgba(15, 23, 42, 0.20),
+        0 4px 12px -6px rgba(15, 23, 42, 0.08);
+}
+
+.cdg__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cdg__empty {
+    text-align: center;
+    color: #6f757e;
+    font-size: 16px;
+    font-weight: 300;
+    padding: 90px 0;
+}
+
+/* ----- Responsivo ----- */
+@media (max-width: 900px) {
+    .cdg__grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 560px) {
+    .cdg__grid {
+        grid-template-columns: 1fr;
+    }
+}

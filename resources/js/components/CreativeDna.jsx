@@ -8,6 +8,7 @@ const MAX_FILES = 30;
 export default function CreativeDna({ userName = '' }) {
     const [files, setFiles] = useState([]); // [{ file, url }]
     const [uploading, setUploading] = useState(false);
+    const [uploaded, setUploaded] = useState(false); // só ativa o botão My Projects
     const [dragging, setDragging] = useState(false);
     const [toast, setToast] = useState(null);
     const inputRef = useRef(null);
@@ -18,24 +19,43 @@ export default function CreativeDna({ userName = '' }) {
     };
 
     const handleSelect = (e) => {
-        const all = Array.from(e.target.files || []);
-        const selected = all.slice(0, MAX_FILES).map((file) => ({
-            file,
-            url: URL.createObjectURL(file),
-        }));
+        const selected = Array.from(e.target.files || []);
 
-        setFiles((prev) => {
-            prev.forEach((item) => URL.revokeObjectURL(item.url));
-            return selected;
+        // Limpa o input: permite voltar a escolher os mesmos ficheiros mais
+        // tarde (sem isto, o onChange não volta a disparar para o mesmo ficheiro).
+        e.target.value = '';
+
+        // Acumula as novas imagens às que já estão escolhidas (não substitui).
+        const seen = new Set(files.map((p) => `${p.file.name}|${p.file.size}`));
+        const next = [...files];
+        let skippedDuplicates = 0;
+        let skippedMax = 0;
+
+        selected.forEach((file) => {
+            const key = `${file.name}|${file.size}`;
+            if (seen.has(key)) {
+                skippedDuplicates++;
+                return;
+            }
+            if (next.length >= MAX_FILES) {
+                skippedMax++;
+                return;
+            }
+            seen.add(key);
+            next.push({ file, url: URL.createObjectURL(file) });
         });
 
-        if (all.length > MAX_FILES) {
+        setFiles(next);
+
+        const missing = MIN_FILES - next.length;
+
+        if (skippedMax > 0) {
+            showToast(`You reached the maximum of ${MAX_FILES} images. No more can be added.`);
+        } else if (skippedDuplicates > 0 && next.length === files.length) {
+            showToast('One or more of those images are already in your selection.');
+        } else if (missing > 0) {
             showToast(
-                `You can upload a maximum of ${MAX_FILES} images. Only the first ${MAX_FILES} were kept.`
-            );
-        } else if (selected.length < MIN_FILES) {
-            showToast(
-                `Please select at least ${MIN_FILES} image files. You selected ${selected.length}.`
+                `Add ${missing} more image${missing === 1 ? '' : 's'} to reach the minimum of ${MIN_FILES}.`
             );
         }
     };
@@ -60,10 +80,8 @@ export default function CreativeDna({ userName = '' }) {
 
         try {
             await axios.post('/creative-dna/upload', data);
+            setUploaded(true);
             showToast('Upload successful. Your Creative DNA is ready.', 'success');
-
-            // O Creative DNA é usado apenas uma vez — segue para Projects
-            setTimeout(() => (window.location.href = '/projects'), 900);
         } catch (err) {
             showToast(err.response?.data?.message || 'Upload failed. Please try again.');
         } finally {
@@ -180,7 +198,7 @@ export default function CreativeDna({ userName = '' }) {
                     <button
                         type="button"
                         className="cdna__projects"
-                        disabled={files.length < MIN_FILES}
+                        disabled={!uploaded}
                         onClick={() => (window.location.href = '/projects')}
                     >
                         My Projects

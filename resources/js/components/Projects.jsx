@@ -230,6 +230,13 @@ export default function Projects({ userName = "" }) {
                         onClick: openCreate,
                         variant: "solid",
                     },
+                    {
+                        label: "My Creative DNA",
+                        onClick: () => {
+                            window.location.href = "/creative-dna/gallery";
+                        },
+                        variant: "ghost",
+                    },
                     { label: "Logout", onClick: logout, variant: "ghost" },
                 ]}
             />

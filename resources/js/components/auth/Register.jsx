@@ -91,7 +91,6 @@ export default function Register() {
                 <div className="login-split__form">
                     <p className="login-split__kicker">MOOD.X — Creative Studio</p>
                     <h2 className="login-split__title">Create account</h2>
-                    <p className="login-split__subtitle">Tell us a little about yourself to get started.</p>
 
                     {errors.length > 0 && (
                         <div className="login-split__alert login-split__alert-error" role="alert">

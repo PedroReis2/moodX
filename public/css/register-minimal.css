@@ -23,12 +23,8 @@
         0 8px 24px -10px rgba(15, 23, 42, 0.10);
 }
 
-/* Cabeçalho do cartão mais compacto */
+/* Cabeçalho do cartão (sem subtítulo) */
 .register-split .login-split__title {
-    margin-bottom: 4px;
-}
-
-.register-split .login-split__subtitle {
     margin-bottom: 24px;
 }
 

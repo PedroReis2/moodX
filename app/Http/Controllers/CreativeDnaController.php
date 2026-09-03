@@ -10,6 +10,36 @@ use App\Services\ColorPaletteService;
 class CreativeDnaController extends Controller
 {
     /**
+     * Página de visualização (só leitura) das imagens do Creative DNA do utilizador.
+     */
+    public function gallery()
+    {
+        // Sem Creative DNA não há imagens para mostrar — volta para Projects.
+        if (!CreativeDna::where('user_id', auth()->id())->exists()) {
+            return redirect()->route('projects.index');
+        }
+
+        return view('creative-dna-gallery');
+    }
+
+    /**
+     * Devolve os URLs públicos das imagens do Creative DNA do utilizador autenticado.
+     */
+    public function images(Request $request)
+    {
+        $rows = CreativeDna::where('user_id', $request->user()->id)
+            ->orderBy('id')
+            ->get(['path', 'original_name']);
+
+        return response()->json([
+            'images' => $rows->map(fn ($row) => [
+                'url' => asset('storage/' . $row->path),
+                'name' => $row->original_name,
+            ])->values(),
+        ]);
+    }
+
+    /**
      * Guarda os ficheiros de imagem enviados pelo utilizador.
      * Exige no mínimo 20 ficheiros de imagem.
      * Em re-upload, substitui as imagens anteriores do utilizador.

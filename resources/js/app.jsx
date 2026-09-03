@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import CreativeDna from './components/CreativeDna';
+import CreativeDnaGallery from './components/CreativeDnaGallery';
 import Projects from './components/Projects';
 
 
@@ -36,6 +37,16 @@ if (creativeDnaRoot) {
     createRoot(creativeDnaRoot).render(
         <React.StrictMode>
             <CreativeDna userName={creativeDnaRoot.dataset.userName || ''} />
+        </React.StrictMode>
+    );
+}
+
+// Página Galeria Creative DNA — visualização só de leitura (React)
+const cdnaGalleryRoot = document.getElementById('cdna-gallery-root');
+if (cdnaGalleryRoot) {
+    createRoot(cdnaGalleryRoot).render(
+        <React.StrictMode>
+            <CreativeDnaGallery userName={cdnaGalleryRoot.dataset.userName || ''} />
         </React.StrictMode>
     );
 }
