@@ -34,11 +34,11 @@ Route::get('/creative-dna/data', [CreativeDnaController::class, 'data'])
     ->name('creative-dna.data')->middleware('auth');
 
 // Página de consulta do Creative DNA já criado (não a de upload)
-Route::get('/creative-dna/view', function () {
+Route::get('creative-dna-view', function () {
     if (!\App\Models\CreativeDna::where('user_id', auth()->id())->exists()) {
         return redirect()->route('creative-dna');
     }
-    return view('creative-dna-view');
+    return view('profile.creative-dna-view');
 })->name('creative-dna.view')->middleware('auth');
 
 // Dashboards desativados — redirecionam para o Creative DNA
