@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+import { Carousel } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const MIN_IMAGES = 4;
 const MAX_IMAGES = 5;
@@ -11,9 +13,8 @@ export default function Projects({ userName = "" }) {
     const [saving, setSaving] = useState(false);
 
     const [modalOpen, setModalOpen] = useState(false);
-    const [editing, setEditing] = useState(null); // project being edited or null (new)
+    const [editing, setEditing] = useState(null);
     const [title, setTitle] = useState("");
-    // project images: [{ key, type: 'new'|'existing', file?, path?, url? }]
     const [images, setImages] = useState([]);
 
     const [deleteAllOpen, setDeleteAllOpen] = useState(false);
@@ -21,6 +22,9 @@ export default function Projects({ userName = "" }) {
 
     const [toast, setToast] = useState(null);
     const fileInputRef = useRef(null);
+
+    // Estado para controlar o índice do carrossel em cada card
+    const [carouselStates, setCarouselStates] = useState({});
 
     const showToast = (message, type = "error") => {
         setToast({ message, type });
@@ -104,6 +108,13 @@ export default function Projects({ userName = "" }) {
             }
             return prev.filter((i) => i.key !== key);
         });
+    };
+
+    const handleCarouselSelect = (projectId, selectedIndex) => {
+        setCarouselStates(prev => ({
+            ...prev,
+            [projectId]: selectedIndex
+        }));
     };
 
     const save = async () => {
@@ -252,15 +263,39 @@ export default function Projects({ userName = "" }) {
                     <div className="mb__grid">
                         {projects.map((project) => (
                             <article key={project.id} className="mb__card">
-                                {project.coverUrl ? (
-                                    <img
-                                        className="mb__card-cover"
-                                        src={project.coverUrl}
-                                        alt={project.title}
-                                    />
+                                {/* CARROSSEL NO CARD */}
+                                {project.imageUrls && project.imageUrls.length > 0 ? (
+                                    <div className="mb__card-carousel">
+                                        <Carousel
+                                            activeIndex={carouselStates[project.id] || 0}
+                                            onSelect={(index) => handleCarouselSelect(project.id, index)}
+                                            interval={2000}
+                                            indicators={false}
+                                            controls={true}
+                                            pause="hover"
+                                            className="card-carousel"
+                                        >
+                                            {project.imageUrls.map((url, idx) => (
+                                                <Carousel.Item key={idx}>
+                                                    <img
+                                                        className="d-block w-100"
+                                                        src={url}
+                                                        alt={`${project.title} - ${idx + 1}`}
+                                                        style={{
+                                                            height: '250px',
+                                                            objectFit: 'cover',
+                                                            width: '100%'
+                                                        }}
+                                                    />
+                                                    
+                                                </Carousel.Item>
+                                            ))}
+                                        </Carousel>
+                                    </div>
                                 ) : (
                                     <div className="mb__card-cover" />
                                 )}
+
                                 <div className="mb__card-body">
                                     <h2 className="mb__card-title">
                                         {project.title}
@@ -493,3 +528,4 @@ export default function Projects({ userName = "" }) {
         </div>
     );
 }
+
