@@ -52,4 +52,19 @@ class CreativeDnaController extends Controller
             'saved' => $saved,
         ]);
     }
+
+    // devolve os dados do creative dna do utilizador logado, incluindo as cores extraídas de cada imagem para mostrarem numa view (pagina)
+    public function data(Request $request)
+    {
+        $items = CreativeDna::where('user_id', $request->user()->id)->get();
+
+        return response()->json([
+            'exists' => $items->isNotEmpty(),
+            'images' => $items->map(fn($item) => [
+                'id' => $item->id,
+                'url' => asset('storage/' . $item->path),
+                'colors' => $item->colors,
+            ]),
+        ]);
+    }
 }
