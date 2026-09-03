@@ -9,6 +9,7 @@ import Register from './components/auth/Register';
 import CreativeDna from './components/CreativeDna';
 import Projects from './components/Projects';
 
+
 // Página de Login (React)
 const loginRoot = document.getElementById('login-root');
 if (loginRoot) {
