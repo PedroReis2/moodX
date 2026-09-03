@@ -13,27 +13,9 @@ export default function CreativeDnaView({ userName = "" }) {
             .finally(() => setLoading(false));
     }, []);
 
-    const logout = async () => {
-        try {
-            await axios.post("/logout");
-        } finally {
-            window.location.href = "/login";
-        }
-    };
-
     return (
         <div className="mb">
-            <Navbar
-                userName={userName}
-                actions={[
-                    {
-                        label: "My Projects",
-                        onClick: () => (window.location.href = "/projects"),
-                        variant: "ghost",
-                    },
-                    { label: "Logout", onClick: logout, variant: "ghost" },
-                ]}
-            />
+            <Navbar userName={userName} page="creative-dna-view" />
 
             <main className="mb__main">
                 <header className="mb__header">

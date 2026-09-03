@@ -71,14 +71,6 @@ export default function CreativeDna({ userName = '' }) {
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            await axios.post('/logout');
-        } finally {
-            window.location.href = '/login';
-        }
-    };
-
     return (
         <div className="cdna">
             {toast && <div className={`cdna-toast cdna-toast--${toast.type}`}>{toast.message}</div>}
@@ -108,7 +100,7 @@ export default function CreativeDna({ userName = '' }) {
                         e.preventDefault();
                         setDragging(true);
                     }}
-                    //dragging: "acende" a borda e muda o fundo 
+                    //dragging: "acende" a borda e muda o fundo
                     onDragOver={(e) => e.preventDefault()}
                     onDragLeave={(e) => {
                         e.preventDefault();

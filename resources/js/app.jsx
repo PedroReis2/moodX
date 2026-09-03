@@ -10,7 +10,6 @@ import CreativeDna from "./components/CreativeDna";
 import CreativeDnaView from "./components/CreativeDnaView";
 import Projects from "./components/Projects";
 
-
 // Página de Login (React)
 const loginRoot = document.getElementById("login-root");
 if (loginRoot) {
