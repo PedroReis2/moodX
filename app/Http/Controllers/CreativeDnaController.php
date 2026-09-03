@@ -39,8 +39,10 @@ class CreativeDnaController extends Controller
                 'user_id' => $user->id,
                 'original_name' => $file->getClientOriginalName(),
                 'path' => $path,
-                // Extrair e guardar as cores principais desta imagem do Creative DNA.
-                'colors' => $palettes->extractFromPublicPath($path),
+                // Extrair e guardar as cores principais desta imagem do Creative DNA,
+                // usando um crop de 60% central para reduzir o peso do fundo
+                // neutro típico das fotos de moda.
+                'colors' => $palettes->extractFromPublicPath($path, 6, 0.6),
 
             ]);
 
@@ -54,17 +56,19 @@ class CreativeDnaController extends Controller
     }
 
     // devolve os dados do creative dna do utilizador logado, incluindo as cores extraídas de cada imagem para mostrarem numa view (pagina)
-    public function data(Request $request)
+    public function data(Request $request, ColorPaletteService $palettes)
     {
         $items = CreativeDna::where('user_id', $request->user()->id)->get();
+
+        $allColors = $items->flatMap(fn($item) => $item->colors ?? [])->all();
 
         return response()->json([
             'exists' => $items->isNotEmpty(),
             'images' => $items->map(fn($item) => [
                 'id' => $item->id,
                 'url' => asset('storage/' . $item->path),
-                'colors' => $item->colors,
             ]),
+            'palette' => $palettes->buildFinalPalette($allColors, [], 8),
         ]);
     }
 }
