@@ -41,6 +41,11 @@ Route::get('creative-dna-view', function () {
     return view('profile.creative-dna-view');
 })->name('creative-dna.view')->middleware('auth');
 
+// Permite re-upload do Creative DNA mesmo que já exista um anterior.
+Route::get('/creative-dna/edit', function () {
+    return view('creative-dna');
+})->name('creative-dna.edit')->middleware('auth');
+
 // Dashboards desativados — redirecionam para o Creative DNA
 Route::redirect('/dashboard', '/creative-dna')->name('dashboard');
 
