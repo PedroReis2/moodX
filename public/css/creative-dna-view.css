@@ -1,0 +1,58 @@
+/* ============================================================
+   CREATIVE DNA VIEW — collage em linhas flexbox, sempre fechada
+   num retângulo perfeito, sem buracos
+   ============================================================ */
+
+.mb__collage {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.mb__collage-row {
+    display: flex;
+    gap: 3px;
+    height: 110px;
+}
+
+.mb__collage-item {
+    flex: 1;
+    overflow: hidden;
+    background: #dcdddf;
+}
+
+.mb__collage-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.mb__collage-item:hover img {
+    transform: scale(1.05);
+}
+
+.mb__palette--dna {
+    justify-content: center;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
+
+.mb__palette--dna {
+    margin-bottom: 32px;
+}
+
+@media (max-width: 900px) {
+    .mb__collage-row {
+        height: 90px;
+    }
+}
+
+@media (max-width: 640px) {
+    .mb__collage-row {
+        height: 70px;
+    }
+}

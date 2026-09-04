@@ -30,6 +30,22 @@ Route::get('/creative-dna', function () {
 Route::post('/creative-dna/upload', [CreativeDnaController::class, 'upload'])
     ->name('creative-dna.upload')->middleware('auth');
 
+Route::get('/creative-dna/data', [CreativeDnaController::class, 'data'])
+    ->name('creative-dna.data')->middleware('auth');
+
+// Página de consulta do Creative DNA já criado (não a de upload)
+Route::get('creative-dna-view', function () {
+    if (!\App\Models\CreativeDna::where('user_id', auth()->id())->exists()) {
+        return redirect()->route('creative-dna');
+    }
+    return view('profile.creative-dna-view');
+})->name('creative-dna.view')->middleware('auth');
+
+// Permite re-upload do Creative DNA mesmo que já exista um anterior.
+Route::get('/creative-dna/edit', function () {
+    return view('creative-dna');
+})->name('creative-dna.edit')->middleware('auth');
+
 // Dashboards desativados — redirecionam para o Creative DNA
 Route::redirect('/dashboard', '/creative-dna')->name('dashboard');
 

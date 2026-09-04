@@ -2,15 +2,16 @@
  * Entrada React para as páginas que usam o bundle Vite.
  * Monta os componentes React nos pontos de montagem da página.
  */
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
-import CreativeDna from './components/CreativeDna';
-import Projects from './components/Projects';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import CreativeDna from "./components/CreativeDna";
+import CreativeDnaView from "./components/CreativeDnaView";
+import Projects from "./components/Projects";
 
 // Página de Login (React)
-const loginRoot = document.getElementById('login-root');
+const loginRoot = document.getElementById("login-root");
 if (loginRoot) {
     createRoot(loginRoot).render(
         <React.StrictMode>
@@ -20,7 +21,7 @@ if (loginRoot) {
 }
 
 // Página de Registo (React)
-const registerRoot = document.getElementById('register-root');
+const registerRoot = document.getElementById("register-root");
 if (registerRoot) {
     createRoot(registerRoot).render(
         <React.StrictMode>
@@ -29,22 +30,34 @@ if (registerRoot) {
     );
 }
 
-// Página Creative DNA (React)
-const creativeDnaRoot = document.getElementById('creative-dna-root');
+// Página Creative DNA inicial para fazer upload de ficheiros (React)
+const creativeDnaRoot = document.getElementById("creative-dna-root");
 if (creativeDnaRoot) {
     createRoot(creativeDnaRoot).render(
         <React.StrictMode>
-            <CreativeDna userName={creativeDnaRoot.dataset.userName || ''} />
+            <CreativeDna userName={creativeDnaRoot.dataset.userName || ""} />
+        </React.StrictMode>
+    );
+}
+
+// Pagina Creative DNA de visualização (React)
+const creativeDnaViewRoot = document.getElementById("creative-dna-view");
+if (creativeDnaViewRoot) {
+    createRoot(creativeDnaViewRoot).render(
+        <React.StrictMode>
+            <CreativeDnaView
+                userName={creativeDnaViewRoot.dataset.userName || ""}
+            />
         </React.StrictMode>
     );
 }
 
 // Página Projects (React)
-const projectsRoot = document.getElementById('projects-root');
+const projectsRoot = document.getElementById("projects-root");
 if (projectsRoot) {
     createRoot(projectsRoot).render(
         <React.StrictMode>
-            <Projects userName={projectsRoot.dataset.userName || ''} />
+            <Projects userName={projectsRoot.dataset.userName || ""} />
         </React.StrictMode>
     );
 }

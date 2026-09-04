@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+import { Carousel } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const MIN_IMAGES = 4;
 const MAX_IMAGES = 5;
@@ -11,9 +13,8 @@ export default function Projects({ userName = "" }) {
     const [saving, setSaving] = useState(false);
 
     const [modalOpen, setModalOpen] = useState(false);
-    const [editing, setEditing] = useState(null); // project being edited or null (new)
+    const [editing, setEditing] = useState(null);
     const [title, setTitle] = useState("");
-    // project images: [{ key, type: 'new'|'existing', file?, path?, url? }]
     const [images, setImages] = useState([]);
 
     const [deleteAllOpen, setDeleteAllOpen] = useState(false);
@@ -21,6 +22,9 @@ export default function Projects({ userName = "" }) {
 
     const [toast, setToast] = useState(null);
     const fileInputRef = useRef(null);
+
+    // Estado para controlar o índice do carrossel em cada card
+    const [carouselStates, setCarouselStates] = useState({});
 
     const showToast = (message, type = "error") => {
         setToast({ message, type });
@@ -33,7 +37,7 @@ export default function Projects({ userName = "" }) {
             setProjects(data.projects);
         } catch (err) {
             showToast(
-                err.response?.data?.message || "Unable to load your projects.",
+                err.response?.data?.message || "Unable to load your projects."
             );
         } finally {
             setLoading(false);
@@ -60,7 +64,7 @@ export default function Projects({ userName = "" }) {
                 type: "existing",
                 path: project.images[i],
                 url,
-            })),
+            }))
         );
         setModalOpen(true);
     };
@@ -72,7 +76,7 @@ export default function Projects({ userName = "" }) {
 
     const handleFiles = (fileList) => {
         const files = Array.from(fileList || []).filter((f) =>
-            f.type.startsWith("image/"),
+            f.type.startsWith("image/")
         );
         if (files.length === 0) return;
 
@@ -80,14 +84,16 @@ export default function Projects({ userName = "" }) {
             const room = MAX_IMAGES - prev.length;
             if (files.length > room) {
                 showToast(
-                    `A project can contain a maximum of ${MAX_IMAGES} images.`,
+                    `A project can contain a maximum of ${MAX_IMAGES} images.`
                 );
             }
             const kept = files.slice(0, Math.max(room, 0));
             return [
                 ...prev,
                 ...kept.map((file) => ({
-                    key: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2)}`,
+                    key: `${file.name}-${file.lastModified}-${Math.random()
+                        .toString(36)
+                        .slice(2)}`,
                     type: "new",
                     file,
                     url: URL.createObjectURL(file),
@@ -106,6 +112,13 @@ export default function Projects({ userName = "" }) {
         });
     };
 
+    const handleCarouselSelect = (projectId, selectedIndex) => {
+        setCarouselStates((prev) => ({
+            ...prev,
+            [projectId]: selectedIndex,
+        }));
+    };
+
     const save = async () => {
         if (!title.trim()) {
             showToast("Give your project a title.");
@@ -113,7 +126,7 @@ export default function Projects({ userName = "" }) {
         }
         if (images.length < MIN_IMAGES || images.length > MAX_IMAGES) {
             showToast(
-                `A project must contain between ${MIN_IMAGES} and ${MAX_IMAGES} images.`,
+                `A project must contain between ${MIN_IMAGES} and ${MAX_IMAGES} images.`
             );
             return;
         }
@@ -132,10 +145,10 @@ export default function Projects({ userName = "" }) {
             if (editing) {
                 const { data: res } = await axios.put(
                     `/projects/${editing.id}`,
-                    data,
+                    data
                 );
                 setProjects((prev) =>
-                    prev.map((p) => (p.id === editing.id ? res.project : p)),
+                    prev.map((p) => (p.id === editing.id ? res.project : p))
                 );
                 showToast("Project updated.", "success");
             } else {
@@ -154,7 +167,7 @@ export default function Projects({ userName = "" }) {
                 msgs.length
                     ? msgs[0]
                     : err.response?.data?.message ||
-                          "Unable to save the project.",
+                          "Unable to save the project."
             );
         } finally {
             setSaving(false);
@@ -173,7 +186,7 @@ export default function Projects({ userName = "" }) {
                 return;
             }
             showToast(
-                err.response?.data?.message || "Unable to delete the project.",
+                err.response?.data?.message || "Unable to delete the project."
             );
         }
     };
@@ -187,19 +200,10 @@ export default function Projects({ userName = "" }) {
             showToast("All projects deleted.", "success");
         } catch (err) {
             showToast(
-                err.response?.data?.message ||
-                    "Unable to delete your projects.",
+                err.response?.data?.message || "Unable to delete your projects."
             );
         } finally {
             setDeletingAll(false);
-        }
-    };
-
-    const logout = async () => {
-        try {
-            await axios.post("/logout");
-        } finally {
-            window.location.href = "/login";
         }
     };
 
@@ -213,13 +217,13 @@ export default function Projects({ userName = "" }) {
 
             <Navbar
                 userName={userName}
+                page="projects"
                 actions={[
                     {
                         label: "New Project",
                         onClick: openCreate,
                         variant: "solid",
                     },
-                    { label: "Logout", onClick: logout, variant: "ghost" },
                 ]}
             />
 
@@ -252,15 +256,51 @@ export default function Projects({ userName = "" }) {
                     <div className="mb__grid">
                         {projects.map((project) => (
                             <article key={project.id} className="mb__card">
-                                {project.coverUrl ? (
-                                    <img
-                                        className="mb__card-cover"
-                                        src={project.coverUrl}
-                                        alt={project.title}
-                                    />
+                                {/* CARROSSEL NO CARD */}
+                                {project.imageUrls &&
+                                project.imageUrls.length > 0 ? (
+                                    <div className="mb__card-carousel">
+                                        <Carousel
+                                            activeIndex={
+                                                carouselStates[project.id] || 0
+                                            }
+                                            onSelect={(index) =>
+                                                handleCarouselSelect(
+                                                    project.id,
+                                                    index
+                                                )
+                                            }
+                                            interval={2000}
+                                            indicators={false}
+                                            controls={true}
+                                            pause="hover"
+                                            className="card-carousel"
+                                        >
+                                            {project.imageUrls.map(
+                                                (url, idx) => (
+                                                    <Carousel.Item key={idx}>
+                                                        <img
+                                                            className="d-block w-100"
+                                                            src={url}
+                                                            alt={`${
+                                                                project.title
+                                                            } - ${idx + 1}`}
+                                                            style={{
+                                                                height: "250px",
+                                                                objectFit:
+                                                                    "cover",
+                                                                width: "100%",
+                                                            }}
+                                                        />
+                                                    </Carousel.Item>
+                                                )
+                                            )}
+                                        </Carousel>
+                                    </div>
                                 ) : (
                                     <div className="mb__card-cover" />
                                 )}
+
                                 <div className="mb__card-body">
                                     <h2 className="mb__card-title">
                                         {project.title}
@@ -282,7 +322,11 @@ export default function Projects({ userName = "" }) {
                                                         backgroundColor:
                                                             color.hex,
                                                     }}
-                                                    title={`${color.hex} - score ${Math.round(color.score)}`}
+                                                    title={`${
+                                                        color.hex
+                                                    } - score ${Math.round(
+                                                        color.score
+                                                    )}`}
                                                 />
                                             ))}
                                         </div>
@@ -367,7 +411,11 @@ export default function Projects({ userName = "" }) {
                                 the project
                             </span>
                             <span
-                                className={`mb-picker__count ${images.length >= MIN_IMAGES ? "mb-picker__count--ok" : ""}`}
+                                className={`mb-picker__count ${
+                                    images.length >= MIN_IMAGES
+                                        ? "mb-picker__count--ok"
+                                        : ""
+                                }`}
                             >
                                 {images.length} / {MAX_IMAGES}
                             </span>
@@ -444,8 +492,8 @@ export default function Projects({ userName = "" }) {
                                 {saving
                                     ? "Saving..."
                                     : editing
-                                      ? "Save changes"
-                                      : "Create project"}
+                                    ? "Save changes"
+                                    : "Create project"}
                             </button>
                         </div>
                     </div>
