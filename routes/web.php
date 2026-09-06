@@ -73,19 +73,22 @@ Route::get('/classes', function () {
 // user
 Route::post('/store_user', [UserController::class, "storeUser"])->name('store_user');
 
-Route::post('/store_user_by_admin', [UserController::class, "storeUserByAdmin"])->name('store_user_by_admin');
+// Rotas antigas de gestão de users, agora protegidas para serem usadas só pelo admin.
+Route::middleware(['auth', 'role:1'])->group(function () {
+    Route::post('/store_user_by_admin', [UserController::class, "storeUserByAdmin"])->name('store_user_by_admin');
 
-Route::put('/update_user_by_admin', [UserController::class, "updateUserByAdmin"])->name('update_user_by_admin');
+    Route::put('/update_user_by_admin', [UserController::class, "updateUserByAdmin"])->name('update_user_by_admin');
 
-Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
-Route::get('/admin/users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle.status');
+    Route::get('/admin/users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle.status');
+
+    Route::get('/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('password.reset');
+});
 
 Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
 
 Route::post('/change-password', [UserController::class, 'changePassword'])->name('password.change');
-
-Route::get('/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('password.reset');
 
 Route::get('/change-password', function () {
     return view('profile.change-password');
