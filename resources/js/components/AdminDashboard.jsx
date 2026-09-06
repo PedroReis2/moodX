@@ -12,6 +12,7 @@ export default function AdminDashboard({ userName }) {
     const [message, setMessage] = useState("");
     const [trainerDrafts, setTrainerDrafts] = useState({});
     const [savingTrainerId, setSavingTrainerId] = useState(null);
+    const [trainerRoleDrafts, setTrainerRoleDrafts] = useState({});
 
     // Carrega os dados enviados pelo Laravel para o dashboard admin.
     async function loadAdminData() {
@@ -42,6 +43,15 @@ export default function AdminDashboard({ userName }) {
                         formador.turmas_como_formador?.map(
                             (turma) => turma.id,
                         ) || [],
+                    ]),
+                ),
+            );
+            // Guarda o role atual de cada formador para poder ser alterado.
+            setTrainerRoleDrafts(
+                Object.fromEntries(
+                    data.formadores.map((formador) => [
+                        formador.id,
+                        formador.role_id,
                     ]),
                 ),
             );
@@ -101,28 +111,46 @@ export default function AdminDashboard({ userName }) {
         });
     }
 
-    // Guarda no backend as turmas escolhidas para o formador.
-    async function saveTrainerTurmas(formadorId) {
+    // Guarda no backend o role e as turmas escolhidas para o formador.
+    async function saveTrainer(formadorId) {
+        const selectedRoleId = Number(trainerRoleDrafts[formadorId]);
+
         setSavingTrainerId(formadorId);
         setMessage("");
 
         try {
-            await axios.put(`/admin/formadores/${formadorId}/turmas`, {
-                turma_ids: trainerDrafts[formadorId] || [],
+            // Primeiro atualiza o role do utilizador.
+            await axios.put(`/admin/users/${formadorId}`, {
+                role_id: selectedRoleId,
+                turma_id: null,
             });
 
-            setMessage("Trainer classes updated successfully.");
+            // Se continuar a ser formador, atualiza também as turmas dele.
+            if (selectedRoleId === 2) {
+                await axios.put(`/admin/formadores/${formadorId}/turmas`, {
+                    turma_ids: trainerDrafts[formadorId] || [],
+                });
+            }
 
-            // Recarrega os dados para mostrar as turmas atualizadas.
+            setMessage("Trainer updated successfully.");
+
+            // Recarrega os dados para atualizar as listas.
             await loadAdminData();
         } catch (error) {
             setMessage(
-                error.response?.data?.message ||
-                    "Unable to update trainer classes.",
+                error.response?.data?.message || "Unable to update trainer.",
             );
         } finally {
             setSavingTrainerId(null);
         }
+    }
+
+    // Atualiza temporariamente o role escolhido para o formador.
+    function updateTrainerRoleDraft(formadorId, value) {
+        setTrainerRoleDrafts((currentDrafts) => ({
+            ...currentDrafts,
+            [formadorId]: value,
+        }));
     }
 
     useEffect(() => {
@@ -221,6 +249,26 @@ export default function AdminDashboard({ userName }) {
                         </div>
 
                         <div className="admin-dashboard__actions">
+                            {/* Select para alterar o role do formador. */}
+                            <select
+                                value={
+                                    trainerRoleDrafts[formador.id] ||
+                                    formador.role_id
+                                }
+                                onChange={(event) =>
+                                    updateTrainerRoleDraft(
+                                        formador.id,
+                                        event.target.value,
+                                    )
+                                }
+                            >
+                                {roles.map((role) => (
+                                    <option key={role.id} value={role.id}>
+                                        {role.name}
+                                    </option>
+                                ))}
+                            </select>
+
                             {/* Checkboxes para escolher as turmas atribuídas ao formador. */}
                             <div className="admin-dashboard__checkboxes">
                                 {turmas.map((turma) => (
@@ -246,7 +294,7 @@ export default function AdminDashboard({ userName }) {
 
                             <button
                                 type="button"
-                                onClick={() => saveTrainerTurmas(formador.id)}
+                                onClick={() => saveTrainer(formador.id)}
                                 disabled={savingTrainerId === formador.id}
                             >
                                 {savingTrainerId === formador.id
