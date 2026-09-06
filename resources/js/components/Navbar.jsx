@@ -7,7 +7,13 @@ import axios from "axios";
  * `page` diz à Navbar qual é a página atual, para não se mostrar a si própria.
  * `actions` são botões extra, específicos da página (ex: "New Project").
  */
-export default function Navbar({ userName = "", page = "", actions = [] }) {
+export default function Navbar({
+    userName = "",
+    page = "",
+    actions = [],
+    projectsDisabled = false,
+    isProfessor = false,
+}) {
     const firstName = (userName || "").trim().split(" ")[0] || "";
 
     const logout = async () => {
@@ -25,6 +31,9 @@ export default function Navbar({ userName = "", page = "", actions = [] }) {
             href: "/creative-dna-view",
         },
         { key: "projects", label: "My Projects", href: "/projects" },
+        ...(isProfessor
+            ? [{ key: "classes", label: "Classes", href: "/classes" }]
+            : []),
     ].filter((link) => link.key !== page);
 
     return (
@@ -37,16 +46,24 @@ export default function Navbar({ userName = "", page = "", actions = [] }) {
                     </span>
                 )}
                 <div className="app-nav__actions">
-                    {fixedLinks.map((link) => (
-                        <button
-                            key={link.key}
-                            type="button"
-                            className="app-nav__btn app-nav__btn--ghost"
-                            onClick={() => (window.location.href = link.href)}
-                        >
-                            {link.label}
-                        </button>
-                    ))}
+                    {fixedLinks.map((link) => {
+                        const isLocked =
+                            projectsDisabled && link.key === "projects";
+                        return (
+                            <button
+                                key={link.key}
+                                type="button"
+                                className="app-nav__btn app-nav__btn--ghost"
+                                onClick={() => {
+                                    if (!isLocked)
+                                        window.location.href = link.href;
+                                }}
+                                disabled={isLocked}
+                            >
+                                {link.label}
+                            </button>
+                        );
+                    })}
 
                     {actions.map((action, i) => (
                         <button

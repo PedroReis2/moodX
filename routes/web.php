@@ -62,6 +62,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 });
 
+// Classes (professor) — página das turmas e dos projetos dos alunos
+Route::get('/classes', function () {
+    if (auth()->user()->role_id !== 2) {
+        return redirect()->route('projects.index');
+    }
+    return view('classes');
+})->name('classes')->middleware('auth');
 
 // user
 Route::post('/store_user', [UserController::class, "storeUser"])->name('store_user');
