@@ -82,14 +82,14 @@ class AdminDashboardController extends Controller
         // Apenas utilizadores formadores podem receber turmas.
         if (!$user->isFormador()) {
             return response()->json([
-                'message' => 'This user is not a trainer.',
+                'message' => 'This user is not a teacher.',
             ], 422);
         }
 
         $user->turmasComoFormador()->sync($validated['turma_ids'] ?? []);
 
         return response()->json([
-            'message' => 'Trainer classes updated successfully.',
+            'message' => 'Teacher classes updated successfully.',
             'user' => $user->load('turmasComoFormador'),
         ]);
     }

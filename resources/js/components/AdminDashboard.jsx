@@ -10,9 +10,9 @@ export default function AdminDashboard({ userName }) {
     const [studentDrafts, setStudentDrafts] = useState({});
     const [savingUserId, setSavingUserId] = useState(null);
     const [message, setMessage] = useState("");
-    const [trainerDrafts, setTrainerDrafts] = useState({});
-    const [savingTrainerId, setSavingTrainerId] = useState(null);
-    const [trainerRoleDrafts, setTrainerRoleDrafts] = useState({});
+    const [teacherDrafts, setTeacherDrafts] = useState({});
+    const [savingTeacherId, setSavingTeacherId] = useState(null);
+    const [teacherRoleDrafts, setTeacherRoleDrafts] = useState({});
 
     // Carrega os dados enviados pelo Laravel para o dashboard admin.
     async function loadAdminData() {
@@ -36,7 +36,7 @@ export default function AdminDashboard({ userName }) {
                 ),
             );
             // Guarda as turmas atuais de cada formador para serem editadas.
-            setTrainerDrafts(
+            setTeacherDrafts(
                 Object.fromEntries(
                     data.formadores.map((formador) => [
                         formador.id,
@@ -47,7 +47,7 @@ export default function AdminDashboard({ userName }) {
                 ),
             );
             // Guarda o role atual de cada formador para poder ser alterado.
-            setTrainerRoleDrafts(
+            setTeacherRoleDrafts(
                 Object.fromEntries(
                     data.formadores.map((formador) => [
                         formador.id,
@@ -96,8 +96,8 @@ export default function AdminDashboard({ userName }) {
         }
     }
     // Adiciona ou remove uma turma da lista temporária do formador.
-    function toggleTrainerTurma(formadorId, turmaId) {
-        setTrainerDrafts((currentDrafts) => {
+    function toggleTeacherTurma(formadorId, turmaId) {
+        setTeacherDrafts((currentDrafts) => {
             const currentTurmas = currentDrafts[formadorId] || [];
 
             const updatedTurmas = currentTurmas.includes(turmaId)
@@ -112,10 +112,10 @@ export default function AdminDashboard({ userName }) {
     }
 
     // Guarda no backend o role e as turmas escolhidas para o formador.
-    async function saveTrainer(formadorId) {
-        const selectedRoleId = Number(trainerRoleDrafts[formadorId]);
+    async function saveTeacher(formadorId) {
+        const selectedRoleId = Number(teacherRoleDrafts[formadorId]);
 
-        setSavingTrainerId(formadorId);
+        setSavingTeacherId(formadorId);
         setMessage("");
 
         try {
@@ -128,26 +128,26 @@ export default function AdminDashboard({ userName }) {
             // Se continuar a ser formador, atualiza também as turmas dele.
             if (selectedRoleId === 2) {
                 await axios.put(`/admin/formadores/${formadorId}/turmas`, {
-                    turma_ids: trainerDrafts[formadorId] || [],
+                    turma_ids: teacherDrafts[formadorId] || [],
                 });
             }
 
-            setMessage("Trainer updated successfully.");
+            setMessage("Teacher updated successfully.");
 
             // Recarrega os dados para atualizar as listas.
             await loadAdminData();
         } catch (error) {
             setMessage(
-                error.response?.data?.message || "Unable to update trainer.",
+                error.response?.data?.message || "Unable to update teacher.",
             );
         } finally {
-            setSavingTrainerId(null);
+            setSavingTeacherId(null);
         }
     }
 
     // Atualiza temporariamente o role escolhido para o formador.
-    function updateTrainerRoleDraft(formadorId, value) {
-        setTrainerRoleDrafts((currentDrafts) => ({
+    function updateTeacherRoleDraft(formadorId, value) {
+        setTeacherRoleDrafts((currentDrafts) => ({
             ...currentDrafts,
             [formadorId]: value,
         }));
@@ -239,7 +239,7 @@ export default function AdminDashboard({ userName }) {
             </section>
 
             <section className="admin-dashboard__section">
-                <h2>Trainers</h2>
+                <h2>Teachers</h2>
 
                 {formadores.map((formador) => (
                     <article key={formador.id} className="admin-dashboard__row">
@@ -252,11 +252,11 @@ export default function AdminDashboard({ userName }) {
                             {/* Select para alterar o role do formador. */}
                             <select
                                 value={
-                                    trainerRoleDrafts[formador.id] ||
+                                    teacherRoleDrafts[formador.id] ||
                                     formador.role_id
                                 }
                                 onChange={(event) =>
-                                    updateTrainerRoleDraft(
+                                    updateTeacherRoleDraft(
                                         formador.id,
                                         event.target.value,
                                     )
@@ -276,12 +276,12 @@ export default function AdminDashboard({ userName }) {
                                         <input
                                             type="checkbox"
                                             checked={
-                                                trainerDrafts[
+                                                teacherDrafts[
                                                     formador.id
                                                 ]?.includes(turma.id) || false
                                             }
                                             onChange={() =>
-                                                toggleTrainerTurma(
+                                                toggleTeacherTurma(
                                                     formador.id,
                                                     turma.id,
                                                 )
@@ -294,10 +294,10 @@ export default function AdminDashboard({ userName }) {
 
                             <button
                                 type="button"
-                                onClick={() => saveTrainer(formador.id)}
-                                disabled={savingTrainerId === formador.id}
+                                onClick={() => saveTeacher(formador.id)}
+                                disabled={savingTeacherId === formador.id}
                             >
-                                {savingTrainerId === formador.id
+                                {savingTeacherId === formador.id
                                     ? "Saving..."
                                     : "Save"}
                             </button>
