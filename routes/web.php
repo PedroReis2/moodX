@@ -30,6 +30,9 @@ Route::get('/creative-dna', function () {
 Route::post('/creative-dna/upload', [CreativeDnaController::class, 'upload'])
     ->name('creative-dna.upload')->middleware('auth');
 
+Route::delete('/creative-dna', [CreativeDnaController::class, 'destroy'])
+    ->name('creative-dna.destroy')->middleware('auth');
+
 Route::get('/creative-dna/data', [CreativeDnaController::class, 'data'])
     ->name('creative-dna.data')->middleware('auth');
 
@@ -59,6 +62,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 });
 
+// Classes (professor) — página das turmas e dos projetos dos alunos
+Route::get('/classes', function () {
+    if (auth()->user()->role_id !== 2) {
+        return redirect()->route('projects.index');
+    }
+    return view('classes');
+})->name('classes')->middleware('auth');
 
 // user
 Route::post('/store_user', [UserController::class, "storeUser"])->name('store_user');
