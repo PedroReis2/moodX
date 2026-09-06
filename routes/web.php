@@ -5,7 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UtilController;
 use App\Http\Controllers\CreativeDnaController;
 use App\Http\Controllers\ProjectController;
-
+use App\Http\Controllers\AdminDashboardController;
 
 
 // Raiz — redireciona conforme o estado do utilizador
@@ -115,8 +115,24 @@ Route::get('/forgot-password', function () {
 
 
 // Admin (desativado — redireciona para o Creative DNA)
-Route::redirect('/dashboard-admin', '/creative-dna')->name('dashboard.admin');
+//Route::redirect('/dashboard-admin', '/creative-dna')->name('dashboard.admin');
+Route::redirect('/dashboard-admin', '/admin/dashboard')->name('dashboard.admin');
+
+// Dashboard próprio do admin.
+// Aqui o admin não vê Creative DNA nem projetos, apenas gestão de users e turmas.
+Route::middleware(['auth', 'role:1'])->prefix('admin')->name('admin.')->group(function () {
+    // Página principal do dashboard admin.
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Dados usados pelo React no dashboard admin.
+    Route::get('/data', [AdminDashboardController::class, 'data'])->name('data');
+
+    // Atualiza role de user e turma caso seja aluno.
+    Route::put('/users/{user}', [AdminDashboardController::class, 'updateUser'])->name('users.update');
+
+    // Atualiza as turmas atribuídas a um formador.
+    Route::put('/formadores/{user}/turmas', [AdminDashboardController::class, 'updateFormadorTurmas'])->name('formadores.turmas.update');
+});
 
 // Em construção
 Route::view('/under-construction', 'fallback.under-construction');
-
