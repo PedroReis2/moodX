@@ -71,4 +71,20 @@ class CreativeDnaController extends Controller
             'palette' => $palettes->buildFinalPalette($allColors, [], 8),
         ]);
     }
+
+    /**
+     * Apaga o Creative DNA do utilizador (registo e ficheiros de imagem).
+     * Utilizado pelo botão "Delete" na página de visualização do Creative DNA.
+     */
+    public function destroy(Request $request)
+    {
+        $rows = CreativeDna::where('user_id', $request->user()->id)->get();
+
+        foreach ($rows as $row) {
+            Storage::disk('public')->delete($row->path);
+        }
+        CreativeDna::where('user_id', $request->user()->id)->delete();
+
+        return response()->json(['message' => 'Creative DNA deleted.']);
+    }
 }

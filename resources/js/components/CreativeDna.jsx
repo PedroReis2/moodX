@@ -8,6 +8,7 @@ const MAX_FILES = 30;
 export default function CreativeDna({ userName = "" }) {
     const [files, setFiles] = useState([]); // [{ file, url }]
     const [uploading, setUploading] = useState(false);
+    const [uploaded, setUploaded] = useState(false); // só liberta "My Projects" após upload
     const [dragging, setDragging] = useState(false);
     const [toast, setToast] = useState(null);
     const inputRef = useRef(null);
@@ -67,8 +68,8 @@ export default function CreativeDna({ userName = "" }) {
                 "success"
             );
 
-            // O Creative DNA é usado apenas uma vez — segue para Projects
-            setTimeout(() => (window.location.href = "/projects"), 900);
+            // Fica na página; o botão "My Projects" só fica ativo após o upload
+            setUploaded(true);
         } catch (err) {
             showToast(
                 err.response?.data?.message ||
@@ -87,7 +88,11 @@ export default function CreativeDna({ userName = "" }) {
                 </div>
             )}
 
-            <Navbar userName={userName} page="creative-dna" />
+            <Navbar
+                userName={userName}
+                page="creative-dna"
+                projectsDisabled={!uploaded}
+            />
 
             <main className="cdna__main">
                 <p className="cdna__kicker">MOOD.X — Creative Studio</p>
@@ -207,7 +212,7 @@ export default function CreativeDna({ userName = "" }) {
                     <button
                         type="button"
                         className="cdna__projects"
-                        disabled={files.length < MIN_FILES}
+                        disabled={!uploaded}
                         onClick={() => (window.location.href = "/projects")}
                     >
                         My Projects

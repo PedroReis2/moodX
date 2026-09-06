@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const MIN_IMAGES = 4;
 const MAX_IMAGES = 5;
 
-export default function Projects({ userName = "" }) {
+export default function Projects({ userName = "", isProfessor = false }) {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -218,6 +218,7 @@ export default function Projects({ userName = "" }) {
             <Navbar
                 userName={userName}
                 page="projects"
+                isProfessor={isProfessor}
                 actions={[
                     {
                         label: "New Project",
