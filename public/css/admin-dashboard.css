@@ -1,0 +1,101 @@
+/* ============================================================
+   ADMIN DASHBOARD
+   Pequenos ajustes por cima dos estilos já usados em Projects/Classes.
+   ============================================================ */
+
+#admin-dashboard-root {
+    min-height: 100vh;
+}
+
+.admin-dashboard .cls__project {
+    min-height: 100%;
+}
+
+/* Cards dos professores primeiro, com espaço para gerir várias turmas. */
+.admin-dashboard__teacher-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Cards dos alunos mais largos para caberem os dois selects e o texto completo. */
+.admin-dashboard__student-grid {
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+}
+
+.admin-dashboard__user-card .cls__project-body {
+    display: flex;
+    min-height: 210px;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.admin-dashboard__field-group,
+.admin-dashboard__student-controls {
+    display: grid;
+    gap: 10px;
+}
+
+.admin-dashboard__student-controls {
+    grid-template-columns: minmax(110px, 0.8fr) minmax(210px, 1.2fr);
+}
+
+.admin-dashboard__select {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #d6d9de;
+    border-radius: 6px;
+    padding: 10px 12px;
+    background: #fff;
+    color: #1c1c1c;
+    font: inherit;
+    font-size: 13px;
+}
+
+.admin-dashboard__select--wide {
+    min-width: 210px;
+}
+
+/* Lista das turmas que cada professor pode acompanhar. */
+.admin-dashboard__class-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 4px;
+}
+
+.admin-dashboard__checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid #d6d9de;
+    border-radius: 999px;
+    padding: 8px 10px;
+    background: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1c1c1c;
+}
+
+.admin-dashboard__checkbox input {
+    margin: 0;
+}
+
+.admin-dashboard__empty-note {
+    font-size: 12px;
+    color: #8a8f98;
+}
+
+.admin-dashboard .mb__btn {
+    width: 100%;
+    margin-top: auto;
+}
+
+@media (max-width: 640px) {
+    .admin-dashboard__student-grid,
+    .admin-dashboard__teacher-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-dashboard__student-controls {
+        grid-template-columns: 1fr;
+    }
+}

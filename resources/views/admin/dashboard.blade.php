@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ asset('css/projects.css') }}">
     <link rel="stylesheet" href="{{ asset('css/classes.css') }}">
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin-dashboard.css') }}">
 
     {{-- Preamble do React necessário em desenvolvimento --}}
     @viteReactRefresh
