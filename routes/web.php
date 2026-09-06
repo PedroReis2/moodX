@@ -30,6 +30,9 @@ Route::get('/creative-dna', function () {
 Route::post('/creative-dna/upload', [CreativeDnaController::class, 'upload'])
     ->name('creative-dna.upload')->middleware('auth');
 
+Route::delete('/creative-dna', [CreativeDnaController::class, 'destroy'])
+    ->name('creative-dna.destroy')->middleware('auth');
+
 Route::get('/creative-dna/data', [CreativeDnaController::class, 'data'])
     ->name('creative-dna.data')->middleware('auth');
 

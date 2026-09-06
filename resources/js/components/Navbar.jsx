@@ -21,7 +21,7 @@ export default function Navbar({ userName = "", page = "", actions = [] }) {
     const fixedLinks = [
         {
             key: "creative-dna",
-            label: "Creative DNA",
+            label: "My Creative DNA",
             href: "/creative-dna-view",
         },
         { key: "projects", label: "My Projects", href: "/projects" },
