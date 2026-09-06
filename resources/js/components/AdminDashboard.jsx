@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Navbar from "./Navbar";
 
 export default function AdminDashboard({ userName }) {
     const [roles, setRoles] = useState([]);
@@ -160,6 +161,7 @@ export default function AdminDashboard({ userName }) {
     if (loading) {
         return (
             <div className="mb">
+                <Navbar userName={userName} logoutOnly />
                 <main className="mb__main">
                     <p className="mb__loading">Loading admin dashboard...</p>
                 </main>
@@ -169,6 +171,7 @@ export default function AdminDashboard({ userName }) {
 
     return (
         <div className="mb">
+            <Navbar userName={userName} logoutOnly />
             <main className="mb__main">
                 <header className="mb__header">
                     <p className="mb__kicker">MOOD.X - Admin</p>

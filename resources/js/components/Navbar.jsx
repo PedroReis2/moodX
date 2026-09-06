@@ -13,6 +13,7 @@ export default function Navbar({
     actions = [],
     projectsDisabled = false,
     isProfessor = false,
+    logoutOnly = false,
 }) {
     const firstName = (userName || "").trim().split(" ")[0] || "";
 
@@ -24,17 +25,19 @@ export default function Navbar({
         }
     };
 
-    const fixedLinks = [
-        {
-            key: "creative-dna",
-            label: "My Creative DNA",
-            href: "/creative-dna-view",
-        },
-        { key: "projects", label: "My Projects", href: "/projects" },
-        ...(isProfessor
-            ? [{ key: "classes", label: "Classes", href: "/classes" }]
-            : []),
-    ].filter((link) => link.key !== page);
+    const fixedLinks = logoutOnly
+        ? []
+        : [
+              {
+                  key: "creative-dna",
+                  label: "My Creative DNA",
+                  href: "/creative-dna-view",
+              },
+              { key: "projects", label: "My Projects", href: "/projects" },
+              ...(isProfessor
+                  ? [{ key: "classes", label: "Classes", href: "/classes" }]
+                  : []),
+          ].filter((link) => link.key !== page);
 
     return (
         <nav className="app-nav">
@@ -65,21 +68,22 @@ export default function Navbar({
                         );
                     })}
 
-                    {actions.map((action, i) => (
-                        <button
-                            key={`${action.label}-${i}`}
-                            type="button"
-                            className={`app-nav__btn ${
-                                action.variant === "solid"
-                                    ? "app-nav__btn--solid"
-                                    : "app-nav__btn--ghost"
-                            }`}
-                            onClick={action.onClick}
-                            disabled={action.disabled}
-                        >
-                            {action.label}
-                        </button>
-                    ))}
+                    {!logoutOnly &&
+                        actions.map((action, i) => (
+                            <button
+                                key={`${action.label}-${i}`}
+                                type="button"
+                                className={`app-nav__btn ${
+                                    action.variant === "solid"
+                                        ? "app-nav__btn--solid"
+                                        : "app-nav__btn--ghost"
+                                }`}
+                                onClick={action.onClick}
+                                disabled={action.disabled}
+                            >
+                                {action.label}
+                            </button>
+                        ))}
 
                     <button
                         type="button"
