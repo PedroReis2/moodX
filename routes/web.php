@@ -13,7 +13,20 @@ Route::get('/', function () {
     if (!auth()->check()) {
         return redirect('/login');
     }
+
+    // Se for admin, entra diretamente no dashboard próprio do admin.
+    if (auth()->user()->role_id === \App\Models\Role::ADMIN_ID) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    // Se for professor, entra na página das turmas.
+    if (auth()->user()->role_id === \App\Models\Role::FORMADOR_ID) {
+        return redirect()->route('classes');
+    }
+
+    // Se for aluno, segue o fluxo normal do Creative DNA / Projects.
     $hasDna = \App\Models\CreativeDna::where('user_id', auth()->id())->exists();
+
     return redirect($hasDna ? '/projects' : '/creative-dna');
 })->name('welcome');
 
@@ -28,9 +41,11 @@ Route::get('/creative-dna', function () {
 })->name('creative-dna')->middleware('auth');
 
 Route::post('/creative-dna/upload', [CreativeDnaController::class, 'upload'])
+
     ->name('creative-dna.upload')->middleware('auth');
 
-Route::delete('/creative-dna', [CreativeDnaController::class, 'destroy'])
+
+    Route::delete('/creative-dna', [CreativeDnaController::class, 'destroy'])
     ->name('creative-dna.destroy')->middleware('auth');
 
 Route::get('/creative-dna/data', [CreativeDnaController::class, 'data'])
