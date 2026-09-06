@@ -10,36 +10,6 @@ use App\Services\ColorPaletteService;
 class CreativeDnaController extends Controller
 {
     /**
-     * Página de visualização (só leitura) das imagens do Creative DNA do utilizador.
-     */
-    public function gallery()
-    {
-        // Sem Creative DNA não há imagens para mostrar — volta para Projects.
-        if (!CreativeDna::where('user_id', auth()->id())->exists()) {
-            return redirect()->route('projects.index');
-        }
-
-        return view('creative-dna-gallery');
-    }
-
-    /**
-     * Devolve os URLs públicos das imagens do Creative DNA do utilizador autenticado.
-     */
-    public function images(Request $request)
-    {
-        $rows = CreativeDna::where('user_id', $request->user()->id)
-            ->orderBy('id')
-            ->get(['path', 'original_name']);
-
-        return response()->json([
-            'images' => $rows->map(fn ($row) => [
-                'url' => asset('storage/' . $row->path),
-                'name' => $row->original_name,
-            ])->values(),
-        ]);
-    }
-
-    /**
      * Guarda os ficheiros de imagem enviados pelo utilizador.
      * Exige no mínimo 20 ficheiros de imagem.
      * Em re-upload, substitui as imagens anteriores do utilizador.
@@ -69,8 +39,10 @@ class CreativeDnaController extends Controller
                 'user_id' => $user->id,
                 'original_name' => $file->getClientOriginalName(),
                 'path' => $path,
-                // Extrair e guardar as cores principais desta imagem do Creative DNA.
-                'colors' => $palettes->extractFromPublicPath($path),
+                // Extrair e guardar as cores principais desta imagem do Creative DNA,
+                // usando um crop de 60% central para reduzir o peso do fundo
+                // neutro típico das fotos de moda.
+                'colors' => $palettes->extractFromPublicPath($path, 6, 0.6),
 
             ]);
 
@@ -80,6 +52,23 @@ class CreativeDnaController extends Controller
         return response()->json([
             'message' => 'Upload successful.',
             'saved' => $saved,
+        ]);
+    }
+
+    // devolve os dados do creative dna do utilizador logado, incluindo as cores extraídas de cada imagem para mostrarem numa view (pagina)
+    public function data(Request $request, ColorPaletteService $palettes)
+    {
+        $items = CreativeDna::where('user_id', $request->user()->id)->get();
+
+        $allColors = $items->flatMap(fn($item) => $item->colors ?? [])->all();
+
+        return response()->json([
+            'exists' => $items->isNotEmpty(),
+            'images' => $items->map(fn($item) => [
+                'id' => $item->id,
+                'url' => asset('storage/' . $item->path),
+            ]),
+            'palette' => $palettes->buildFinalPalette($allColors, [], 8),
         ]);
     }
 }

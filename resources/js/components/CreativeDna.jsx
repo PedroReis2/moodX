@@ -1,61 +1,41 @@
-import React, { useRef, useState } from 'react';
-import axios from 'axios';
-import Navbar from './Navbar';
+import React, { useRef, useState } from "react";
+import axios from "axios";
+import Navbar from "./Navbar";
 
 const MIN_FILES = 20;
 const MAX_FILES = 30;
 
-export default function CreativeDna({ userName = '' }) {
+export default function CreativeDna({ userName = "" }) {
     const [files, setFiles] = useState([]); // [{ file, url }]
     const [uploading, setUploading] = useState(false);
-    const [uploaded, setUploaded] = useState(false); // só ativa o botão My Projects
     const [dragging, setDragging] = useState(false);
     const [toast, setToast] = useState(null);
     const inputRef = useRef(null);
 
-    const showToast = (message, type = 'error') => {
+    const showToast = (message, type = "error") => {
         setToast({ message, type });
         setTimeout(() => setToast(null), 4000);
     };
 
     const handleSelect = (e) => {
-        const selected = Array.from(e.target.files || []);
+        const all = Array.from(e.target.files || []);
+        const selected = all.slice(0, MAX_FILES).map((file) => ({
+            file,
+            url: URL.createObjectURL(file),
+        }));
 
-        // Limpa o input: permite voltar a escolher os mesmos ficheiros mais
-        // tarde (sem isto, o onChange não volta a disparar para o mesmo ficheiro).
-        e.target.value = '';
-
-        // Acumula as novas imagens às que já estão escolhidas (não substitui).
-        const seen = new Set(files.map((p) => `${p.file.name}|${p.file.size}`));
-        const next = [...files];
-        let skippedDuplicates = 0;
-        let skippedMax = 0;
-
-        selected.forEach((file) => {
-            const key = `${file.name}|${file.size}`;
-            if (seen.has(key)) {
-                skippedDuplicates++;
-                return;
-            }
-            if (next.length >= MAX_FILES) {
-                skippedMax++;
-                return;
-            }
-            seen.add(key);
-            next.push({ file, url: URL.createObjectURL(file) });
+        setFiles((prev) => {
+            prev.forEach((item) => URL.revokeObjectURL(item.url));
+            return selected;
         });
 
-        setFiles(next);
-
-        const missing = MIN_FILES - next.length;
-
-        if (skippedMax > 0) {
-            showToast(`You reached the maximum of ${MAX_FILES} images. No more can be added.`);
-        } else if (skippedDuplicates > 0 && next.length === files.length) {
-            showToast('One or more of those images are already in your selection.');
-        } else if (missing > 0) {
+        if (all.length > MAX_FILES) {
             showToast(
-                `Add ${missing} more image${missing === 1 ? '' : 's'} to reach the minimum of ${MIN_FILES}.`
+                `You can upload a maximum of ${MAX_FILES} images. Only the first ${MAX_FILES} were kept.`
+            );
+        } else if (selected.length < MIN_FILES) {
+            showToast(
+                `Please select at least ${MIN_FILES} image files. You selected ${selected.length}.`
             );
         }
     };
@@ -70,48 +50,56 @@ export default function CreativeDna({ userName = '' }) {
 
     const handleUpload = async () => {
         if (files.length < MIN_FILES || files.length > MAX_FILES) {
-            showToast(`Please select between ${MIN_FILES} and ${MAX_FILES} image files.`);
+            showToast(
+                `Please select between ${MIN_FILES} and ${MAX_FILES} image files.`
+            );
             return;
         }
 
         setUploading(true);
         const data = new FormData();
-        files.forEach(({ file }) => data.append('files[]', file));
+        files.forEach(({ file }) => data.append("files[]", file));
 
         try {
-            await axios.post('/creative-dna/upload', data);
-            setUploaded(true);
-            showToast('Upload successful. Your Creative DNA is ready.', 'success');
+            await axios.post("/creative-dna/upload", data);
+            showToast(
+                "Upload successful. Your Creative DNA is ready.",
+                "success"
+            );
+
+            // O Creative DNA é usado apenas uma vez — segue para Projects
+            setTimeout(() => (window.location.href = "/projects"), 900);
         } catch (err) {
-            showToast(err.response?.data?.message || 'Upload failed. Please try again.');
+            showToast(
+                err.response?.data?.message ||
+                    "Upload failed. Please try again."
+            );
         } finally {
             setUploading(false);
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            await axios.post('/logout');
-        } finally {
-            window.location.href = '/login';
-        }
-    };
-
     return (
         <div className="cdna">
-            {toast && <div className={`cdna-toast cdna-toast--${toast.type}`}>{toast.message}</div>}
+            {toast && (
+                <div className={`cdna-toast cdna-toast--${toast.type}`}>
+                    {toast.message}
+                </div>
+            )}
 
-            <Navbar userName={userName} actions={[{ label: 'Logout', onClick: handleLogout, variant: 'ghost' }]} />
+            <Navbar userName={userName} page="creative-dna" />
 
             <main className="cdna__main">
                 <p className="cdna__kicker">MOOD.X — Creative Studio</p>
                 <h1 className="cdna__title">Creative DNA</h1>
                 <p className="cdna__subtitle">
-                    Upload at least {MIN_FILES} images that inspire your fashion design.
+                    Upload at least {MIN_FILES} images that inspire your fashion
+                    design.
                 </p>
                 <p className="cdna__note">
-                    These images define your DNA as a designer. Once created, your Creative DNA
-                    cannot be edited, and it will be used to generate a result with AI.
+                    These images define your DNA as a designer. Once created,
+                    your Creative DNA cannot be edited, and it will be used to
+                    generate a result with AI.
                 </p>
 
                 {/* Arrasta sobre a área → onDragEnter → destaca (dragover)
@@ -120,13 +108,15 @@ export default function CreativeDna({ userName = '' }) {
 
                 <div
                     // arrastar e soltar ficheiros -- dropzone
-                    className={`cdna__dropzone ${dragging ? 'cdna__dropzone--dragover' : ''}`}
+                    className={`cdna__dropzone ${
+                        dragging ? "cdna__dropzone--dragover" : ""
+                    }`}
                     onClick={() => inputRef.current?.click()}
                     onDragEnter={(e) => {
                         e.preventDefault();
                         setDragging(true);
                     }}
-                    //dragging: "acende" a borda e muda o fundo 
+                    //dragging: "acende" a borda e muda o fundo
                     onDragOver={(e) => e.preventDefault()}
                     onDragLeave={(e) => {
                         e.preventDefault();
@@ -135,7 +125,9 @@ export default function CreativeDna({ userName = '' }) {
                     onDrop={(e) => {
                         e.preventDefault();
                         setDragging(false);
-                        handleSelect({ target: { files: e.dataTransfer.files } });
+                        handleSelect({
+                            target: { files: e.dataTransfer.files },
+                        });
                     }}
                 >
                     <input
@@ -147,12 +139,17 @@ export default function CreativeDna({ userName = '' }) {
                         onChange={handleSelect}
                     />
                     <span className="cdna__dropzone-icon">+</span>
-                    <p className="cdna__dropzone-text">Click or drag your images here</p>
-                    <p className="cdna__dropzone-hint">JPG, PNG — between {MIN_FILES} and {MAX_FILES} files</p>
+                    <p className="cdna__dropzone-text">
+                        Click or drag your images here
+                    </p>
+                    <p className="cdna__dropzone-hint">
+                        JPG, PNG — between {MIN_FILES} and {MAX_FILES} files
+                    </p>
                 </div>
 
                 <p className="cdna__steps">
-                    After your images are loaded, click “Upload images” and then “My Projects”.
+                    After your images are loaded, click “Upload images” and then
+                    “My Projects”.
                 </p>
 
                 {files.length > 0 && (
@@ -160,7 +157,9 @@ export default function CreativeDna({ userName = '' }) {
                         {files.map((item, i) => (
                             <div
                                 key={item.url}
-                                className={`cdna__preview ${i === 0 ? 'cdna__preview--first' : ''}`}
+                                className={`cdna__preview ${
+                                    i === 0 ? "cdna__preview--first" : ""
+                                }`}
                             >
                                 <img src={item.url} alt="" />
                                 <button
@@ -177,11 +176,17 @@ export default function CreativeDna({ userName = '' }) {
                 )}
 
                 <div className="cdna__meta">
-                    <span className={`cdna__count ${files.length >= MIN_FILES ? 'cdna__count--ok' : ''}`}>
+                    <span
+                        className={`cdna__count ${
+                            files.length >= MIN_FILES ? "cdna__count--ok" : ""
+                        }`}
+                    >
                         {files.length} / {MIN_FILES}–{MAX_FILES} images selected
                     </span>
                     {files.length > 0 && files.length < MIN_FILES && (
-                        <span className="cdna__warn">At least {MIN_FILES} images required.</span>
+                        <span className="cdna__warn">
+                            At least {MIN_FILES} images required.
+                        </span>
                     )}
                 </div>
 
@@ -190,16 +195,20 @@ export default function CreativeDna({ userName = '' }) {
                         type="button"
                         className="cdna__upload"
                         onClick={handleUpload}
-                        disabled={uploading || files.length < MIN_FILES || files.length > MAX_FILES}
+                        disabled={
+                            uploading ||
+                            files.length < MIN_FILES ||
+                            files.length > MAX_FILES
+                        }
                     >
-                        {uploading ? 'Uploading...' : 'Upload images'}
+                        {uploading ? "Uploading..." : "Upload images"}
                     </button>
 
                     <button
                         type="button"
                         className="cdna__projects"
-                        disabled={!uploaded}
-                        onClick={() => (window.location.href = '/projects')}
+                        disabled={files.length < MIN_FILES}
+                        onClick={() => (window.location.href = "/projects")}
                     >
                         My Projects
                     </button>
