@@ -158,153 +158,217 @@ export default function AdminDashboard({ userName }) {
     }, []);
 
     if (loading) {
-        return <p>Loading admin dashboard...</p>;
+        return (
+            <div className="mb">
+                <main className="mb__main">
+                    <p className="mb__loading">Loading admin dashboard...</p>
+                </main>
+            </div>
+        );
     }
 
     return (
-        <main className="admin-dashboard">
-            <header className="admin-dashboard__header">
-                <div>
-                    <p className="admin-dashboard__eyebrow">Admin Dashboard</p>
-                    <h1>Users and classes</h1>
+        <div className="mb">
+            <main className="mb__main">
+                <header className="mb__header">
+                    <p className="mb__kicker">MOOD.X - Admin</p>
+                    <h1 className="mb__title">Users and classes</h1>
+                    <p className="mb__subtitle">
+                        Manage students, teachers, roles and class assignments.
+                    </p>
+                    <p className="mb__card-count">{userName}</p>
+                </header>
+
+                {message && <p className="mb__loading">{message}</p>}
+
+                <div className="cls__list">
+                    <section className="cls__card">
+                        <header className="cls__card-head">
+                            <h2 className="cls__card-name">Students</h2>
+                            <span className="cls__card-count">
+                                {alunos.length} users
+                            </span>
+                        </header>
+
+                        <div className="cls__grid">
+                            {alunos.map((aluno) => (
+                                <article
+                                    key={aluno.id}
+                                    className="cls__project"
+                                >
+                                    <div className="cls__project-body">
+                                        <h3 className="cls__project-title">
+                                            {aluno.name}
+                                        </h3>
+                                        <p className="cls__project-student">
+                                            {aluno.email}
+                                        </p>
+
+                                        <div className="mb__card-actions">
+                                            {/* Select para alterar o role do utilizador. */}
+                                            <select
+                                                value={
+                                                    studentDrafts[aluno.id]
+                                                        ?.role_id ||
+                                                    aluno.role_id
+                                                }
+                                                onChange={(event) =>
+                                                    updateStudentDraft(
+                                                        aluno.id,
+                                                        "role_id",
+                                                        event.target.value,
+                                                    )
+                                                }
+                                            >
+                                                {roles.map((role) => (
+                                                    <option
+                                                        key={role.id}
+                                                        value={role.id}
+                                                    >
+                                                        {role.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+
+                                            {/* Select para colocar o aluno numa turma. */}
+                                            <select
+                                                value={
+                                                    studentDrafts[aluno.id]
+                                                        ?.turma_id || ""
+                                                }
+                                                onChange={(event) =>
+                                                    updateStudentDraft(
+                                                        aluno.id,
+                                                        "turma_id",
+                                                        event.target.value,
+                                                    )
+                                                }
+                                            >
+                                                <option value="">
+                                                    No class assigned
+                                                </option>
+
+                                                {turmas.map((turma) => (
+                                                    <option
+                                                        key={turma.id}
+                                                        value={turma.id}
+                                                    >
+                                                        {turma.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            className="mb__btn mb__btn--solid"
+                                            onClick={() => saveStudent(aluno.id)}
+                                            disabled={savingUserId === aluno.id}
+                                        >
+                                            {savingUserId === aluno.id
+                                                ? "Saving..."
+                                                : "Save"}
+                                        </button>
+                                    </div>
+                                </article>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="cls__card">
+                        <header className="cls__card-head">
+                            <h2 className="cls__card-name">Teachers</h2>
+                            <span className="cls__card-count">
+                                {formadores.length} users
+                            </span>
+                        </header>
+
+                        <div className="cls__grid">
+                            {formadores.map((formador) => (
+                                <article
+                                    key={formador.id}
+                                    className="cls__project"
+                                >
+                                    <div className="cls__project-body">
+                                        <h3 className="cls__project-title">
+                                            {formador.name}
+                                        </h3>
+                                        <p className="cls__project-student">
+                                            {formador.email}
+                                        </p>
+
+                                        <div className="mb__card-actions">
+                                            {/* Select para alterar o role do formador. */}
+                                            <select
+                                                value={
+                                                    teacherRoleDrafts[
+                                                        formador.id
+                                                    ] || formador.role_id
+                                                }
+                                                onChange={(event) =>
+                                                    updateTeacherRoleDraft(
+                                                        formador.id,
+                                                        event.target.value,
+                                                    )
+                                                }
+                                            >
+                                                {roles.map((role) => (
+                                                    <option
+                                                        key={role.id}
+                                                        value={role.id}
+                                                    >
+                                                        {role.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        {/* Checkboxes para escolher as turmas atribuídas ao formador. */}
+                                        <div className="mb__card-actions">
+                                            {turmas.map((turma) => (
+                                                <label key={turma.id}>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={
+                                                            teacherDrafts[
+                                                                formador.id
+                                                            ]?.includes(
+                                                                turma.id,
+                                                            ) || false
+                                                        }
+                                                        onChange={() =>
+                                                            toggleTeacherTurma(
+                                                                formador.id,
+                                                                turma.id,
+                                                            )
+                                                        }
+                                                    />
+                                                    {turma.name}
+                                                </label>
+                                            ))}
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            className="mb__btn mb__btn--solid"
+                                            onClick={() =>
+                                                saveTeacher(formador.id)
+                                            }
+                                            disabled={
+                                                savingTeacherId === formador.id
+                                            }
+                                        >
+                                            {savingTeacherId === formador.id
+                                                ? "Saving..."
+                                                : "Save"}
+                                        </button>
+                                    </div>
+                                </article>
+                            ))}
+                        </div>
+                    </section>
                 </div>
-
-                <p className="admin-dashboard__user">{userName}</p>
-            </header>
-            {message && <p className="admin-dashboard__message">{message}</p>}
-
-            <section className="admin-dashboard__section">
-                <h2>Students</h2>
-
-                {alunos.map((aluno) => (
-                    <article key={aluno.id} className="admin-dashboard__row">
-                        <div>
-                            <strong>{aluno.name}</strong>
-                            <span>{aluno.email}</span>
-                        </div>
-                        <div className="admin-dashboard__actions">
-                            {/* Select para alterar o role do utilizador. */}
-                            <select
-                                value={
-                                    studentDrafts[aluno.id]?.role_id ||
-                                    aluno.role_id
-                                }
-                                onChange={(event) =>
-                                    updateStudentDraft(
-                                        aluno.id,
-                                        "role_id",
-                                        event.target.value,
-                                    )
-                                }
-                            >
-                                {roles.map((role) => (
-                                    <option key={role.id} value={role.id}>
-                                        {role.name}
-                                    </option>
-                                ))}
-                            </select>
-
-                            {/* Select para colocar o aluno numa turma. */}
-                            <select
-                                value={studentDrafts[aluno.id]?.turma_id || ""}
-                                onChange={(event) =>
-                                    updateStudentDraft(
-                                        aluno.id,
-                                        "turma_id",
-                                        event.target.value,
-                                    )
-                                }
-                            >
-                                <option value="">No class assigned</option>
-
-                                {turmas.map((turma) => (
-                                    <option key={turma.id} value={turma.id}>
-                                        {turma.name}
-                                    </option>
-                                ))}
-                            </select>
-
-                            <button
-                                type="button"
-                                onClick={() => saveStudent(aluno.id)}
-                                disabled={savingUserId === aluno.id}
-                            >
-                                {savingUserId === aluno.id
-                                    ? "Saving..."
-                                    : "Save"}
-                            </button>
-                        </div>{" "}
-                    </article>
-                ))}
-            </section>
-
-            <section className="admin-dashboard__section">
-                <h2>Teachers</h2>
-
-                {formadores.map((formador) => (
-                    <article key={formador.id} className="admin-dashboard__row">
-                        <div>
-                            <strong>{formador.name}</strong>
-                            <span>{formador.email}</span>
-                        </div>
-
-                        <div className="admin-dashboard__actions">
-                            {/* Select para alterar o role do formador. */}
-                            <select
-                                value={
-                                    teacherRoleDrafts[formador.id] ||
-                                    formador.role_id
-                                }
-                                onChange={(event) =>
-                                    updateTeacherRoleDraft(
-                                        formador.id,
-                                        event.target.value,
-                                    )
-                                }
-                            >
-                                {roles.map((role) => (
-                                    <option key={role.id} value={role.id}>
-                                        {role.name}
-                                    </option>
-                                ))}
-                            </select>
-
-                            {/* Checkboxes para escolher as turmas atribuídas ao formador. */}
-                            <div className="admin-dashboard__checkboxes">
-                                {turmas.map((turma) => (
-                                    <label key={turma.id}>
-                                        <input
-                                            type="checkbox"
-                                            checked={
-                                                teacherDrafts[
-                                                    formador.id
-                                                ]?.includes(turma.id) || false
-                                            }
-                                            onChange={() =>
-                                                toggleTeacherTurma(
-                                                    formador.id,
-                                                    turma.id,
-                                                )
-                                            }
-                                        />
-                                        {turma.name}
-                                    </label>
-                                ))}
-                            </div>
-
-                            <button
-                                type="button"
-                                onClick={() => saveTeacher(formador.id)}
-                                disabled={savingTeacherId === formador.id}
-                            >
-                                {savingTeacherId === formador.id
-                                    ? "Saving..."
-                                    : "Save"}
-                            </button>
-                        </div>
-                    </article>
-                ))}
-            </section>
-        </main>
+            </main>
+        </div>
     );
 }

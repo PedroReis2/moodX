@@ -10,6 +10,7 @@
 
     {{-- CSS já usado nas páginas principais da app --}}
     <link rel="stylesheet" href="{{ asset('css/projects.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/classes.css') }}">
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
 
     {{-- Preamble do React necessário em desenvolvimento --}}
