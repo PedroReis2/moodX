@@ -10,6 +10,7 @@ import CreativeDna from "./components/CreativeDna";
 import CreativeDnaView from "./components/CreativeDnaView";
 import Projects from "./components/Projects";
 import Classes from "./components/Classes";
+import AdminDashboard from "./components/AdminDashboard";
 
 // Página de Login (React)
 const loginRoot = document.getElementById("login-root");
@@ -72,6 +73,17 @@ if (classesRoot) {
     createRoot(classesRoot).render(
         <React.StrictMode>
             <Classes userName={classesRoot.dataset.userName || ""} />
+        </React.StrictMode>
+    );
+}
+// Página Admin Dashboard — gestão de alunos, formadores, roles e turmas (React)
+const adminDashboardRoot = document.getElementById("admin-dashboard-root");
+if (adminDashboardRoot) {
+    createRoot(adminDashboardRoot).render(
+        <React.StrictMode>
+            <AdminDashboard
+                userName={adminDashboardRoot.dataset.userName || ""}
+            />
         </React.StrictMode>
     );
 }
