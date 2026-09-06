@@ -6,6 +6,7 @@ export default function CreativeDnaView({ userName = "" }) {
     const [images, setImages] = useState([]);
     const [palette, setPalette] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleting, setDeleting] = useState(false);
 
     useEffect(() => {
         axios
@@ -28,6 +29,26 @@ export default function CreativeDnaView({ userName = "" }) {
         }
         return result;
     }, [images]);
+
+    const handleDelete = async () => {
+        if (
+            !window.confirm(
+                "Delete your Creative DNA? This action cannot be undone."
+            )
+        )
+            return;
+        setDeleting(true);
+        try {
+            await axios.delete("/creative-dna");
+            window.location.href = "/creative-dna";
+        } catch (err) {
+            alert(
+                err.response?.data?.message ||
+                    "Unable to delete your Creative DNA."
+            );
+            setDeleting(false);
+        }
+    };
 
     return (
         <div className="mb">
@@ -84,13 +105,13 @@ export default function CreativeDnaView({ userName = "" }) {
                         <div className="mb__footer">
                             <button
                                 type="button"
-                                className="mb__btn mb__btn--ghost"
-                                onClick={() =>
-                                    (window.location.href =
-                                        "/creative-dna/edit")
-                                }
+                                className="mb__btn mb__btn--danger"
+                                onClick={handleDelete}
+                                disabled={deleting}
                             >
-                                Update Creative DNA
+                                {deleting
+                                    ? "Deleting..."
+                                    : "Delete Creative DNA"}
                             </button>
                         </div>
                     </>
