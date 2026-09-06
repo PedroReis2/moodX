@@ -10,6 +10,8 @@ export default function AdminDashboard({ userName }) {
     const [studentDrafts, setStudentDrafts] = useState({});
     const [savingUserId, setSavingUserId] = useState(null);
     const [message, setMessage] = useState("");
+    const [trainerDrafts, setTrainerDrafts] = useState({});
+    const [savingTrainerId, setSavingTrainerId] = useState(null);
 
     // Carrega os dados enviados pelo Laravel para o dashboard admin.
     async function loadAdminData() {
@@ -29,6 +31,17 @@ export default function AdminDashboard({ userName }) {
                             role_id: aluno.role_id,
                             turma_id: aluno.turma_id || "",
                         },
+                    ]),
+                ),
+            );
+            // Guarda as turmas atuais de cada formador para serem editadas.
+            setTrainerDrafts(
+                Object.fromEntries(
+                    data.formadores.map((formador) => [
+                        formador.id,
+                        formador.turmas_como_formador?.map(
+                            (turma) => turma.id,
+                        ) || [],
                     ]),
                 ),
             );
@@ -70,6 +83,45 @@ export default function AdminDashboard({ userName }) {
             );
         } finally {
             setSavingUserId(null);
+        }
+    }
+    // Adiciona ou remove uma turma da lista temporária do formador.
+    function toggleTrainerTurma(formadorId, turmaId) {
+        setTrainerDrafts((currentDrafts) => {
+            const currentTurmas = currentDrafts[formadorId] || [];
+
+            const updatedTurmas = currentTurmas.includes(turmaId)
+                ? currentTurmas.filter((id) => id !== turmaId)
+                : [...currentTurmas, turmaId];
+
+            return {
+                ...currentDrafts,
+                [formadorId]: updatedTurmas,
+            };
+        });
+    }
+
+    // Guarda no backend as turmas escolhidas para o formador.
+    async function saveTrainerTurmas(formadorId) {
+        setSavingTrainerId(formadorId);
+        setMessage("");
+
+        try {
+            await axios.put(`/admin/formadores/${formadorId}/turmas`, {
+                turma_ids: trainerDrafts[formadorId] || [],
+            });
+
+            setMessage("Trainer classes updated successfully.");
+
+            // Recarrega os dados para mostrar as turmas atualizadas.
+            await loadAdminData();
+        } catch (error) {
+            setMessage(
+                error.response?.data?.message ||
+                    "Unable to update trainer classes.",
+            );
+        } finally {
+            setSavingTrainerId(null);
         }
     }
 
@@ -168,9 +220,40 @@ export default function AdminDashboard({ userName }) {
                             <span>{formador.email}</span>
                         </div>
 
-                        <span>
-                            {formador.turmas_como_formador?.length || 0} classes
-                        </span>
+                        <div className="admin-dashboard__actions">
+                            {/* Checkboxes para escolher as turmas atribuídas ao formador. */}
+                            <div className="admin-dashboard__checkboxes">
+                                {turmas.map((turma) => (
+                                    <label key={turma.id}>
+                                        <input
+                                            type="checkbox"
+                                            checked={
+                                                trainerDrafts[
+                                                    formador.id
+                                                ]?.includes(turma.id) || false
+                                            }
+                                            onChange={() =>
+                                                toggleTrainerTurma(
+                                                    formador.id,
+                                                    turma.id,
+                                                )
+                                            }
+                                        />
+                                        {turma.name}
+                                    </label>
+                                ))}
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={() => saveTrainerTurmas(formador.id)}
+                                disabled={savingTrainerId === formador.id}
+                            >
+                                {savingTrainerId === formador.id
+                                    ? "Saving..."
+                                    : "Save"}
+                            </button>
+                        </div>
                     </article>
                 ))}
             </section>
