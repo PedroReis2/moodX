@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,9 @@
 
     <title>Admin Dashboard — mood.x</title>
 
-    {{-- CSS específico do dashboard admin --}}
-    <link rel="stylesheet" href="{{ asset('css/admin-dashboard.css') }}">
+    {{-- CSS já usado nas páginas principais da app --}}
+    <link rel="stylesheet" href="{{ asset('css/projects.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
 
     {{-- Preamble do React necessário em desenvolvimento --}}
     @viteReactRefresh
@@ -16,11 +18,10 @@
     {{-- Bundle principal do React --}}
     @vite(['resources/js/app.js'])
 </head>
+
 <body>
     {{-- Root onde o React vai montar o dashboard admin --}}
-    <div
-        id="admin-dashboard-root"
-        data-user-name="{{ auth()->user()->name }}"
-    ></div>
+    <div id="admin-dashboard-root" data-user-name="{{ auth()->user()->name }}"></div>
 </body>
+
 </html>
