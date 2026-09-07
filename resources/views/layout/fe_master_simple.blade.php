@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{ asset('css/master-simple.css') }}">
     <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
     <link rel="stylesheet" href="{{ asset('css/login-minimal.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/register-minimal.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- JS -->

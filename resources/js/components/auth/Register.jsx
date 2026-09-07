@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+const EyeIcon = () => (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+        <circle cx="12" cy="12" r="3" />
+    </svg>
+);
+
+const EyeOffIcon = () => (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M14.12 14.12A3 3 0 1 1 9.88 9.88" />
+        <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+);
+
 /**
- * Página de Registo em React (substitui o formulário Blade).
- * Faz POST multipart para a rota /store_user e trata erros de validação.
+ * Página de Registo em React — layout moderno (split-screen) igual ao Login.
+ * Faz POST para a rota /store_user e trata erros de validação.
  */
 export default function Register() {
     const [form, setForm] = useState({
@@ -14,8 +28,8 @@ export default function Register() {
         password: '',
         password_confirmation: '',
     });
-    const [profileImage, setProfileImage] = useState(null);
-    const [preview, setPreview] = useState('https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -23,41 +37,17 @@ export default function Register() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        setProfileImage(file);
-
-        const reader = new FileReader();
-        reader.onload = (ev) => setPreview(ev.target.result);
-        reader.readAsDataURL(file);
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors([]);
         setLoading(true);
-
-        const data = new FormData();
-        data.append('first_name', form.first_name);
-        data.append('last_name', form.last_name);
-        data.append('username', form.username);
-        data.append('email', form.email);
-        data.append('password', form.password);
-        data.append('password_confirmation', form.password_confirmation);
-        if (profileImage) {
-            data.append('profile_image', profileImage);
-        }
 
         try {
             // O backend cria a conta e responde com redirect (302) para /dashboard.
             // No browser, o XHR segue o redirect; como o utilizador não é autenticado
             // automaticamente, o /dashboard (protegido) responde 401.
             // Ambos os casos significam "conta criada com sucesso".
-            await axios.post('/store_user', data, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
+            await axios.post('/store_user', form);
 
             // Se chegámos aqui sem exceção -> conta criada
             window.location.href = '/login';
@@ -83,158 +73,176 @@ export default function Register() {
     };
 
     return (
-        <div className="register-page container-fluid">
-            <div className="header-container mx-auto" style={{ maxWidth: 1062, position: 'relative' }}>
-
-                {/* Logo */}
-                <div className="layout-logo">
-                    <img src="/images/logo.png" className="logo-img raise-up" alt="Logo" />
+        <div className="login-split register-split">
+            <aside className="login-split__brand">
+                <div className="login-split__logo">mood.x</div>
+                <div className="login-split__copy">
+                    <p className="login-split__eyebrow">Creative Studio</p>
+                    <h1 className="login-split__headline">
+                        Start your
+                        <br />
+                        creative <span className="login-split__accent">story.</span>
+                    </h1>
                 </div>
+                <p className="login-split__foot">Your creative DNA, projects &amp; AI.</p>
+            </aside>
 
-                {/* Título */}
-                <div className="title-outside">
-                    <h1 className="page-title">CREATE ACCOUNT</h1>
-                </div>
+            <main className="login-split__panel">
+                <div className="login-split__form">
+                    <p className="login-split__kicker">MOOD.X — Creative Studio</p>
+                    <h2 className="login-split__title">Create account</h2>
 
-                {/* Botão de fechar */}
-                <div className="close-button-container">
-                    <a href="/" className="close-button">
-                        <i className="fa-solid fa-xmark"></i>
-                    </a>
-                </div>
-
-                <div className="white-rectangle mx-auto">
                     {errors.length > 0 && (
-                        <div className="alert alert-danger mt-3">
-                            <ul className="mb-0">
+                        <div className="login-split__alert login-split__alert-error" role="alert">
+                            <ul>
                                 {errors.map((error, i) => (
-                                    <li key={i}>{error}</li>
+                                    <li key={i}>
+                                        <span className="login-split__alert-icon">!</span>
+                                        {error}
+                                    </li>
                                 ))}
                             </ul>
                         </div>
                     )}
 
-                    <div className="row align-items-center w-100">
+                    <form onSubmit={handleSubmit} noValidate>
+                        <div className="register-split__grid">
+                            <div className="login-split__field">
+                                <label className="login-split__label" htmlFor="first_name">First name</label>
+                                <input
+                                    type="text"
+                                    className="login-split__input"
+                                    id="first_name"
+                                    name="first_name"
+                                    placeholder="Jane"
+                                    value={form.first_name}
+                                    onChange={handleChange}
+                                    autoComplete="given-name"
+                                    required
+                                    autoFocus
+                                />
+                            </div>
 
-                        {/* Coluna esquerda: foto de perfil */}
-                        <div className="col-12 col-md-5 d-flex flex-column align-items-center mb-4 mb-md-0">
-                            <div className="profile-pic-wrapper">
-                                <div className="circle">
-                                    <img
-                                        id="profilePreview"
-                                        className="profile-pic"
-                                        src={preview}
-                                        alt="Profile Picture"
-                                    />
-                                </div>
-                                <div className="p-image" onClick={() => document.getElementById('profileImageInput').click()}>
-                                    <i className="fa fa-camera upload-button"></i>
-                                </div>
+                            <div className="login-split__field">
+                                <label className="login-split__label" htmlFor="last_name">Last name</label>
+                                <input
+                                    type="text"
+                                    className="login-split__input"
+                                    id="last_name"
+                                    name="last_name"
+                                    placeholder="Doe"
+                                    value={form.last_name}
+                                    onChange={handleChange}
+                                    autoComplete="family-name"
+                                    required
+                                />
                             </div>
                         </div>
 
-                        {/* Coluna direita: formulário */}
-                        <div className="col-12 col-md-7">
-                            <div className="form-column">
-                                <form className="create_account_form" onSubmit={handleSubmit} encType="multipart/form-data">
+                        <div className="login-split__field">
+                            <label className="login-split__label" htmlFor="username">Username</label>
+                            <input
+                                type="text"
+                                className="login-split__input"
+                                id="username"
+                                name="username"
+                                placeholder="janedoe"
+                                value={form.username}
+                                onChange={handleChange}
+                                autoComplete="username"
+                                required
+                            />
+                        </div>
+
+                        <div className="login-split__field">
+                            <label className="login-split__label" htmlFor="email">Email</label>
+                            <input
+                                type="email"
+                                className="login-split__input"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                value={form.email}
+                                onChange={handleChange}
+                                autoComplete="email"
+                                required
+                            />
+                        </div>
+
+                        <div className="register-split__grid">
+                            <div className="login-split__field">
+                                <label className="login-split__label" htmlFor="password">Password</label>
+                                <div className="login-split__input-wrap">
                                     <input
-                                        type="file"
-                                        name="profile_image"
-                                        id="profileImageInput"
-                                        style={{ display: 'none' }}
-                                        accept="image/*"
-                                        onChange={handleImageChange}
+                                        type={showPassword ? 'text' : 'password'}
+                                        className="login-split__input login-split__input-password"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Min. 6 characters"
+                                        value={form.password}
+                                        onChange={handleChange}
+                                        autoComplete="new-password"
+                                        required
                                     />
+                                    <button
+                                        type="button"
+                                        className="login-split__toggle"
+                                        onClick={() => setShowPassword((v) => !v)}
+                                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                    >
+                                        {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                                    </button>
+                                </div>
+                            </div>
 
-                                    <div className="form-floating">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="first_name"
-                                            name="first_name"
-                                            placeholder="First Name"
-                                            value={form.first_name}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="form-floating">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="last_name"
-                                            name="last_name"
-                                            placeholder="Last Name"
-                                            value={form.last_name}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="form-floating">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="username"
-                                            name="username"
-                                            placeholder="Username"
-                                            value={form.username}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="form-floating">
-                                        <input
-                                            type="email"
-                                            className="form-control"
-                                            id="email"
-                                            name="email"
-                                            placeholder="Email"
-                                            value={form.email}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="form-floating">
-                                        <input
-                                            type="password"
-                                            className="form-control"
-                                            id="password"
-                                            name="password"
-                                            placeholder="Password"
-                                            value={form.password}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="form-floating">
-                                        <input
-                                            type="password"
-                                            className="form-control"
-                                            id="password_confirmation"
-                                            name="password_confirmation"
-                                            placeholder="Confirm Password"
-                                            value={form.password_confirmation}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="text-end">
-                                        <button type="submit" className="button button_wide" disabled={loading}>
-                                            {loading ? 'Saving...' : 'Save'}
-                                        </button>
-                                    </div>
-                                </form>
+                            <div className="login-split__field">
+                                <label className="login-split__label" htmlFor="password_confirmation">Confirm</label>
+                                <div className="login-split__input-wrap">
+                                    <input
+                                        type={showConfirm ? 'text' : 'password'}
+                                        className="login-split__input login-split__input-password"
+                                        id="password_confirmation"
+                                        name="password_confirmation"
+                                        placeholder="Repeat password"
+                                        value={form.password_confirmation}
+                                        onChange={handleChange}
+                                        autoComplete="new-password"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        className="login-split__toggle"
+                                        onClick={() => setShowConfirm((v) => !v)}
+                                        aria-label={showConfirm ? 'Hide password' : 'Show password'}
+                                    >
+                                        {showConfirm ? <EyeOffIcon /> : <EyeIcon />}
+                                    </button>
+                                </div>
                             </div>
                         </div>
+
+                        <div className="login-split__actions">
+                            <button type="submit" className="login-split__submit" disabled={loading}>
+                                {loading ? (
+                                    <>
+                                        <span className="login-split__spinner" aria-hidden="true" />
+                                        Creating...
+                                    </>
+                                ) : (
+                                    'Create account'
+                                )}
+                            </button>
+                        </div>
+                    </form>
+
+                    <div className="login-split__register">
+                        <p className="login-split__register-text">Already have an account?</p>
+                        <a href="/login" className="login-split__register-link">
+                            Sign in
+                        </a>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
     );
 }

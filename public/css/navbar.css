@@ -82,6 +82,22 @@
 }
 
 /* ----- Responsivo ----- */
+@media (max-width: 900px) {
+    .app-nav {
+        flex-wrap: wrap;
+        gap: 10px 16px;
+    }
+
+    .app-nav__right {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .app-nav__actions {
+        flex-wrap: wrap;
+    }
+}
+
 @media (max-width: 640px) {
     .app-nav {
         padding: 14px 20px;

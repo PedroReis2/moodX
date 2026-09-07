@@ -9,6 +9,8 @@ import Register from "./components/auth/Register";
 import CreativeDna from "./components/CreativeDna";
 import CreativeDnaView from "./components/CreativeDnaView";
 import Projects from "./components/Projects";
+import Classes from "./components/Classes";
+import AdminDashboard from "./components/AdminDashboard";
 
 // Página de Login (React)
 const loginRoot = document.getElementById("login-root");
@@ -57,7 +59,31 @@ const projectsRoot = document.getElementById("projects-root");
 if (projectsRoot) {
     createRoot(projectsRoot).render(
         <React.StrictMode>
-            <Projects userName={projectsRoot.dataset.userName || ""} />
+            <Projects
+                userName={projectsRoot.dataset.userName || ""}
+                isProfessor={projectsRoot.dataset.isProfessor === "1"}
+            />
+        </React.StrictMode>
+    );
+}
+
+// Página Classes (professor) — turmas e projetos dos alunos (React)
+const classesRoot = document.getElementById("classes-root");
+if (classesRoot) {
+    createRoot(classesRoot).render(
+        <React.StrictMode>
+            <Classes userName={classesRoot.dataset.userName || ""} />
+        </React.StrictMode>
+    );
+}
+// Página Admin Dashboard — gestão de alunos, formadores, roles e turmas (React)
+const adminDashboardRoot = document.getElementById("admin-dashboard-root");
+if (adminDashboardRoot) {
+    createRoot(adminDashboardRoot).render(
+        <React.StrictMode>
+            <AdminDashboard
+                userName={adminDashboardRoot.dataset.userName || ""}
+            />
         </React.StrictMode>
     );
 }
