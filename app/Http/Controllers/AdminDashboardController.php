@@ -33,10 +33,18 @@ class AdminDashboardController extends Controller
                 ->orderBy('name')
                 ->get(),
 
-            // Lista de alunos com a turma onde estão inseridos.
+            // Lista de alunos que já foram colocados numa turma.
             'alunos' => User::with('turma')
                 ->where('role_id', Role::ALUNO_ID)
+                ->whereNotNull('turma_id')
                 ->orderBy('name')
+                ->get(),
+
+            // Pessoas novas que ainda precisam de ser classificadas pelo admin.
+            'newUsers' => User::with(['turma', 'turmasComoFormador'])
+                ->where('role_id', Role::ALUNO_ID)
+                ->whereNull('turma_id')
+                ->orderBy('created_at', 'desc')
                 ->get(),
         ]);
     }
