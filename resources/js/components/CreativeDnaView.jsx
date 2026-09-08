@@ -6,7 +6,7 @@ export default function CreativeDnaView({ userName = "" }) {
     const [images, setImages] = useState([]);
     const [palette, setPalette] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [deleting, setDeleting] = useState(false);
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
         axios
@@ -30,23 +30,23 @@ export default function CreativeDnaView({ userName = "" }) {
         return result;
     }, [images]);
 
-    const handleDelete = async () => {
+    const handleUpdate = async () => {
         if (
             !window.confirm(
-                "Delete your Creative DNA? This action cannot be undone."
+                "Update your Creative DNA? This action cannot be undone."
             )
         )
             return;
-        setDeleting(true);
+        setUpdating(true);
         try {
-            await axios.delete("/creative-dna");
+            await axios.update("/creative-dna");
             window.location.href = "/creative-dna";
         } catch (err) {
             alert(
                 err.response?.data?.message ||
-                    "Unable to delete your Creative DNA."
+                    "Unable to update your Creative DNA."
             );
-            setDeleting(false);
+            setUpdating(false);
         }
     };
 
@@ -106,12 +106,12 @@ export default function CreativeDnaView({ userName = "" }) {
                             <button
                                 type="button"
                                 className="mb__btn mb__btn--danger"
-                                onClick={handleDelete}
-                                disabled={deleting}
+                                onClick={handleUpdate}
+                                disabled={updating}
                             >
-                                {deleting
-                                    ? "Deleting..."
-                                    : "Delete Creative DNA"}
+                                {updating
+                                    ? "Updating..."
+                                    : "Update Creative DNA"}
                             </button>
                         </div>
                     </>
