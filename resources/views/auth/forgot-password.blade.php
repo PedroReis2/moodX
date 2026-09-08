@@ -11,7 +11,7 @@
 </div>
 
 <div class="form-container">
-<form method="POST" action="{{ route('forgot-password.submit') }}">
+<form method="POST" action="{{ route('password.email') }}">
     @csrf
     <div class="form-floating-login mb-1">
         <input type="email" class="form-control" id="email" placeholder="Email" name="email">

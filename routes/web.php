@@ -116,16 +116,6 @@ Route::get('/change-password', function () {
     return view('profile.change-password');
 })->name('change-password');
 
-
-
-Route::post('/forgot-password', function (\Illuminate\Http\Request $request) {
-
-    // Redireciona para a página de login com mensagem
-    return redirect()->route('login')->with('message', 'Recover instructions sent to your email');
-})->name('forgot-password.submit');
-
-
-
 Route::get('/profile', function () {
     return view('profile.profile');
 })->name('profile');
@@ -134,9 +124,7 @@ Route::get('/under-construction', function () {
     return view('fallback.under-construction');
 })->name('under-construction');
 
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->name('forgot-password');
+
 
 
 // Admin (desativado — redireciona para o Creative DNA)
