@@ -95,8 +95,22 @@ Route::get('/change-password', function () {
 
 Route::post('/forgot-password', function (\Illuminate\Http\Request $request) {
 
-    // Redireciona para a página de login com mensagem
-    return redirect()->route('login')->with('message', 'Recover instructions sent to your email');
+    // Validação básica do email (os erros chegam como 422 à página React)
+    $request->validate([
+        'email' => ['required', 'email'],
+    ]);
+
+    // TODO: enviar aqui o email real de recuperação (PasswordBroker)
+    // quando a página de reset password estiver pronta.
+    $message = 'If that email is registered, a recovery link has been sent.';
+
+    // Resposta JSON — usada pela página React de forgot password
+    if ($request->expectsJson()) {
+        return response()->json(['message' => $message], 200);
+    }
+
+    // Fallback para pedidos normais (form) — redireciona para o login com mensagem
+    return redirect()->route('login')->with('message', $message);
 })->name('forgot-password.submit');
 
 
