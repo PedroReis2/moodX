@@ -37,11 +37,19 @@ export default function Navbar({
               ...(isProfessor
                   ? [{ key: "classes", label: "Classes", href: "/classes" }]
                   : []),
+              { key: 'my-moodboards', label: 'My Moodboards', href: '/my-moodboards'
+              },
           ].filter((link) => link.key !== page);
 
     return (
         <nav className="app-nav">
-            <span className="app-nav__brand">mood.x</span>
+            <span
+                className="app-nav__brand"
+                onClick={() => (window.location.href = "/gallery")}
+                style={{ cursor: "pointer" }}
+            >
+                mood.x
+            </span>
             <div className="app-nav__right">
                 {firstName && (
                     <span className="app-nav__welcome">
