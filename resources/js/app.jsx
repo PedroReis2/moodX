@@ -11,6 +11,9 @@ import CreativeDnaView from "./components/CreativeDnaView";
 import Projects from "./components/Projects";
 import Classes from "./components/Classes";
 import AdminDashboard from "./components/AdminDashboard";
+import Gallery from "./components/Gallery";
+import MoodboardSelect from "./components/MoodboardSelect";
+import MyMoodboards from "./components/MyMoodboards";
 
 // Página de Login (React)
 const loginRoot = document.getElementById("login-root");
@@ -63,6 +66,36 @@ if (projectsRoot) {
                 userName={projectsRoot.dataset.userName || ""}
                 isProfessor={projectsRoot.dataset.isProfessor === "1"}
             />
+        </React.StrictMode>
+    );
+}
+
+// Página Gallery (tipo pinterest) — moodboards públicos
+const galleryRoot = document.getElementById('gallery-root');
+if (galleryRoot) {
+    createRoot(galleryRoot).render(
+        <React.StrictMode>
+            <Gallery userName={galleryRoot.dataset.userName || ''} />
+        </React.StrictMode>
+    );
+}
+
+// para selecionar projetos de um moodboard (nova página de moodboard)
+const moodboardSelectRoot = document.getElementById('moodboard-select-root');
+if (moodboardSelectRoot) {
+    createRoot(moodboardSelectRoot).render(
+        <React.StrictMode>
+            <MoodboardSelect userName={moodboardSelectRoot.dataset.userName || ''} />
+        </React.StrictMode>
+    );
+}
+
+// Página My Moodboards
+const myMoodboardsRoot = document.getElementById('my-moodboards-root');
+if (myMoodboardsRoot) {
+    createRoot(myMoodboardsRoot).render(
+        <React.StrictMode>
+            <MyMoodboards userName={myMoodboardsRoot.dataset.userName || ''} />
         </React.StrictMode>
     );
 }
