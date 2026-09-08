@@ -6,6 +6,7 @@ use App\Http\Controllers\UtilController;
 use App\Http\Controllers\CreativeDnaController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\MoodboardController;
 
 
 // Raiz — redireciona conforme o estado do utilizador
@@ -76,6 +77,22 @@ Route::middleware('auth')->group(function () {
     Route::delete('/projects', [ProjectController::class, 'destroyAll'])->name('projects.deleteAll');
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 });
+
+// Galeria pública — página inicial depois de ter Creative DNA
+    Route::get('/gallery', [MoodboardController::class, 'gallery'])->name('gallery');
+    Route::get('/gallery-data', [MoodboardController::class, 'galleryData'])->name('gallery.data');
+
+    // Criação de moodboard
+    Route::get('/moodboard', [MoodboardController::class, 'index'])->name('moodboard.index');
+    Route::get('/moodboard-select-data', [MoodboardController::class, 'selectData'])->name('moodboard.select-data');
+    Route::post('/moodboard', [MoodboardController::class, 'store'])->name('moodboard.store');
+    Route::patch('/moodboard/{moodboard}/toggle-public', [MoodboardController::class, 'togglePublic'])->name('moodboard.toggle-public');
+    Route::post('/moodboard/{moodboard}/like', [MoodboardController::class, 'toggleLike'])->name('moodboard.like');
+    Route::delete('/moodboard/{moodboard}', [MoodboardController::class, 'destroy'])->name('moodboard.destroy');
+
+    // My Moodboards
+    Route::get('/my-moodboards', [MoodboardController::class, 'myMoodboards'])->name('my-moodboards');
+    Route::get('/my-moodboards-data', [MoodboardController::class, 'data'])->name('my-moodboards.data');
 
 // Classes (professor) — página das turmas e dos projetos dos alunos
 Route::get('/classes', function () {
