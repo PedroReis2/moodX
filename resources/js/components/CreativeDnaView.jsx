@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+import ImagePreviewModal from "./ImagePreviewModal";
 
 const MIN_FILES = 20;
 const MAX_FILES = 30;
@@ -16,6 +17,7 @@ export default function CreativeDnaView({ userName = "" }) {
     const [toast, setToast] = useState(null);
     const [dragging, setDragging] = useState(false);
     const fileInputRef = useRef(null);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const showToast = (message, type = "error") => {
         setToast({ message, type });
@@ -61,7 +63,7 @@ export default function CreativeDnaView({ userName = "" }) {
 
     const handleFiles = (fileList) => {
         const selected = Array.from(fileList || []).filter((f) =>
-            f.type.startsWith("image/")
+            f.type.startsWith("image/"),
         );
         if (selected.length === 0) return;
 
@@ -95,7 +97,7 @@ export default function CreativeDnaView({ userName = "" }) {
     const save = async () => {
         if (files.length < MIN_FILES || files.length > MAX_FILES) {
             showToast(
-                `Select between ${MIN_FILES} and ${MAX_FILES} images to update your Creative DNA.`
+                `Select between ${MIN_FILES} and ${MAX_FILES} images to update your Creative DNA.`,
             );
             return;
         }
@@ -116,7 +118,7 @@ export default function CreativeDnaView({ userName = "" }) {
                 msgs.length
                     ? msgs[0]
                     : err.response?.data?.message ||
-                          "Unable to update Creative DNA."
+                          "Unable to update Creative DNA.",
             );
         } finally {
             setSaving(false);
@@ -154,7 +156,7 @@ export default function CreativeDnaView({ userName = "" }) {
                                         className="mb__palette-swatch"
                                         style={{ backgroundColor: color.hex }}
                                         title={`${color.hex} - score ${Math.round(
-                                            color.score
+                                            color.score,
                                         )}`}
                                     />
                                 ))}
@@ -172,6 +174,9 @@ export default function CreativeDnaView({ userName = "" }) {
                                             <img
                                                 src={img.url}
                                                 alt="Creative DNA reference"
+                                                onClick={() =>
+                                                    setSelectedImage(img.url)
+                                                }
                                             />
                                         </div>
                                     ))}
@@ -324,6 +329,11 @@ export default function CreativeDnaView({ userName = "" }) {
                     </div>
                 </div>
             )}
+            <ImagePreviewModal
+                imageUrl={selectedImage}
+                alt="Creative DNA reference"
+                onClose={() => setSelectedImage(null)}
+            />
         </div>
     );
 }
