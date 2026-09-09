@@ -23,7 +23,6 @@ export default function Projects({ userName = "", isProfessor = false }) {
     const [toast, setToast] = useState(null);
     const fileInputRef = useRef(null);
 
-    // Estado para controlar o índice do carrossel em cada card
     const [carouselStates, setCarouselStates] = useState({});
 
     const showToast = (message, type = "error") => {
@@ -257,7 +256,6 @@ export default function Projects({ userName = "", isProfessor = false }) {
                     <div className="mb__grid">
                         {projects.map((project) => (
                             <article key={project.id} className="mb__card">
-                                {/* CARROSSEL NO CARD */}
                                 {project.imageUrls &&
                                 project.imageUrls.length > 0 ? (
                                     <div className="mb__card-carousel">
@@ -312,7 +310,6 @@ export default function Projects({ userName = "", isProfessor = false }) {
                                             ? "image"
                                             : "images"}
                                     </span>
-                                    {/* Mostrar os quadradinhos com as cores geradas para este projeto. */}
                                     {project.palette?.length > 0 && (
                                         <div className="mb__palette">
                                             {project.palette.map((color) => (

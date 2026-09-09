@@ -42,12 +42,7 @@ Route::get('/creative-dna', function () {
 })->name('creative-dna')->middleware('auth');
 
 Route::post('/creative-dna/upload', [CreativeDnaController::class, 'upload'])
-
     ->name('creative-dna.upload')->middleware('auth');
-
-
-    Route::delete('/creative-dna', [CreativeDnaController::class, 'destroy'])
-    ->name('creative-dna.destroy')->middleware('auth');
 
 Route::get('/creative-dna/data', [CreativeDnaController::class, 'data'])
     ->name('creative-dna.data')->middleware('auth');
@@ -59,11 +54,6 @@ Route::get('creative-dna-view', function () {
     }
     return view('profile.creative-dna-view');
 })->name('creative-dna.view')->middleware('auth');
-
-// Permite re-upload do Creative DNA mesmo que já exista um anterior.
-Route::get('/creative-dna/edit', function () {
-    return view('creative-dna');
-})->name('creative-dna.edit')->middleware('auth');
 
 // Dashboards desativados — redirecionam para o Creative DNA
 Route::redirect('/dashboard', '/creative-dna')->name('dashboard');
@@ -126,16 +116,6 @@ Route::get('/change-password', function () {
     return view('profile.change-password');
 })->name('change-password');
 
-
-
-Route::post('/forgot-password', function (\Illuminate\Http\Request $request) {
-
-    // Redireciona para a página de login com mensagem
-    return redirect()->route('login')->with('message', 'Recover instructions sent to your email');
-})->name('forgot-password.submit');
-
-
-
 Route::get('/profile', function () {
     return view('profile.profile');
 })->name('profile');
@@ -144,9 +124,7 @@ Route::get('/under-construction', function () {
     return view('fallback.under-construction');
 })->name('under-construction');
 
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->name('forgot-password');
+
 
 
 // Admin (desativado — redireciona para o Creative DNA)
