@@ -46,7 +46,7 @@
 
 .cls__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 16px;
 }
 
@@ -70,6 +70,8 @@
     justify-content: center;
     overflow: hidden;
     background: #dcdddf;
+    background-position: center;
+    background-size: cover;
 }
 
 .cls__project-monogram {
@@ -115,6 +117,53 @@
     height: 16px;
     border-radius: 4px;
     border: 1px solid rgba(28, 28, 28, 0.15);
+}
+
+.cls__empty {
+    font-size: 14px;
+    font-weight: 300;
+    color: #8a8f98;
+    margin: 0;
+}
+
+.cls__feedback {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #e4e6e9;
+}
+
+.cls__feedback-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #6f757e;
+    margin-bottom: 8px;
+}
+
+.cls__feedback-input {
+    width: 100%;
+    min-height: 104px;
+    resize: vertical;
+    border: 1px solid #d6d9de;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #1c1c1c;
+    background: #fff;
+}
+
+.cls__feedback-input:focus {
+    outline: none;
+    border-color: #1c1c1c;
+}
+
+.cls__feedback-btn {
+    width: 100%;
+    margin-top: 10px;
 }
 
 @media (max-width: 640px) {
