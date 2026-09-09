@@ -56,8 +56,11 @@ Route::get('creative-dna-view', function () {
     return view('profile.creative-dna-view');
 })->name('creative-dna.view')->middleware('auth');
 
-// Dashboards desativados — redirecionam para o Creative DNA
-Route::redirect('/dashboard', '/creative-dna')->name('dashboard');
+// Dashboard genérico.
+// Cada tipo de utilizador é enviado para a sua área certa.
+Route::get('/dashboard', function () {
+    return redirect()->route('welcome');
+})->name('dashboard')->middleware('auth');
 
 // Projects — projetos do utilizador (CRUD protegido)
 Route::middleware('auth')->group(function () {
