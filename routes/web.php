@@ -72,11 +72,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
 });
 
-// Galeria pública — página inicial depois de ter Creative DNA
+// Moodboards e galeria usam dados do utilizador logado, por isso ficam protegidos por auth.
+Route::middleware('auth')->group(function () {
+    // Galeria pública dentro da app — mostra moodboards públicos, mas precisa do user para likes.
     Route::get('/gallery', [MoodboardController::class, 'gallery'])->name('gallery');
     Route::get('/gallery-data', [MoodboardController::class, 'galleryData'])->name('gallery.data');
 
-    // Criação de moodboard
+    // Criação de moodboard.
     Route::get('/moodboard', [MoodboardController::class, 'index'])->name('moodboard.index');
     Route::get('/moodboard-select-data', [MoodboardController::class, 'selectData'])->name('moodboard.select-data');
     Route::post('/moodboard', [MoodboardController::class, 'store'])->name('moodboard.store');
@@ -84,9 +86,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/moodboard/{moodboard}/like', [MoodboardController::class, 'toggleLike'])->name('moodboard.like');
     Route::delete('/moodboard/{moodboard}', [MoodboardController::class, 'destroy'])->name('moodboard.destroy');
 
-    // My Moodboards
+    // My Moodboards.
     Route::get('/my-moodboards', [MoodboardController::class, 'myMoodboards'])->name('my-moodboards');
     Route::get('/my-moodboards-data', [MoodboardController::class, 'data'])->name('my-moodboards.data');
+});
 
 // Classes (professor) — página das turmas e dos projetos dos alunos.
 Route::middleware('auth')->group(function () {
