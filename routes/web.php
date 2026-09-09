@@ -7,6 +7,7 @@ use App\Http\Controllers\CreativeDnaController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\MoodboardController;
+use App\Http\Controllers\ClassesController;
 
 
 // Raiz — redireciona conforme o estado do utilizador
@@ -84,13 +85,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-moodboards', [MoodboardController::class, 'myMoodboards'])->name('my-moodboards');
     Route::get('/my-moodboards-data', [MoodboardController::class, 'data'])->name('my-moodboards.data');
 
-// Classes (professor) — página das turmas e dos projetos dos alunos
-Route::get('/classes', function () {
-    if (auth()->user()->role_id !== 2) {
-        return redirect()->route('projects.index');
-    }
-    return view('classes');
-})->name('classes')->middleware('auth');
+// Classes (professor) — página das turmas e dos projetos dos alunos.
+Route::middleware('auth')->group(function () {
+    Route::get('/classes', [ClassesController::class, 'index'])->name('classes');
+    Route::get('/classes/data', [ClassesController::class, 'data'])->name('classes.data');
+    Route::post('/classes/projects/{project}/feedback', [ClassesController::class, 'storeFeedback'])->name('classes.projects.feedback');
+});
 
 // user
 Route::post('/store_user', [UserController::class, "storeUser"])->name('store_user');

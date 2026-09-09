@@ -12,13 +12,14 @@ class Turma extends Model
     // Campos que podem ser preenchidos ao criar ou editar uma turma.
     protected $fillable = [
         'name',
+        'code',
         'description',
     ];
 
     // Alunos associados a esta turma.
     public function alunos()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class)->where('role_id', Role::ALUNO_ID);
     }
 
     // Formadores associados a esta turma.

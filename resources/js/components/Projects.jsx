@@ -329,6 +329,44 @@ export default function Projects({ userName = "", isProfessor = false }) {
                                             ))}
                                         </div>
                                     )}
+                                    {project.feedbacks?.length > 0 && (
+                                        <div className="mb-feedback">
+                                            <p className="mb-feedback__title">
+                                                Teacher feedback
+                                            </p>
+                                            {project.feedbacks.map(
+                                                (feedback) => (
+                                                    <div
+                                                        key={feedback.id}
+                                                        className="mb-feedback__item"
+                                                    >
+                                                        <div className="mb-feedback__meta">
+                                                            <span>
+                                                                {
+                                                                    feedback.teacherName
+                                                                }
+                                                            </span>
+                                                            {feedback.createdAt && (
+                                                                <span>
+                                                                    {
+                                                                        feedback.createdAt
+                                                                    }
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <textarea
+                                                            className="mb-feedback__box"
+                                                            value={
+                                                                feedback.content
+                                                            }
+                                                            readOnly
+                                                            rows={4}
+                                                        />
+                                                    </div>
+                                                ),
+                                            )}
+                                        </div>
+                                    )}
                                     <div className="mb__card-actions">
                                         <button
                                             type="button"

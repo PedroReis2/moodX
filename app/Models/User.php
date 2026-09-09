@@ -19,6 +19,7 @@ class User extends Authenticatable
         'password',
         'role_id',
         'turma_id',
+        'classified_at',
     ];
 
     // Campos escondidos quando o utilizador é devolvido em JSON.
@@ -32,6 +33,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'classified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }

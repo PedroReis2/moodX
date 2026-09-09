@@ -33,10 +33,22 @@ class AdminDashboardController extends Controller
                 ->orderBy('name')
                 ->get(),
 
-            // Lista de alunos com a turma onde estão inseridos.
+            // Lista de alunos que já foram classificados pelo admin.
             'alunos' => User::with('turma')
                 ->where('role_id', Role::ALUNO_ID)
+                ->where(function ($query) {
+                    $query->whereNotNull('turma_id')
+                        ->orWhereNotNull('classified_at');
+                })
                 ->orderBy('name')
+                ->get(),
+
+            // Pessoas novas que ainda precisam de ser classificadas pelo admin.
+            'newUsers' => User::with(['turma', 'turmasComoFormador'])
+                ->where('role_id', Role::ALUNO_ID)
+                ->whereNull('turma_id')
+                ->whereNull('classified_at')
+                ->orderBy('created_at', 'desc')
                 ->get(),
         ]);
     }
@@ -50,6 +62,7 @@ class AdminDashboardController extends Controller
         ]);
 
         $user->role_id = $validated['role_id'];
+        $user->classified_at = now();
 
         // Só alunos ficam diretamente ligados a uma turma.
         if ((int) $validated['role_id'] === Role::ALUNO_ID) {
