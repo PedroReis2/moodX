@@ -1,0 +1,335 @@
+================================================================================
+MODATEX — GUIA COMPLETO DO PROJETO (mood.x)
+Preparado para apresentação, perguntas e estudo do código
+================================================================================
+
+--------------------------------------------------------------------------------
+1. VISÃO GERAL DO PROJETO
+--------------------------------------------------------------------------------
+MODATEX é uma aplicação web de estúdio criativo de moda chamada "mood.x".
+Cada utilizador cria o seu "Creative DNA" (identidade criativa) carregando
+imagens de referência e depois organiza esses looks em "projetos" (moodboards).
+
+STACK (pilha tecnológica):
+- Backend:  Laravel 12 (PHP) + MySQL (banco de dados, autenticação e API)
+- Frontend: React 18 (via Vite) — páginas principais (Login, Registo, Creative DNA, Projects)
+- Autenticação: Laravel Fortify (login, registo, recuperação de password, 2FA)
+- Comunicação: Axios (JSON, com CSRF token)
+- CSS: Bootstrap + CSS custom (pasta public/css)
+
+ARQUITETURA — COMO FUNCIONA (importante para a apresentação):
+Não é uma SPA (Single Page Application) com React Router.
+Cada página é uma view Blade do Laravel que tem um <div> vazio
+(#login-root, #register-root, #creative-dna-root, #projects-root).
+O arquivo resources/js/app.jsx verifica qual div existe na página
+e monta ali o componente React correspondente.
+
+Exemplo do padrão (app.jsx):
+    const creativeDnaRoot = document.getElementById('creative-dna-root');
+    if (creativeDnaRoot) {
+        createRoot(creativeDnaRoot).render(
+            <React.StrictMode>
+                <CreativeDna userName={creativeDnaRoot.dataset.userName || ''} />
+            </React.StrictMode>
+        );
+    }
+
+O nome do utilizador é passado do Blade para o React via atributo:
+    data-user-name="{{ auth()->user()->name }}"
+Assim o React sabe quem está logado.
+
+--------------------------------------------------------------------------------
+2. FLUXO DO UTILIZADOR (rota raiz "/")
+--------------------------------------------------------------------------------
+Fluxo:
+1. Utilizador visita "/" (raiz)
+2. Está autenticado?
+   - Não  -> redireciona para /login
+   - Sim  -> já tem Creative DNA?
+       - Não -> redireciona para /creative-dna
+       - Sim -> redireciona para /projects
+
+Lógica em routes/web.php:
+    Route::get('/', function () {
+        if (!auth()->check()) return redirect('/login');
+        $hasDna = \App\Models\CreativeDna::where('user_id', auth()->id())->exists();
+        return redirect($hasDna ? '/projects' : '/creative-dna');
+    });
+
+REGRAS DE NEGÓCIO CENTRAIS:
+- O Creative DNA é ÚNICO e IMUTÁVEL por utilizador (cria-se uma vez).
+- O Creative DNA é pré-requisito para aceder aos Projects.
+- Cada projeto (moodboard) contém entre 4 e 5 imagens.
+
+--------------------------------------------------------------------------------
+3. PÁGINA POR PÁGINA
+--------------------------------------------------------------------------------
+
+=== 3.1 Login — /login ========================================================
+Arquivos:
+- resources/js/components/auth/Login.jsx
+- resources/views/auth/login.blade.php
+- resources/views/layout/fe_master_simple.blade.php
+
+O que faz:
+Formulário de entrada com email, password, "Remember me" e botão de
+mostrar/ocultar password (ícone de olho).
+
+Como funciona:
+- Usa Axios para fazer POST /login (rota do Fortify) com { email, password, remember }.
+- Após login, redireciona para "/" — que decide o destino (Projects ou Creative DNA).
+- Erros de validação do backend são exibidos numa caixa vermelha.
+
+Detalhe de design:
+Layout "split" — metade com a marca (slogan "Where ideas become design.")
+e metade com o formulário.
+
+=== 3.2 Registo — /register ===================================================
+Arquivos:
+- resources/js/components/auth/Register.jsx
+- resources/views/auth/register.blade.php
+- resources/views/layout/fe_master.blade.php
+
+O que faz:
+Cria uma conta com nome, apelido, username, email, password (e confirmação)
++ foto de perfil opcional com preview imediato (FileReader).
+
+Como funciona:
+- Envia POST /store_user (multipart/form-data) com a foto.
+- O backend (UserController::storeUser) valida, cria o User com role_id = 3
+  (formando) e cria o Profile associado.
+- A password é guardada com Hash (Hash::make).
+
+Particularidade interessante:
+- O backend responde com redirect para /dashboard (rota protegida).
+- Como o utilizador ainda não está autenticado via XHR, recebe 401.
+- O código trata esse 401 como "conta criada com sucesso" e manda para /login.
+- Vale mencionar isto se te perguntarem como o registo funciona.
+
+=== 3.3 Creative DNA — /creative-dna =========================================
+Arquivos:
+- resources/js/components/CreativeDna.jsx
+- resources/views/creative-dna.blade.php
+- CSS: public/css/creative-dna.css + public/css/navbar.css
+
+O que faz:
+A página central do conceito. O utilizador carrega ENTRE 20 E 30 IMAGENS
+que representam a sua identidade criativa como designer.
+
+Funcionalidades:
+- Drag & drop + clique para selecionar (estado "dragging" que acende a borda).
+- Preview das imagens selecionadas com botão de remover individual.
+- Contador "X / 20–30 images selected" e aviso se faltam imagens.
+- Botão "Upload images" desabilitado até ter o mínimo.
+
+Como funciona o upload:
+- POST /creative-dna/upload -> CreativeDnaController::upload
+- Valida (min:20 max:30, imagem até 5MB), apaga as anteriores (re-upload)
+- Guarda cada imagem em storage/app/public/creative-dna/{userId}/
+- Cria um registo na tabela creative_dna_files
+
+Importante:
+"Once created, your Creative DNA cannot be edited."
+Após o upload bem-sucedido, redireciona para /projects.
+
+Navbar:
+Usa o componente partilhado Navbar.jsx (preta, com "mood.x" e
+"Welcome, {firstName}" + botão Logout).
+
+=== 3.4 Projects — /projects ==================================================
+Arquivos:
+- resources/js/components/Projects.jsx
+- resources/views/projects.blade.php
+- CSS: public/css/projects.css + public/css/navbar.css
+
+O que faz:
+O CRUD completo dos projetos (moodboards) do utilizador:
+Create, Read, Update, Delete, Delete All.
+
+Acesso:
+Só é acessível se o utilizador já tiver Creative DNA
+(verificado no ProjectController::index).
+
+Funcionalidades:
+- Grelha de cards com a capa (primeira imagem), título e contagem de imagens.
+- Modal "New project / Edit project" com título + entre 4 e 5 imagens
+  (drag & drop ou clique).
+- Edit: mostra as imagens existentes e permite substituir/remover;
+  envia existing[] (imagens que ficam) + files[] (novas).
+- Delete individual com confirmação (window.confirm).
+- Delete all com modal de confirmação (só aparece com 2+ projetos).
+
+Backend (ProjectController):
+- data       -> devolve projetos em JSON (com URLs de imagem)
+- store      -> cria projeto
+- update     -> valida que as "existing" pertencem ao projeto e apaga
+                as imagens removidas do disco
+- destroy / destroyAll -> apaga projetos e ficheiros do disco
+- Segurança: authorizeOwner() garante que só o dono mexe no projeto (senão 403)
+
+Armazenamento:
+- Imagens em storage/app/public/projects/{userId}/
+- Coluna images é um JSON array (cast "array" no modelo Project)
+
+=== 3.5 Perfil — /profile =====================================================
+Arquivos:
+- resources/views/profile/profile.blade.php (view Blade pura, NÃO React)
+- UserController::updateProfile
+
+O que faz:
+Mostra e edita o perfil: foto, email e data de nascimento.
+
+Detalhes:
+- Nome, apelido e username são read-only (só mostrados).
+- O utilizador pode:
+  * Trocar a foto de perfil (preview imediato via JS)
+  * Alterar o email
+  * Definir data de nascimento
+  * Link para "Change password"
+
+Backend:
+updateProfile valida email único, faz upload da foto para profile-pics/
+e atualiza as tabelas users + profiles.
+
+=== 3.6 Mudar Password — /change-password =====================================
+Arquivos:
+- resources/views/profile/change-password.blade.php
+- UserController::changePassword
+
+O que faz:
+Formulário com 3 campos: password atual, nova e confirmação.
+
+Regras:
+- Verifica se a atual está correta (Hash::check)
+- A nova deve ter min 6 caracteres e ser confirmada
+- Em erro, mostra "Current password is incorrect"
+
+=== 3.7 Recuperar Password — /forgot-password =================================
+Arquivos:
+- resources/views/auth/forgot-password.blade.php
+
+O que faz:
+Formulário de email que, ao enviar, apenas redireciona para o login com a
+mensagem "Recover instructions sent to your email".
+É um PLACEHOLDER/SIMULAÇÃO (não envia email real ainda).
+Bom ponto a mencionar se perguntarem sobre o que falta implementar.
+
+=== 3.8 Página 404 — Fallback =================================================
+Arquivos:
+- resources/views/fallback/fallback.blade.php
+- UtilController::fallback
+
+O que faz:
+Qualquer rota inexistente cai aqui (Route::fallback).
+Página criativa: "404 PAGE NOT FOUND — Looks like you've lost the thread!"
+com botão "GO BACK" (vai para o dashboard).
+
+=== 3.9 Em Construção — /under-construction ===================================
+Arquivos:
+- resources/views/fallback/under-construction.blade.php
+
+O que faz:
+Página placeholder: "We're stitching the details — STAY TUNED".
+Usada para páginas futuras.
+
+--------------------------------------------------------------------------------
+4. AUTENTICAÇÃO (Fortify)
+--------------------------------------------------------------------------------
+- Login/Registo/Password/2FA são geridos pelo Laravel Fortify
+  (FortifyServiceProvider).
+- Rate limiting: máx. 5 tentativas de login por minuto por utilizador/IP
+  (anti brute-force).
+- LoginResponse customizado: depois do login, redireciona para "/"
+  (para o fluxo decidir o destino).
+- Roles: admin (tudo), formador (ler/comentar), user (criar/ler/editar/comentar)
+  — tabela "roles".
+
+UTILIZADORES DE TESTE (do seeder — úteis para demo):
+  Email                | Password    | Papel
+  ---------------------|-------------|---------
+  admin@email.com      | admin       | admin
+  formador@email.com   | formador    | formador
+  formador2@email.com  | formador    | formador
+  user@email.com       | user        | user
+  user1@email.com      | user        | user
+  user2@email.com      | user        | user
+  user3@email.com      | user        | user
+
+--------------------------------------------------------------------------------
+5. SERVIÇO DE IA (em preparação)
+--------------------------------------------------------------------------------
+Existe app/Services/AIService.php com métodos para:
+- sendMessage()  -> envia texto para a API da OpenAI (chat)
+- generateImage()-> gera imagens (modelo gpt-image-1)
+
+MAS ainda NÃO está ligado a nenhuma página.
+Há um "mock" comentado no código:
+    // return "Resposta de teste sem chamar a API";
+
+A ideia futura é que o Creative DNA + projetos alimentem a geração de
+resultados com IA.
+
+Se te perguntarem "onde está a IA?" -> está preparada no backend,
+mas o frontend ainda não a usa.
+
+--------------------------------------------------------------------------------
+6. PERGUNTAS PROVÁVEIS NA APRESENTAÇÃO (E RESPOSTAS)
+--------------------------------------------------------------------------------
+
+P1. "Por que misturam React com Blade?"
+R: Usamos Blade como "esqueleto" das páginas e React para as partes
+   interativas (formulários, upload, drag & drop, CRUD). Cada página monta
+   o seu componente React, evitando a complexidade de uma SPA completa.
+
+P2. "Como funciona o upload de imagens?"
+R: O React envia os ficheiros via FormData + Axios para um controller
+   Laravel, que valida (quantidade/tamanho), guarda em storage/app/public
+   e cria registos na base de dados. As URLs ficam acessíveis via
+   asset('storage/...').
+
+P3. "Como é a segurança?"
+R: Passwords com hash (bcrypt), CSRF token em todos os POSTs, validação
+   no backend, rate limiting no login, e verificação de dono
+   (authorizeOwner) para impedir que um utilizador altere projetos de outro.
+
+P4. "Qual é a regra de negócio principal?"
+R: O Creative DNA é único por utilizador: 20-30 imagens, criado uma vez,
+   define a identidade criativa, e é pré-requisito para aceder aos Projects.
+
+P5. "O que falta fazer?"
+R: Ligar o AIService à interface (gerar resultados com IA a partir das
+   imagens), recuperação de password real (com email), e possivelmente a
+   dashboard admin.
+
+--------------------------------------------------------------------------------
+7. ESTRUTURA DE ARQUIVOS IMPORTANTE (mapa rápido)
+--------------------------------------------------------------------------------
+
+Rotas:                  routes/web.php
+Controllers:            app/Http/Controllers/
+   - UserController.php (registo, perfil, mudar password, admin users)
+   - CreativeDnaController.php (upload do creative dna)
+   - ProjectController.php (CRUD de projetos)
+   - UtilController.php (fallback/404)
+Models:                 app/Models/ (User, Profile, Role, CreativeDna, Project)
+Serviço IA:             app/Services/AIService.php
+Autenticação:           app/Providers/FortifyServiceProvider.php
+Componentes React:      resources/js/components/
+   - auth/Login.jsx, auth/Register.jsx
+   - CreativeDna.jsx, Projects.jsx
+   - Navbar.jsx (navbar partilhada)
+Ponto de entrada React: resources/js/app.jsx
+Views Blade:            resources/views/
+   - auth/ (login, register, forgot-password, reset-password, ...)
+   - profile/ (profile, change-password)
+   - fallback/ (fallback, under-construction)
+   - creative-dna.blade.php, projects.blade.php
+   - layout/ (fe_master, fe_master_simple)
+CSS:                    public/css/ (login-minimal, creative-dna, projects, navbar, ...)
+Migrations/Seeders:     database/migrations/ + database/seeders/
+Comandos:               npm run build | npm run dev
+                        php artisan serve --port=8000
+
+--------------------------------------------------------------------------------
+FIM DO GUIA
+--------------------------------------------------------------------------------

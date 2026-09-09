@@ -6,6 +6,8 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import ForgotPassword from "./components/auth/ForgotPassword";
+import ResetPassword from "./components/auth/ResetPassword";
 import CreativeDna from "./components/CreativeDna";
 import CreativeDnaView from "./components/CreativeDnaView";
 import Projects from "./components/Projects";
@@ -31,6 +33,29 @@ if (registerRoot) {
     createRoot(registerRoot).render(
         <React.StrictMode>
             <Register />
+        </React.StrictMode>
+    );
+}
+
+// Página "Forgot Password" — recuperação de senha (React)
+const forgotPasswordRoot = document.getElementById("forgot-password-root");
+if (forgotPasswordRoot) {
+    createRoot(forgotPasswordRoot).render(
+        <React.StrictMode>
+            <ForgotPassword />
+        </React.StrictMode>
+    );
+}
+
+// Página "Reset Password" — definir nova senha via token (React)
+const resetPasswordRoot = document.getElementById("reset-password-root");
+if (resetPasswordRoot) {
+    createRoot(resetPasswordRoot).render(
+        <React.StrictMode>
+            <ResetPassword
+                token={resetPasswordRoot.dataset.token || ""}
+                email={resetPasswordRoot.dataset.email || ""}
+            />
         </React.StrictMode>
     );
 }
