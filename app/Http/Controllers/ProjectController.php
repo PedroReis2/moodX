@@ -34,6 +34,7 @@ class ProjectController extends Controller
         $user = $request->user();
 
         $projects = Project::where('user_id', $user->id)
+            ->with('feedbacks.formador')
             ->orderByDesc('id')
             ->get()
             ->map(fn(Project $project) => $this->serialize($project));
@@ -212,6 +213,8 @@ class ProjectController extends Controller
 
     private function serialize(Project $project): array
     {
+        $project->loadMissing('feedbacks.formador');
+
         $paths = $project->images ?? [];
 
         return [
@@ -223,6 +226,12 @@ class ProjectController extends Controller
             'createdAt' => optional($project->created_at)->toDateString(),
             'imageColors' => $project->image_colors ?? [],
             'palette' => $project->palette ?? [],
+            'feedbacks' => $project->feedbacks->map(fn($feedback) => [
+                'id' => $feedback->id,
+                'content' => $feedback->content,
+                'teacherName' => $feedback->formador->name ?? 'Teacher',
+                'createdAt' => optional($feedback->created_at)->toDateString(),
+            ])->values()->all(),
         ];
     }
 }
