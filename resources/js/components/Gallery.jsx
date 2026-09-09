@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+import ImagePreviewModal from "./ImagePreviewModal";
 
-function MoodboardCollage({ images }) {
+function MoodboardCollage({ images, onImageClick }) {
     const rows = useMemo(() => {
         const n = images.length;
         if (n === 0) return [];
@@ -19,8 +20,15 @@ function MoodboardCollage({ images }) {
             {rows.map((row, rowIndex) => (
                 <div key={rowIndex} className="mb__collage-row">
                     {row.map((url, i) => (
-                        <div key={`${rowIndex}-${i}`} className="mb__collage-item">
-                            <img src={url} alt="Moodboard reference" />
+                        <div
+                            key={`${rowIndex}-${i}`}
+                            className="mb__collage-item"
+                        >
+                            <img
+                                src={url}
+                                alt="Moodboard reference"
+                                onClick={() => onImageClick(url)}
+                            />
                         </div>
                     ))}
                 </div>
@@ -32,6 +40,7 @@ function MoodboardCollage({ images }) {
 export default function Gallery({ userName = "" }) {
     const [moodboards, setMoodboards] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
         axios
@@ -42,13 +51,19 @@ export default function Gallery({ userName = "" }) {
 
     const toggleLike = async (moodboard) => {
         try {
-            const { data } = await axios.post(`/moodboard/${moodboard.id}/like`);
+            const { data } = await axios.post(
+                `/moodboard/${moodboard.id}/like`,
+            );
             setMoodboards((prev) =>
                 prev.map((m) =>
                     m.id === moodboard.id
-                        ? { ...m, likedByUser: data.liked, likesCount: data.likesCount }
-                        : m
-                )
+                        ? {
+                              ...m,
+                              likedByUser: data.liked,
+                              likesCount: data.likesCount,
+                          }
+                        : m,
+                ),
             );
         } catch {
             // silencioso
@@ -78,7 +93,10 @@ export default function Gallery({ userName = "" }) {
                     </div>
                 ) : (
                     moodboards.map((moodboard) => (
-                        <section key={moodboard.id} style={{ marginBottom: 56 }}>
+                        <section
+                            key={moodboard.id}
+                            style={{ marginBottom: 56 }}
+                        >
                             <div
                                 style={{
                                     display: "flex",
@@ -88,7 +106,10 @@ export default function Gallery({ userName = "" }) {
                                 }}
                             >
                                 <div>
-                                    <h2 className="mb__card-title" style={{ fontSize: 22 }}>
+                                    <h2
+                                        className="mb__card-title"
+                                        style={{ fontSize: 22 }}
+                                    >
                                         {moodboard.title}
                                     </h2>
                                     <span className="mb__card-count">
@@ -100,7 +121,8 @@ export default function Gallery({ userName = "" }) {
                                     className="mb__link"
                                     onClick={() => toggleLike(moodboard)}
                                 >
-                                    {moodboard.likedByUser ? "♥" : "♡"} {moodboard.likesCount}
+                                    {moodboard.likedByUser ? "♥" : "♡"}{" "}
+                                    {moodboard.likesCount}
                                 </button>
                             </div>
 
@@ -124,18 +146,28 @@ export default function Gallery({ userName = "" }) {
                                         <span
                                             key={`${color.hex}-${i}`}
                                             className="mb__palette-swatch"
-                                            style={{ backgroundColor: color.hex }}
+                                            style={{
+                                                backgroundColor: color.hex,
+                                            }}
                                             title={`${color.hex} (${color.source})`}
                                         />
                                     ))}
                                 </div>
                             )}
 
-                            <MoodboardCollage images={moodboard.images} />
+                            <MoodboardCollage
+                                images={moodboard.images}
+                                onImageClick={setSelectedImage}
+                            />
                         </section>
                     ))
                 )}
             </main>
+            <ImagePreviewModal
+                imageUrl={selectedImage}
+                alt="Moodboard reference"
+                onClose={() => setSelectedImage(null)}
+            />
         </div>
     );
 }
