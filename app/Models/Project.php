@@ -28,6 +28,12 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
+    // Feedbacks escritos pelos professores neste projeto.
+    public function feedbacks()
+    {
+        return $this->morphMany(Feedback::class, 'feedbackable')->latest();
+    }
+
     /**
      * Capa do projeto — a primeira imagem carregada.
      */
