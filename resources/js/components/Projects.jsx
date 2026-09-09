@@ -3,6 +3,7 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import { Carousel } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ImagePreviewModal from "./ImagePreviewModal";
 
 const MIN_IMAGES = 4;
 const MAX_IMAGES = 5;
@@ -11,6 +12,7 @@ export default function Projects({ userName = "", isProfessor = false }) {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState(null);
@@ -36,7 +38,7 @@ export default function Projects({ userName = "", isProfessor = false }) {
             setProjects(data.projects);
         } catch (err) {
             showToast(
-                err.response?.data?.message || "Unable to load your projects."
+                err.response?.data?.message || "Unable to load your projects.",
             );
         } finally {
             setLoading(false);
@@ -63,7 +65,7 @@ export default function Projects({ userName = "", isProfessor = false }) {
                 type: "existing",
                 path: project.images[i],
                 url,
-            }))
+            })),
         );
         setModalOpen(true);
     };
@@ -75,7 +77,7 @@ export default function Projects({ userName = "", isProfessor = false }) {
 
     const handleFiles = (fileList) => {
         const files = Array.from(fileList || []).filter((f) =>
-            f.type.startsWith("image/")
+            f.type.startsWith("image/"),
         );
         if (files.length === 0) return;
 
@@ -83,7 +85,7 @@ export default function Projects({ userName = "", isProfessor = false }) {
             const room = MAX_IMAGES - prev.length;
             if (files.length > room) {
                 showToast(
-                    `A project can contain a maximum of ${MAX_IMAGES} images.`
+                    `A project can contain a maximum of ${MAX_IMAGES} images.`,
                 );
             }
             const kept = files.slice(0, Math.max(room, 0));
@@ -125,7 +127,7 @@ export default function Projects({ userName = "", isProfessor = false }) {
         }
         if (images.length < MIN_IMAGES || images.length > MAX_IMAGES) {
             showToast(
-                `A project must contain between ${MIN_IMAGES} and ${MAX_IMAGES} images.`
+                `A project must contain between ${MIN_IMAGES} and ${MAX_IMAGES} images.`,
             );
             return;
         }
@@ -144,10 +146,10 @@ export default function Projects({ userName = "", isProfessor = false }) {
             if (editing) {
                 const { data: res } = await axios.put(
                     `/projects/${editing.id}`,
-                    data
+                    data,
                 );
                 setProjects((prev) =>
-                    prev.map((p) => (p.id === editing.id ? res.project : p))
+                    prev.map((p) => (p.id === editing.id ? res.project : p)),
                 );
                 showToast("Project updated.", "success");
             } else {
@@ -166,7 +168,7 @@ export default function Projects({ userName = "", isProfessor = false }) {
                 msgs.length
                     ? msgs[0]
                     : err.response?.data?.message ||
-                          "Unable to save the project."
+                          "Unable to save the project.",
             );
         } finally {
             setSaving(false);
@@ -185,7 +187,7 @@ export default function Projects({ userName = "", isProfessor = false }) {
                 return;
             }
             showToast(
-                err.response?.data?.message || "Unable to delete the project."
+                err.response?.data?.message || "Unable to delete the project.",
             );
         }
     };
@@ -199,7 +201,8 @@ export default function Projects({ userName = "", isProfessor = false }) {
             showToast("All projects deleted.", "success");
         } catch (err) {
             showToast(
-                err.response?.data?.message || "Unable to delete your projects."
+                err.response?.data?.message ||
+                    "Unable to delete your projects.",
             );
         } finally {
             setDeletingAll(false);
@@ -266,7 +269,7 @@ export default function Projects({ userName = "", isProfessor = false }) {
                                             onSelect={(index) =>
                                                 handleCarouselSelect(
                                                     project.id,
-                                                    index
+                                                    index,
                                                 )
                                             }
                                             interval={2000}
@@ -284,6 +287,11 @@ export default function Projects({ userName = "", isProfessor = false }) {
                                                             alt={`${
                                                                 project.title
                                                             } - ${idx + 1}`}
+                                                            onClick={() =>
+                                                                setSelectedImage(
+                                                                    url,
+                                                                )
+                                                            }
                                                             style={{
                                                                 height: "250px",
                                                                 objectFit:
@@ -292,7 +300,7 @@ export default function Projects({ userName = "", isProfessor = false }) {
                                                             }}
                                                         />
                                                     </Carousel.Item>
-                                                )
+                                                ),
                                             )}
                                         </Carousel>
                                     </div>
@@ -323,7 +331,7 @@ export default function Projects({ userName = "", isProfessor = false }) {
                                                     title={`${
                                                         color.hex
                                                     } - score ${Math.round(
-                                                        color.score
+                                                        color.score,
                                                     )}`}
                                                 />
                                             ))}
@@ -528,8 +536,8 @@ export default function Projects({ userName = "", isProfessor = false }) {
                                 {saving
                                     ? "Saving..."
                                     : editing
-                                    ? "Save changes"
-                                    : "Create project"}
+                                      ? "Save changes"
+                                      : "Create project"}
                             </button>
                         </div>
                     </div>
@@ -574,6 +582,11 @@ export default function Projects({ userName = "", isProfessor = false }) {
                     </div>
                 </div>
             )}
+            <ImagePreviewModal
+                imageUrl={selectedImage}
+                alt="Project reference"
+                onClose={() => setSelectedImage(null)}
+            />
         </div>
     );
 }
