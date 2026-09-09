@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+import ImagePreviewModal from "./ImagePreviewModal";
 
-function MoodboardCollage({ images }) {
+function MoodboardCollage({ images, onImageClick }) {
     const rows = useMemo(() => {
         const n = images.length;
         if (n === 0) return [];
@@ -19,8 +20,15 @@ function MoodboardCollage({ images }) {
             {rows.map((row, rowIndex) => (
                 <div key={rowIndex} className="mb__collage-row">
                     {row.map((url, i) => (
-                        <div key={`${rowIndex}-${i}`} className="mb__collage-item">
-                            <img src={url} alt="Moodboard reference" />
+                        <div
+                            key={`${rowIndex}-${i}`}
+                            className="mb__collage-item"
+                        >
+                            <img
+                                src={url}
+                                alt="Moodboard reference"
+                                onClick={() => onImageClick(url)}
+                            />
                         </div>
                     ))}
                 </div>
@@ -32,6 +40,7 @@ function MoodboardCollage({ images }) {
 export default function MyMoodboards({ userName = "" }) {
     const [moodboards, setMoodboards] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
         axios
@@ -41,7 +50,8 @@ export default function MyMoodboards({ userName = "" }) {
     }, []);
 
     const remove = async (moodboard) => {
-        if (!window.confirm(`Delete the moodboard "${moodboard.title}"?`)) return;
+        if (!window.confirm(`Delete the moodboard "${moodboard.title}"?`))
+            return;
         try {
             await axios.delete(`/moodboard/${moodboard.id}`);
             setMoodboards((prev) => prev.filter((m) => m.id !== moodboard.id));
@@ -52,9 +62,11 @@ export default function MyMoodboards({ userName = "" }) {
 
     const togglePublic = async (moodboard) => {
         try {
-            const { data } = await axios.patch(`/moodboard/${moodboard.id}/toggle-public`);
+            const { data } = await axios.patch(
+                `/moodboard/${moodboard.id}/toggle-public`,
+            );
             setMoodboards((prev) =>
-                prev.map((m) => (m.id === moodboard.id ? data.moodboard : m))
+                prev.map((m) => (m.id === moodboard.id ? data.moodboard : m)),
             );
         } catch {
             // silencioso
@@ -92,7 +104,10 @@ export default function MyMoodboards({ userName = "" }) {
                     </div>
                 ) : (
                     moodboards.map((moodboard) => (
-                        <section key={moodboard.id} style={{ marginBottom: 56 }}>
+                        <section
+                            key={moodboard.id}
+                            style={{ marginBottom: 56 }}
+                        >
                             <div
                                 style={{
                                     display: "flex",
@@ -101,10 +116,19 @@ export default function MyMoodboards({ userName = "" }) {
                                     marginBottom: 16,
                                 }}
                             >
-                                <h2 className="mb__card-title" style={{ fontSize: 22 }}>
+                                <h2
+                                    className="mb__card-title"
+                                    style={{ fontSize: 22 }}
+                                >
                                     {moodboard.title}
                                 </h2>
-                                <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        gap: 16,
+                                        alignItems: "center",
+                                    }}
+                                >
                                     <span className="mb__card-count">
                                         ♥ {moodboard.likesCount}
                                     </span>
@@ -113,7 +137,9 @@ export default function MyMoodboards({ userName = "" }) {
                                         className="mb__link"
                                         onClick={() => togglePublic(moodboard)}
                                     >
-                                        {moodboard.isPublic ? "Make Private" : "Make Public"}
+                                        {moodboard.isPublic
+                                            ? "Make Private"
+                                            : "Make Public"}
                                     </button>
                                     <button
                                         type="button"
@@ -149,18 +175,28 @@ export default function MyMoodboards({ userName = "" }) {
                                         <span
                                             key={`${color.hex}-${i}`}
                                             className="mb__palette-swatch"
-                                            style={{ backgroundColor: color.hex }}
+                                            style={{
+                                                backgroundColor: color.hex,
+                                            }}
                                             title={`${color.hex} (${color.source})`}
                                         />
                                     ))}
                                 </div>
                             )}
 
-                            <MoodboardCollage images={moodboard.images} />
+                            <MoodboardCollage
+                                images={moodboard.images}
+                                onImageClick={setSelectedImage}
+                            />
                         </section>
                     ))
                 )}
             </main>
+            <ImagePreviewModal
+                imageUrl={selectedImage}
+                alt="Moodboard reference"
+                onClose={() => setSelectedImage(null)}
+            />
         </div>
     );
 }

@@ -37,7 +37,10 @@ export default function Navbar({
               ...(isProfessor
                   ? [{ key: "classes", label: "Classes", href: "/classes" }]
                   : []),
-              { key: 'my-moodboards', label: 'My Moodboards', href: '/my-moodboards'
+              {
+                  key: "my-moodboards",
+                  label: "My Moodboards",
+                  href: "/my-moodboards",
               },
           ].filter((link) => link.key !== page);
 
@@ -45,8 +48,14 @@ export default function Navbar({
         <nav className="app-nav">
             <span
                 className="app-nav__brand"
-                onClick={() => (window.location.href = "/gallery")}
-                style={{ cursor: "pointer" }}
+                // Se for navbar do admin, o logo não leva para a Gallery.
+                // O admin deve ficar apenas no dashboard admin.
+                onClick={
+                    logoutOnly
+                        ? undefined
+                        : () => (window.location.href = "/gallery")
+                }
+                style={{ cursor: logoutOnly ? "default" : "pointer" }}
             >
                 mood.x
             </span>
