@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+import ImagePreviewModal from "./ImagePreviewModal";
 
-function MoodboardCollage({ images }) {
+function MoodboardCollage({ images, onImageClick }) {
     const rows = useMemo(() => {
         const n = images.length;
         if (n === 0) return [];
@@ -20,7 +21,7 @@ function MoodboardCollage({ images }) {
                 <div key={rowIndex} className="mb__collage-row">
                     {row.map((url, i) => (
                         <div key={`${rowIndex}-${i}`} className="mb__collage-item">
-                            <img src={url} alt="Moodboard reference" />
+                            <img src={url} alt="Moodboard reference" onClick={() => onImageClick(url)} />
                         </div>
                     ))}
                 </div>
@@ -32,6 +33,7 @@ function MoodboardCollage({ images }) {
 export default function MyMoodboards({ userName = "" }) {
     const [moodboards, setMoodboards] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
         axios
@@ -156,11 +158,19 @@ export default function MyMoodboards({ userName = "" }) {
                                 </div>
                             )}
 
-                            <MoodboardCollage images={moodboard.images} />
+                            <MoodboardCollage
+    images={moodboard.images}
+    onImageClick={setSelectedImage}
+/>
                         </section>
                     ))
                 )}
             </main>
+            <ImagePreviewModal
+    imageUrl={selectedImage}
+    alt="Moodboard reference"
+    onClose={() => setSelectedImage(null)}
+/>
         </div>
     );
 }
