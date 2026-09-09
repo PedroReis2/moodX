@@ -115,6 +115,11 @@ export default function AdminDashboard({ userName }) {
         return ["user", "student", "aluno"].includes(selectedRoleName(roleId));
     }
 
+    // Mostra a turma com o código oficial para o admin não se enganar na escolha.
+    function turmaLabel(turma) {
+        return turma.code ? `${turma.name} - ${turma.code}` : turma.name;
+    }
+
     // Atualiza temporariamente os dados de uma pessoa nova.
     function updateNewUserDraft(userId, field, value) {
         setNewUserDrafts((currentDrafts) => ({
@@ -403,7 +408,7 @@ export default function AdminDashboard({ userName }) {
                                                             key={turma.id}
                                                             value={turma.id}
                                                         >
-                                                            {turma.name}
+                                                            {turmaLabel(turma)}
                                                         </option>
                                                     ))}
                                                 </select>
@@ -451,7 +456,7 @@ export default function AdminDashboard({ userName }) {
                                                                     }
                                                                 />
                                                                 <span>
-                                                                    {turma.name}
+                                                                    {turmaLabel(turma)}
                                                                 </span>
                                                             </label>
                                                         ))
@@ -556,7 +561,7 @@ export default function AdminDashboard({ userName }) {
                                                             key={turma.id}
                                                             value={turma.id}
                                                         >
-                                                            {turma.name}
+                                                            {turmaLabel(turma)}
                                                         </option>
                                                     ))}
                                                 </select>
@@ -603,7 +608,7 @@ export default function AdminDashboard({ userName }) {
                                                                     }
                                                                 />
                                                                 <span>
-                                                                    {turma.name}
+                                                                    {turmaLabel(turma)}
                                                                 </span>
                                                             </label>
                                                         ))
@@ -749,7 +754,7 @@ export default function AdminDashboard({ userName }) {
                                                                         }
                                                                     >
                                                                         {
-                                                                            turma.name
+                                                                            turmaLabel(turma)
                                                                         }
                                                                     </option>
                                                                 ),
@@ -798,7 +803,7 @@ export default function AdminDashboard({ userName }) {
                                                                             />
                                                                             <span>
                                                                                 {
-                                                                                    turma.name
+                                                                                    turmaLabel(turma)
                                                                                 }
                                                                             </span>
                                                                         </label>
