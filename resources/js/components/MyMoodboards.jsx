@@ -37,7 +37,7 @@ function MoodboardCollage({ images, onImageClick }) {
     );
 }
 
-export default function MyMoodboards({ userName = "" }) {
+export default function MyMoodboards({ userName = "", isProfessor = false }) {
     const [moodboards, setMoodboards] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -75,7 +75,11 @@ export default function MyMoodboards({ userName = "" }) {
 
     return (
         <div className="mb">
-            <Navbar userName={userName} page="my-moodboards" />
+            <Navbar
+                userName={userName}
+                page="my-moodboards"
+                isProfessor={isProfessor}
+            />
 
             <main className="mb__main">
                 <header className="mb__header">

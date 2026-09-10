@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 const MIN_FILES = 20;
 const MAX_FILES = 30;
 
-export default function CreativeDna({ userName = "" }) {
+export default function CreativeDna({ userName = "", isProfessor = false }) {
     const [files, setFiles] = useState([]); // [{ file, url }]
     const [uploading, setUploading] = useState(false);
     const [uploaded, setUploaded] = useState(false); // só liberta "My Projects" após upload
@@ -92,6 +92,7 @@ export default function CreativeDna({ userName = "" }) {
                 userName={userName}
                 page="creative-dna"
                 projectsDisabled={!uploaded}
+                isProfessor={isProfessor}
             />
 
             <main className="cdna__main">

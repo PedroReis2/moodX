@@ -13,6 +13,10 @@
     @vite(['resources/js/app.jsx'])
 </head>
 <body>
-    <div id="gallery-root" data-user-name="{{ auth()->user()->name }}"></div>
+    <div
+        id="gallery-root"
+        data-user-name="{{ auth()->user()->name }}"
+        data-is-professor="{{ auth()->user()->role_id === 2 ? '1' : '0' }}"
+    ></div>
 </body>
 </html>
