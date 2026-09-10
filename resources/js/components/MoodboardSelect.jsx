@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 const MIN_PROJECTS = 1; // minimo de 1 projeto por moodboard
 const MAX_PROJECTS = 5; // maximo de 5 projetos por moodboard
 
-export default function MoodboardSelect({ userName = "" }) {
+export default function MoodboardSelect({ userName = "", isProfessor = false }) {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selected, setSelected] = useState([]);
@@ -76,7 +76,11 @@ export default function MoodboardSelect({ userName = "" }) {
                 <div className={`mb-toast mb-toast--${toast.type}`}>{toast.message}</div>
             )}
 
-            <Navbar userName={userName} page="moodboard" />
+            <Navbar
+                userName={userName}
+                page="moodboard"
+                isProfessor={isProfessor}
+            />
 
             <main className="mb__main">
                 <header className="mb__header">

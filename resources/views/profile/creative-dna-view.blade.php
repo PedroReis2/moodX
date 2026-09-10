@@ -16,7 +16,11 @@
 </head>
 
 <body>
-    <div id="creative-dna-view" data-user-name="{{ auth()->user()->name }}"></div>
+    <div
+        id="creative-dna-view"
+        data-user-name="{{ auth()->user()->name }}"
+        data-is-professor="{{ auth()->user()->role_id === 2 ? '1' : '0' }}"
+    ></div>
 </body>
 
 </html>
