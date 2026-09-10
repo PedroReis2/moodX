@@ -29,7 +29,7 @@ Route::get('/', function () {
     // Se for aluno, segue o fluxo normal do Creative DNA / Projects.
     $hasDna = \App\Models\CreativeDna::where('user_id', auth()->id())->exists();
 
-    return redirect($hasDna ? '/projects' : '/creative-dna');
+    return redirect($hasDna ? '/gallery' : '/creative-dna');
 })->name('welcome');
 
 Route::fallback([UtilController::class, "fallback"]);
