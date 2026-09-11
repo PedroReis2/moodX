@@ -6,7 +6,7 @@ import ImagePreviewModal from "./ImagePreviewModal";
 const MIN_FILES = 20;
 const MAX_FILES = 30;
 
-export default function CreativeDnaView({ userName = "" }) {
+export default function CreativeDnaView({ userName = "", isProfessor = false }) {
     const [images, setImages] = useState([]);
     const [palette, setPalette] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -133,7 +133,11 @@ export default function CreativeDnaView({ userName = "" }) {
                 </div>
             )}
 
-            <Navbar userName={userName} page="creative-dna" />
+            <Navbar
+                userName={userName}
+                page="creative-dna"
+                isProfessor={isProfessor}
+            />
 
             <main className="mb__main">
                 <header className="mb__header">

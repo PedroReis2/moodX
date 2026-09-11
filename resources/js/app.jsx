@@ -65,7 +65,10 @@ const creativeDnaRoot = document.getElementById("creative-dna-root");
 if (creativeDnaRoot) {
     createRoot(creativeDnaRoot).render(
         <React.StrictMode>
-            <CreativeDna userName={creativeDnaRoot.dataset.userName || ""} />
+            <CreativeDna
+                userName={creativeDnaRoot.dataset.userName || ""}
+                isProfessor={creativeDnaRoot.dataset.isProfessor === "1"}
+            />
         </React.StrictMode>
     );
 }
@@ -77,6 +80,7 @@ if (creativeDnaViewRoot) {
         <React.StrictMode>
             <CreativeDnaView
                 userName={creativeDnaViewRoot.dataset.userName || ""}
+                isProfessor={creativeDnaViewRoot.dataset.isProfessor === "1"}
             />
         </React.StrictMode>
     );
@@ -100,7 +104,10 @@ const galleryRoot = document.getElementById('gallery-root');
 if (galleryRoot) {
     createRoot(galleryRoot).render(
         <React.StrictMode>
-            <Gallery userName={galleryRoot.dataset.userName || ''} />
+            <Gallery
+                userName={galleryRoot.dataset.userName || ''}
+                isProfessor={galleryRoot.dataset.isProfessor === "1"}
+            />
         </React.StrictMode>
     );
 }
@@ -110,7 +117,10 @@ const moodboardSelectRoot = document.getElementById('moodboard-select-root');
 if (moodboardSelectRoot) {
     createRoot(moodboardSelectRoot).render(
         <React.StrictMode>
-            <MoodboardSelect userName={moodboardSelectRoot.dataset.userName || ''} />
+            <MoodboardSelect
+                userName={moodboardSelectRoot.dataset.userName || ''}
+                isProfessor={moodboardSelectRoot.dataset.isProfessor === "1"}
+            />
         </React.StrictMode>
     );
 }
@@ -120,7 +130,10 @@ const myMoodboardsRoot = document.getElementById('my-moodboards-root');
 if (myMoodboardsRoot) {
     createRoot(myMoodboardsRoot).render(
         <React.StrictMode>
-            <MyMoodboards userName={myMoodboardsRoot.dataset.userName || ''} />
+            <MyMoodboards
+                userName={myMoodboardsRoot.dataset.userName || ''}
+                isProfessor={myMoodboardsRoot.dataset.isProfessor === "1"}
+            />
         </React.StrictMode>
     );
 }
